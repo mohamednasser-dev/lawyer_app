@@ -31,7 +31,7 @@ class HomePageController extends Controller
                 $sessions = Sessions::where('parent_id', $user->parent_id)->get();
                 $mohdreen = mohdr::where('parent_id', $user->parent_id)->get();
 
-                $coming_session = Sessions::select('id','session_date','month','year','case_Id')
+                $coming_session = Sessions::select('id','session_date','month','year','case_Id','status')
                                             ->whereBetween('session_date', array($today, $date))
                                             ->where('parent_id', $user->parent_id)
                                             ->get()
@@ -58,7 +58,7 @@ class HomePageController extends Controller
                 $sessions = Sessions::select('id','session_date','month','year')->where('parent_id', $user->id)->get();
                 $mohdreen = mohdr::where('parent_id', $user->id)->get();
 
-                $coming_session = Sessions::select('id','session_date','month','year','case_Id')
+                $coming_session = Sessions::select('id','session_date','month','year','case_Id','status')
                                             ->whereBetween('session_date', array($today, $date))
                                             ->where('parent_id', $user->id)
                                             ->get()
