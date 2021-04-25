@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\API;
+use App\Clients;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Session_Notes;
@@ -160,10 +161,22 @@ class casesApiController extends Controller
         $api_token = $request->header('api_token');
         $user = User::where('api_token', $api_token)->first();
         if ($user != null) {
-                $case_data = Cases::select('id','invetation_num','inventation_type','circle_num','court','first_session_date')->where('id', $id )->first();
+                $case_data = Cases::select('id','invetation_num','inventation_type','circle_num','court','first_session_date')->where('id', $id )
+                    ->first();
                 $sessions_data = Sessions::query()->where('case_Id', $id)->orderBy('id', 'desc')->get();
+
+                $clients = Case_client::where('case_id',$id)->with('client_data')->whereHas('client_data',function ($query) {
+                    $query->where('type', 'client');
+                })->get();
+
+                $khesm = Case_client::where('case_id',$id)->with('client_data')->whereHas('client_data',function ($query) {
+                    $query->where('type', 'khesm');
+                })->get();
+
+
                 if($case_data != null){
-                    return sendResponse(200, trans('site_lang.data_dispaly_success'),array( 'case_data' => $case_data , 'sessions_data' => $sessions_data ));
+                    return sendResponse(200, trans('site_lang.data_dispaly_success'),array( 'case_data' => $case_data , 'sessions_data' => $sessions_data
+                    ,'clients' => $clients , 'khesm'=>$khesm ));
                 }else{
                     return sendResponse(401,  'يجب اختيار دعوى بشكل صحيح ... !', null);
                 }

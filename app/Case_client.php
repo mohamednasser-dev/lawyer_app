@@ -10,6 +10,7 @@ class Case_client extends Model
     protected $fillable = [
         'case_id', 'client_id'
     ];
+    protected $hidden = ['created_at','updated_at'];
 
     public function case()
     {
@@ -20,6 +21,9 @@ class Case_client extends Model
     {
         return $this->belongsTo(Clients::class, 'client_id');
     }
-
+    public function client_data()
+    {
+        return $this->belongsTo(Clients::class, 'client_id')->select('id','client_Name');
+    }
 
 }
