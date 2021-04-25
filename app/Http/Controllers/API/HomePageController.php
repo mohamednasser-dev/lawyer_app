@@ -38,6 +38,7 @@ class HomePageController extends Controller
                                             ->map(function($sessions){
                                                 $case = Cases::findOrFail($sessions->case_Id);
                                                 $sessions->invetation_num = $case->invetation_num ;
+                                                $sessions->month = date('F', strtotime($sessions->session_date));
                                                 return $sessions ;
                                             });
                 $previous_session = Sessions::select('id','session_date','month','year','case_Id','status')
@@ -65,6 +66,7 @@ class HomePageController extends Controller
                                             ->map(function($sessions){
                                                 $case = Cases::findOrFail($sessions->case_Id);
                                                 $sessions->invetation_num = $case->invetation_num ;
+                                                $sessions->month = date('F', strtotime($sessions->session_date));
                                                 return $sessions ;
                                             });
                 $previous_session = Sessions::select('id','session_date','month','year','case_Id','status')
@@ -76,7 +78,6 @@ class HomePageController extends Controller
                                                 $case = Cases::findOrFail($sessions->case_Id);
                                                 $sessions->invetation_num = $case->invetation_num ;
                                                 $sessions->month = date('F', strtotime($sessions->session_date));
-
                                                 return $sessions ;
                                             });
                 $mohder = mohdr::select('moh_Id','court_mohdareen','paper_type','session_Date')->whereBetween('session_date', array($today, $datee))->where('parent_id', $user->id)->get();
