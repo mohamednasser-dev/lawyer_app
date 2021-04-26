@@ -90,19 +90,19 @@ Route::get('getSessionNotes/{id}', 'API\casesApiController@getSessionNotes');
 Route::post('caseClientsData', 'API\casesApiController@caseClientsData');
 
 //Cases Session Actions
-Route::post('caseSessions', 'API\sessionApiController@index');
+Route::get('case/sessions/{id}', 'API\sessionApiController@index');
 Route::post('addSession', 'API\sessionApiController@store');
 Route::post('editSession', 'API\sessionApiController@edit');
-Route::post('changeSessionStatus', 'API\sessionApiController@changeSessionStatus');
+Route::get('changeSessionStatus/{id}', 'API\sessionApiController@changeSessionStatus');
 Route::post('showSession', 'API\sessionApiController@show');
-Route::post('deleteSession', 'API\sessionApiController@destroy');
+Route::get('deleteSession/{id}', 'API\sessionApiController@destroy');
 
 //Cases Session Notes Actions
-Route::post('sessionsNote', 'API\sessionNoteApiController@index');
+Route::get('sessionsNote/{id}', 'API\sessionNoteApiController@index');
 Route::post('addSessionNote', 'API\sessionNoteApiController@store');
-Route::post('deleteSessionNote', 'API\sessionNoteApiController@destroy');
 Route::post('editSessionNote', 'API\sessionNoteApiController@edit');
-Route::post('changeNoteStatus', 'API\sessionNoteApiController@changeNoteStatus');
+Route::get('changeNoteStatus/{id}', 'API\sessionNoteApiController@changeNoteStatus');
+Route::get('removeNoteStatus/{id}', 'API\sessionNoteApiController@destroy');
 
 //Cases Attachment Actions
 Route::post('caseAttachment', 'API\attachmentApiController@index');

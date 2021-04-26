@@ -81,10 +81,7 @@ class casesApiController extends Controller
             $data['to_whome'] = $request->to_whome;
             $input['parent_id'] = $auth_user->id;
         }
-
         if (!is_array($validate)) {
-
-
 //                $input['parent_id']= getQuery();
             if ($request->mokel_Names != null && $request->khesm_Names != null) {
                 $month = date('m', strtotime($request->first_session_date));
@@ -163,7 +160,11 @@ class casesApiController extends Controller
         if ($user != null) {
                 $case_data = Cases::select('id','invetation_num','inventation_type','circle_num','court','first_session_date')->where('id', $id )
                     ->first();
-                $sessions_data = Sessions::query()->where('case_Id', $id)->orderBy('id', 'desc')->get();
+                $numbers['sessions_number'] = Sessions::where('case_Id', $id)->get()->count();
+                $numbers['attachments_number'] = attachment::where('case_Id', $id)->get()->count();
+
+                $ids = Sessions::where('case_Id', $id)->select('id')->get()->toArray();
+                $numbers['notes_number'] = Session_Notes::whereIn('session_Id', $ids)->get()->count();
 
                 $clients = Case_client::where('case_id',$id)->with('client_data')->whereHas('client_data',function ($query) {
                     $query->where('type', 'client');
@@ -175,7 +176,7 @@ class casesApiController extends Controller
 
 
                 if($case_data != null){
-                    return sendResponse(200, trans('site_lang.data_dispaly_success'),array( 'case_data' => $case_data , 'sessions_data' => $sessions_data
+                    return sendResponse(200, trans('site_lang.data_dispaly_success'),array( 'case_data' => $case_data , 'numbers' => $numbers
                     ,'clients' => $clients , 'khesm'=>$khesm ));
                 }else{
                     return sendResponse(401,  'يجب اختيار دعوى بشكل صحيح ... !', null);
@@ -200,35 +201,27 @@ class casesApiController extends Controller
             return sendResponse(403,  trans('site_lang.loginWarning'), null);
         }
     }
-    public function destroy(Request $request,$id)
+    public function destroy(Request $request, $id)
     {
-        $input = $request->all();
-        $api_token =$request->header('api_token');
-        $auth_user = User::where('api_token',$api_token)->first();
-        if(empty($auth_user)){
-            return sendResponse(403, 'يرجى تسجيل الدخول ',null);
-        }
-        $user_id= $auth_user->id;
-        $permission = Permission::where('user_id', $user_id)->first();
-        $enabled = $permission->search_case;
-        if ($enabled == 'yes') {
-            $caseclient = Case_client::where('case_id', $id)->get();
-            foreach ($caseclient as $caseclient) {
-                $caseclient->delete();
-            }
-            $caseSessions = Sessions::where('case_id', $id)->get();
-            foreach ($caseSessions as $caseSessions) {
-                $session_id = $caseSessions->id;
-                $session_note = Session_Notes::where('session_Id', $session_id)->get();
-                foreach ($session_note as $session_note) {
-                    $session_note->delete();
+        $api_token = $request->header('api_token');
+        $user = User::where('api_token', $api_token)->first();
+        if ($user != null) {
+            $permission = Permission::where('user_id', $user->id)->first();
+            $enabled = $permission->search_case;
+            if ($enabled == 'yes') {
+                Case_client::where('case_id', $id)->delete();
+                $caseSessions = Sessions::where('case_id', $id)->get();
+                foreach ($caseSessions as $caseSessions) {
+                    $session_note = Session_Notes::where('session_Id', $caseSessions->id)->delete();
+                    $caseSessions->delete();
                 }
-                $caseSessions->delete();
+                Cases::where('id', $id)->delete();
+                return sendResponse(200, 'تم حذف الدعوى  بنجاح' ,null);
+            } else {
+                return sendResponse(401, trans('site_lang.permission_warrning'), null);
             }
-            Cases::where('id', $id)->delete();
-            return sendResponse(200, 'تم حذف الدعوى  بنجاح' ,null);
-        }else {
-            return sendResponse(403, trans('site_lang.permission_warrning'),null);
+        } else {
+            return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
     }
     //Case Clients Functions

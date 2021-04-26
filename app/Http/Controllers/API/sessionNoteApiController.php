@@ -12,111 +12,62 @@ use Validator;
 
 class sessionNoteApiController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, $id)
     {
-        $rules = [
-            'api_token'=>'required',
-            'session_id'=>'required|exists:sessions,id',
-        ];
- $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
-        }
-        else
-        {
-            $api_token = $request->input('api_token');
-            $user = User::where('api_token',$api_token)->first();
-            if($user != null){
-                $user_id= $user->id;
-                $permission = Permission::where('user_id', $user_id)->first();
-                $enabled = $permission->search_case;
-                if ($enabled == 'yes') {
-                    $session_Notes = Session_Notes::where("session_id", "=", $request->session_id)->get();
-                    return sendResponse(200, 'تم',array('session_Notes'=>$session_Notes));
-                } else {
-                    return sendResponse(401,  trans('site_lang.permission_warrning'),null);
-                }
-            }else{
-                return sendResponse(403, 'يرجى تسجيل الدخول ',null);
+
+        $api_token = $request->header('api_token');
+        $user = User::where('api_token', $api_token)->first();
+        if ($user != null) {
+            $user_id = $user->id;
+            $permission = Permission::where('user_id', $user_id)->first();
+            $enabled = $permission->search_case;
+            if ($enabled == 'yes') {
+                $session_Notes = Session_Notes::select('id', 'note', 'status')->where("session_id", $id)->get();
+                return sendResponse(200, 'تم', $session_Notes);
+            } else {
+                return sendResponse(401, trans('site_lang.permission_warrning'), null);
             }
+        } else {
+            return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
+
     }
+
     public function store(Request $request)
     {
         $input = $request->all();
-        $validate = null;
-        $validate_api = makeValidate($input,
-            [
-                'api_token' => 'required',
-
-            ]);
-            
- $validator = Validator::make($request->all(), $validate_api);
-        if ($validator->fails()) {
-             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
-        }
-        if (!is_array($validate_api)) {
-            $api_token = $request->input('api_token');
-            $auth_user = User::where('api_token', $api_token)->first();
-            if (empty($auth_user)) {
-                return sendResponse(403, 'يرجى تسجيل الدخول ', null);
-            }
-            if ($auth_user->type == 'User') {
-                $validate = makeValidate($input,
-                    [
-                        'note' => 'required',
-                        'session_Id' => 'required|exists:sessions,id',
-                    ]);
-                $input['parent_id'] = $auth_user->parent_id;
+        $api_token = $request->header('api_token');
+        $user = User::where('api_token', $api_token)->first();
+        if ($user != null) {
+            $validate = makeValidate($input,
+                [
+                    'note' => 'required',
+                    'session_Id' => 'required|exists:sessions,id',
+                ]);
+            if ($user->type == 'User') {
+                $input['parent_id'] = $user->parent_id;
             } else {
-                $validate = makeValidate($input,
-                    [
-                        'note' => 'required',
-                        'session_Id' => 'required|exists:sessions,id',
-                    ]);
-                $input['parent_id'] = $auth_user->id;
+                $input['parent_id'] = $user->id;
             }
             if (!is_array($validate)) {
-                if ($request->note != null ) {
-                    $session_Notes = Session_Notes::create($input);
-                    return sendResponse(200, 'تم الاضافه بنجاح', $session_Notes);
-                } else {
-
-                    return sendResponse(403, "من فضلك قم بأختيار تاريخ الجلسة",null);
-                }
-
-            }else{
+                $session_Notes = Session_Notes::create($input);
+                return sendResponse(200, 'تم الاضافه بنجاح', $session_Notes);
+            } else {
                 return sendResponse(403, $validate[0], null);
             }
+        } else {
+            return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
-        return sendResponse(403, "برجاء تسجيل الدخول", null);
     }
-    public function changeNoteStatus(Request $request)
+
+    public function changeNoteStatus(Request $request, $id)
     {
-        $input = $request->all();
-        $id = $request->note_id;
-        $validate  =   makeValidate($input,
-            [
-                'api_token'=>'required',
-                'note_id'=>'required|exists:Session__Notes,id',
-            ]);
-            
-            
- $validator = Validator::make($request->all(), $validate_api);
-        if ($validator->fails()) {
-             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
-        }
-        if (!is_array($validate))
-        {
-            $api_token =$request->input('api_token');
-            $auth_user = User::where('api_token',$api_token)->first();
-            if(empty($auth_user))
-            {
-                return sendResponse(403, 'يرجى تسجيل الدخول ',null);
-            }
+        $api_token = $request->header('api_token');
+        $user = User::where('api_token', $api_token)->first();
+        if ($user != null) {
             $status = false;
             $session_Notes = Session_Notes::find($id);
-            if ($session_Notes->status== trans('site_lang.public_no_text')) {
+            if ($session_Notes->status == trans('site_lang.public_no_text')) {
                 $session_Notes->status = "Yes";
                 $status = true;
             } else {
@@ -124,80 +75,56 @@ class sessionNoteApiController extends Controller
                 $status = false;
             }
             $session_Notes->update();
-            return sendResponse(200, 'تم التعديل  الحالة بنجاح' ,$status);
-        }else{
-            return sendResponse(403, $validate[0],null);
+            return sendResponse(200, 'تم التعديل الحالة بنجاح', $status);
+        } else {
+            return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
     }
+
     public function edit(Request $request)
     {
         $input = $request->all();
-        $id = $request->note_Id;
-        $validate  =   makeValidate($input,
-            [
-                'api_token'=>'required',
-                'note' => 'required',
-                'note_Id' => 'required|exists:Session__Notes,id',
-            ]);
-            
-            
- $validator = Validator::make($request->all(), $validate_api);
-        if ($validator->fails()) {
-             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
-        }
-        if (!is_array($validate))
-        {
-            $api_token =$request->input('api_token');
-            $auth_user = User::where('api_token',$api_token)->first();
-            if(empty($auth_user))
-            {
-                return sendResponse(403, 'يرجى تسجيل الدخول ',null);
+        $api_token = $request->header('api_token');
+        $user = User::where('api_token', $api_token)->first();
+        if ($user != null) {
+            $validate = makeValidate($input,
+                [
+                    'note_id' => 'required|exists:session__notes,id',
+                    'note' => 'required',
+                ]);
+            if ($user->type == 'User') {
+                $input['parent_id'] = $user->parent_id;
+            } else {
+
+                $input['parent_id'] = $user->id;
             }
-            $session_Notes = Session_Notes::find(intval($id))->update($input);
-            return sendResponse(200, 'تم التعديل  بنجاح' ,$session_Notes);
-        }else{
-            return sendResponse(403, $validate[0],null);
+            if (!is_array($validate)) {
+                $data['note'] = $request->note;
+                $session_Notes = Session_Notes::where('id',$request->note_id)->update($data);
+                return sendResponse(200, 'تم التعديل بنجاح' , null );
+            } else {
+                return sendResponse(403, $validate[0], null);
+            }
+        } else {
+            return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
     }
-    public function destroy(Request $request)
+
+    public function destroy(Request $request, $id)
     {
-        $input = $request->all();
-        $validate  =   makeValidate($input,
-            [
-                'api_token'=>'required',
-                'session_note_id'=>'required|exists:Session__Notes,id',
-
-            ]);
-            
-            
- $validator = Validator::make($request->all(), $validate_api);
-        if ($validator->fails()) {
-             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
-        }
-        if (!is_array($validate))
-        {
-
-            $api_token =$request->input('api_token');
-            $auth_user = User::where('api_token',$api_token)->first();
-
-            if(empty($auth_user))
-            {
-                return sendResponse(403, 'يرجى تسجيل الدخول ',null);
-            }
-            $user_id= $auth_user->id;
-            $permission = Permission::where('user_id', $user_id)->first();
-
+        $api_token = $request->header('api_token');
+        $user = User::where('api_token', $api_token)->first();
+        if ($user != null) {
+            $permission = Permission::where('user_id', $user->id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
-
-                $session_Note = Session_Notes::find(intval($request->session_note_id))->delete();
-
-                return sendResponse(200, 'تم حذف ملاحظة الجلسة' ,$session_Note);
+                $session_Note = Session_Notes::find(intval($id))->delete();
+                return sendResponse(200, 'تم حذف ملاحظة الجلسة بنجاح', $session_Note);
             } else {
-                return sendResponse(401, trans('site_lang.permission_warrning'),null);
+                return sendResponse(401, trans('site_lang.permission_warrning'), null);
             }
-        }else{
-            return sendResponse(403, $validate[0],null);
+        } else {
+            return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
     }
 }
