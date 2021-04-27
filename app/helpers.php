@@ -23,11 +23,11 @@ if (!function_exists('getQuery')) {
     }
 }
 if (!function_exists('sendResponse')) {
-    function sendResponse($code = null, $msg = null, $data = null)
+    function sendResponse($status = null, $msg = null, $data = null)
     {
         return response(
             [
-                'code' => $code,
+                'status' => $status,
                 'msg' => $msg,
                 'data' => $data
             ]
