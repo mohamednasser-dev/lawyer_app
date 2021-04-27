@@ -170,14 +170,22 @@ class casesApiController extends Controller
                     $query->where('type', 'client');
                 })->get();
 
+                foreach ($clients as $key => $row){
+                    $client_data[$key]['id'] = $row->client_data->id ;
+                    $client_data[$key]['client_Name'] = $row->client_data->client_Name ;
+                }
+
                 $khesm = Case_client::where('case_id',$id)->with('client_data')->whereHas('client_data',function ($query) {
                     $query->where('type', 'khesm');
                 })->get();
 
-
+                foreach ($khesm as $key => $row){
+                    $khesm_data[$key]['id'] = $row->client_data->id ;
+                    $khesm_data[$key]['client_Name'] = $row->client_data->client_Name ;
+                }
                 if($case_data != null){
                     return sendResponse(200, trans('site_lang.data_dispaly_success'),array( 'case_data' => $case_data , 'numbers' => $numbers
-                    ,'clients' => $clients , 'khesm'=>$khesm ));
+                    ,'clients' => $client_data , 'khesm'=>$khesm_data ));
                 }else{
                     return sendResponse(401,  'يجب اختيار دعوى بشكل صحيح ... !', null);
                 }
