@@ -44,7 +44,7 @@ Route::get('delete_client/{id}', 'API\ClientController@destroy');
 
 
 //case actions
-Route::get('select/data/to_add_case', 'API\ClientController@select_data_to_add_case');
+Route::get('select/data/to_add_case', 'API\casesApiController@select_data_to_add_case');
 //client Profile
 Route::get('client_Profile/{id}', 'API\ClientProfileController@client_cases');
 Route::post('add_clientNote', 'API\ClientProfileController@store');
@@ -88,6 +88,9 @@ Route::post('edit_Case', 'API\casesApiController@update');
 Route::get('caseData/{id}', 'API\casesApiController@caseData');
 Route::get('getSessionNotes/{id}', 'API\casesApiController@getSessionNotes');
 Route::post('caseClientsData', 'API\casesApiController@caseClientsData');
+Route::post('caseClients/store', 'API\casesApiController@storeCaseClient');
+Route::post('caseClients/destroy', 'API\casesApiController@destroyCaseClient');
+Route::get('caseClients/data_by_id/{id}/{type}', 'API\casesApiController@caseClientDataByID');
 
 //Cases Session Actions
 Route::get('case/sessions/{id}', 'API\sessionApiController@index');
@@ -105,4 +108,7 @@ Route::get('changeNoteStatus/{id}', 'API\sessionNoteApiController@changeNoteStat
 Route::get('removeNoteStatus/{id}', 'API\sessionNoteApiController@destroy');
 
 //Cases Attachment Actions
-Route::post('caseAttachment', 'API\attachmentApiController@index');
+Route::get('caseAttachment/{id}', 'API\attachmentApiController@index');
+Route::post('add_case_attachment', 'API\attachmentApiController@store');
+Route::post('update_case_attachment/{id}', 'API\attachmentApiController@update');
+Route::get('remove_attachment/{id}', 'API\attachmentApiController@destroy');

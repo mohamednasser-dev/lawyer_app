@@ -264,4 +264,9 @@ return
                 'ar' => 'يوجد دعاوى مرتبطة بهذا التصنيف.. لايمكنك الحذف',
                 'en' => 'Sorry ,Your order time before time now',
             ],
+        'deleted_s' =>
+            [
+                'ar' => 'تم الحذف بنجاح',
+                'en' => 'deleted successfully',
+            ],
     ];
