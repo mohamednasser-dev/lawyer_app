@@ -43,14 +43,12 @@ class mohdareenApiController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-
         $api_token = $request->header('api_token');
         $auth_user = check_api_token($api_token);
         if (empty($auth_user)) {
             return response()->json(msg($request, not_authoize(), 'invalid_data'));
         }
         if ($auth_user->type == 'User') {
-
             $rules =
                 [
                     'court_mohdareen' => 'required',
@@ -64,7 +62,6 @@ class mohdareenApiController extends Controller
                     'notes' => 'required',
                 ];
             $input['cat_id'] = $auth_user->cat_id;
-
         } else {
             $rules =
                 [
@@ -93,12 +90,10 @@ class mohdareenApiController extends Controller
             $mohdr = $mohdr->with('category')->latest()->first();
             return msgdata($request, success(), 'success', $mohdr);
         }
-
     }
 
     public function mohder_by_id(Request $request, $id)
     {
-
         $api_token = $request->header('api_token');
         $user = check_api_token($api_token);
         if (!$user) {
@@ -133,20 +128,15 @@ class mohdareenApiController extends Controller
                     'notes' => 'required',
 
                 ];
- $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
-        }
-
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                 return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+            }
             $mohdrs = mohdr::find(intval($id))->update($input);
-
             return msg($request, success(), 'success');
         } else {
             return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
-
         }
-
-
     }
 
     public function destroy(Request $request, $id)

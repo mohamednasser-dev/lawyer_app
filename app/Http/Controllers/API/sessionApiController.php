@@ -124,7 +124,8 @@ class sessionApiController extends Controller
                 $input['month'] = date('m', strtotime($request->session_date));
                 $input['year'] = date('Y', strtotime($request->session_date));
                 $Sessions = Sessions::find(intval($request->session_id))->update($input);
-                return sendResponse(200, 'تم التعديل  بنجاح', $Sessions);
+                $data = Sessions::find(intval($request->session_id));
+                return sendResponse(200, 'تم التعديل  بنجاح', $data);
             } else {
                 return sendResponse(403, $validate[0], null);
             }
@@ -157,6 +158,7 @@ class sessionApiController extends Controller
 
     public function destroy(Request $request, $id)
     {
+
         $api_token = $request->header('api_token');
         $user = User::where('api_token', $api_token)->first();
         if ($user != null) {

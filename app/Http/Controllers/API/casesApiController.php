@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\API;
 
-use App\category;
-use App\Clients;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Session_Notes;
@@ -11,9 +9,10 @@ use App\Case_client;
 use App\attachment;
 use App\Permission;
 use App\Sessions;
+use App\category;
+use App\Clients;
 use App\Cases;
 use Validator;
-use App\mohdr;
 use App\User;
 
 class casesApiController extends Controller
@@ -71,7 +70,7 @@ class casesApiController extends Controller
         $api_token = $request->header('api_token');
         $auth_user = User::where('api_token', $api_token)->first();
         if (empty($auth_user)) {
-            return sendResponse(403, 'يرجى تسجيل الدخول ', null);
+            return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
         if ($auth_user->type == 'User') {
             $validate = Validator::make($request->all(), [
@@ -129,9 +128,9 @@ class casesApiController extends Controller
                 foreach ($res as $client) {
                     Case_client::create(['case_id' => $case->id, 'client_id' => $client]);
                 }
-                return sendResponse(200, trans('site_lang.add_success'), $case);
+                return sendResponse(200, trans('site_lang.add_success') , $case);
             } else {
-                return sendResponse(401, "من فضلك قم بافراغ خانه الموكلين والخصوم واخترهم", null);
+                return sendResponse(401, trans('site_lang.please_empty') , null);
             }
 
         } else {
@@ -160,18 +159,20 @@ class casesApiController extends Controller
                 return sendResponse(403, trans('site_lang.loginWarning'), $dataOut);
             } else {
                 $case = Cases::where('id', $id)->update($input);
+                $data = Cases::where('id', $id)->first();
                 if ($case == 1) {
                     $dataOut['status'] = true;
-                    return sendResponse(200, trans('site_lang.updatSuccess'), $dataOut);
+                    return sendResponse(200, trans('site_lang.updatSuccess'), $data);
                 } else {
                     $dataOut['status'] = false;
-                    return sendResponse(401, 'يجب ادخال البيانات بشكل صحيح ', $dataOut);
+                    return sendResponse(401, trans('site_lang.should_enter_correct') , null);
                 }
             }
         } else {
             return sendResponse(401, $validate[0], null);
         }
     }
+
     public function select_data_to_add_case(Request $request)
     {
         $api_token = $request->header('api_token');
@@ -247,12 +248,13 @@ class casesApiController extends Controller
                 return sendResponse(200, trans('site_lang.data_dispaly_success'), array('case_data' => $case_data, 'numbers' => $numbers
                 ));
             } else {
-                return sendResponse(401, 'يجب اختيار دعوى بشكل صحيح ... !', null);
+                return sendResponse(401, trans('site_lang.should_choose_case_models'), null);
             }
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
     }
+
     public function caseClientDataByID(Request $request, $id,$type)
     {
         $api_token = $request->header('api_token');
@@ -289,11 +291,10 @@ class casesApiController extends Controller
         $user = User::where('api_token', $api_token)->first();
         if ($user != null) {
             $session_Notes = Session_Notes::query()->where('session_Id', $id)->orderBy('id', 'desc')->get();
-
             if ($session_Notes != null) {
                 return sendResponse(200, trans('site_lang.data_dispaly_success'), $session_Notes);
             } else {
-                return sendResponse(401, 'يجب اختيار جلسة .... !', null);
+                return sendResponse(401, trans('site_lang.should_choose_case'), null);
             }
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
@@ -315,7 +316,7 @@ class casesApiController extends Controller
                     $caseSessions->delete();
                 }
                 Cases::where('id', $id)->delete();
-                return sendResponse(200, 'تم حذف الدعوى  بنجاح', null);
+                return sendResponse(200, trans('site_lang.case_deleted'), null);
             } else {
                 return sendResponse(401, trans('site_lang.permission_warrning'), null);
             }
@@ -325,8 +326,7 @@ class casesApiController extends Controller
     }
 
     //Case Clients Functions
-    public function caseClientsData(Request $request)
-    {
+    public function caseClientsData(Request $request){
         $rules = [
             'api_token' => 'required',
             'case_id' => 'required|exists:cases,id',
@@ -357,8 +357,7 @@ class casesApiController extends Controller
         }
     }
 
-    public function storeCaseClient(Request $request)
-    {
+    public function storeCaseClient(Request $request){
         $input = $request->all();
         $rules = null;
         $api_token = $request->header('api_token');
@@ -379,6 +378,7 @@ class casesApiController extends Controller
             }
         }
     }
+
     public function destroyCaseClient(Request $request)
     {
         $input = $request->all();
@@ -389,8 +389,8 @@ class casesApiController extends Controller
             return response()->json(msg($request, not_authoize(), 'invalid_data'));
         } else {
             $rules = [
-                'client_id' => 'required',
-                'case_id' => 'required'
+                'client_id' => 'required|exists:clients,id',
+                'case_id' => 'required|exists:cases,id'
             ];
             $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
             if ($validator->fails()) {

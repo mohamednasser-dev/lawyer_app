@@ -59,7 +59,7 @@ class attachmentApiController extends Controller
                     $input['img_Url'] = $fileNewName;
                 }
                 $attachment = attachment::create($input);
-                return sendResponse(200, 'تم الاضافه بنجاح', $attachment);
+                return sendResponse(200, trans('site_lang.add_success'), $attachment);
             } else {
                 return sendResponse(403, $validate[0], null);
             }
@@ -93,10 +93,11 @@ class attachmentApiController extends Controller
                     $data = $request->all();
                     $input['img_Url'] = $fileNewName;
                 }
-                $attachment = attachment::where('id',$id)->update($input);
-                return sendResponse(200, 'تم التعديل بنجاح', $attachment);
+                attachment::where('id',$id)->update($input);
+                $data = attachment::whereId($id)->first();
+                return sendResponse(200, trans('site_lang.updatSuccess'), $data);
             } else {
-                return sendResponse(403, $validate[0], null);
+                return sendResponse(401, $validate[0], null);
             }
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
@@ -109,7 +110,7 @@ class attachmentApiController extends Controller
         $user = User::where('api_token', $api_token)->first();
         if ($user != null) {
                 $attachment = attachment::where('id',$id)->delete();
-                return sendResponse(200, 'تم الحذف بنجاح', $attachment);
+                return sendResponse(200, trans('site_lang.deleted') , $attachment);
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }

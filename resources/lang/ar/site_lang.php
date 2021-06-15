@@ -2,18 +2,16 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Authentication Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are used during authentication for various
-    | messages that we need to display to the user. You are free to modify
-    | these language lines according to your application's requirements.
-    |
-    */
+    'case_deleted' => 'تم حذف الدعوى  بنجاح',
+    'should_choose_case' => 'يجب اختيار جلسة .... !',
+    'should_choose_case_models' => 'يجب اختيار دعوى بشكل صحيح ... !',
+    'should_enter_correct' => 'يجب ادخال البيانات بشكل صحيح',
+    'please_empty' => "من فضلك قم بافراغ خانه الموكلين والخصوم واخترهم",
+
+
 
     // public use
+
     'public_add_btn_text' => 'إضافة',
     'loginWarning' => 'يجب تسجيل الدخول',
     'app_name1' => 'توثيق',

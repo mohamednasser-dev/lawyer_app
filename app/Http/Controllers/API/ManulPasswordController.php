@@ -12,7 +12,7 @@ use Mail;
 class ManulPasswordController extends Controller
 {
     public function forgot(Request $request,$email) {
-        $manual_pas;
+        $manual_pass ="";
         $input = $request->all();
         $validate = Validator::make($request->all(), [
             'email' => 'required|email|exists:users,email',

@@ -57,7 +57,6 @@ class ClientProfileController extends Controller
             if (empty($auth_user)) {
                 return response()->json(msg($request, not_authoize(), 'invalid_data'));
             }
-
             $input['user_id'] = $auth_user->id;
             $input['client_id'] = $request->client_id;
             if ($auth_user->parent_id != null) {
@@ -67,16 +66,12 @@ class ClientProfileController extends Controller
             }
             $data = Client_Note::create($input);
             $data = Client_Note::whereId($data->id)->first();
-
             return msgdata($request, success(), 'success', $data);
-//
-
         }
     }
 
     public function Edit_Note(Request $request)
     {
-        
         $input = $request->all();
         $rules =
             [
@@ -92,7 +87,6 @@ class ClientProfileController extends Controller
             if (empty($auth_user)) {
                 return response()->json(msg($request, not_authoize(), 'invalid_data'));
             }
-           
             if ($auth_user->type == 'admin') {
                 $input_data['notes'] = $request->notes;
                 $data = Client_Note::find($request->id)->update($input);
@@ -110,19 +104,13 @@ class ClientProfileController extends Controller
         $api_token = $request->header('api_token');
         $auth_user = check_api_token($api_token);
         if (empty($auth_user)) {
-
             return response()->json(msg($request, not_authoize(), 'invalid_data'));
         }
         if ($auth_user->type == 'admin') {
             Client_Note::findOrFail(intval($id))->delete();
             return msg($request, success(), 'success');
         } else {
-
             return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
-
         }
-
     }
-
-
 }
