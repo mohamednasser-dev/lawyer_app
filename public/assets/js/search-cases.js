@@ -16,6 +16,10 @@ $(document).ready(function () {
                 name: 'client_Name',
                 className: 'center'
             }, {
+                data: 'khesm_Name',
+                name: 'khesm_Name',
+                className: 'center'
+            }, {
                 data: 'invetation_num',
                 name: 'invetation_num',
                 className: 'center'
