@@ -150,7 +150,8 @@ class sessionApiController extends Controller
                 $status = false;
             }
             $session->update();
-            return sendResponse(200, 'تم التعديل  الحالة بنجاح', $status);
+            $data = Sessions::select('status')->find($id)->status;
+            return msgdata($request, success(), 'status_updated_s', $data);
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
@@ -165,11 +166,10 @@ class sessionApiController extends Controller
             $permission = Permission::where('user_id', $user->id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
-                $session_Note = Session_Notes::where('session_Id',$id)->delete();
-                if($session_Note){
-                    $session = Sessions::findOrFail($id)->delete();
-                    return sendResponse(200, 'تم حذف الجلسة  بنجاح', $session);
-                }
+                Session_Notes::where('session_Id',$id)->delete();
+                Sessions::findOrFail($id)->delete();
+                return sendResponse(200, 'تم حذف الجلسة  بنجاح', null);
+
             } else {
                 return sendResponse(401, trans('site_lang.permission_warrning'), null);
             }
