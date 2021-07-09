@@ -22,7 +22,7 @@ class sessionNoteApiController extends Controller
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
-                $session_Notes = Session_Notes::select('id', 'note', 'status')->where("session_id", $id)->get();
+                $session_Notes = Session_Notes::with('user')->select('id', 'note', 'status','parent_id')->where("session_id", $id)->get()->makeHidden('parent_id');
                 return sendResponse(200, 'تم', $session_Notes);
             } else {
                 return sendResponse(401, trans('site_lang.permission_warrning'), null);
