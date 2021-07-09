@@ -16,7 +16,6 @@ class ClientProfileController extends Controller
 {
     public function client_cases(Request $request, $id)
     {
-
         $api_token = $request->header('api_token');
         $user = check_api_token($api_token);
         if ($user) {
@@ -24,21 +23,15 @@ class ClientProfileController extends Controller
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->clients;
             if ($enabled == 'yes') {
-                $client_profile = Clients::select('id')->where('id', $id)->with('cases')->with('client_notes.user')->first();
-
+                $client_profile = Clients::select('id')->where('id', $id)->with('cases')->with('client_notes_api.user')->first();
                 return msgdata($request, success(), 'success', $client_profile);
-
             } else {
                 return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
             }
-
         } else {
             return response()->json(msg($request, not_authoize(), 'not_authoize'));
-
         }
-
     }
-
 
     public function store(Request $request)
     {
