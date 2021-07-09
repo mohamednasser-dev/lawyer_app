@@ -56,8 +56,8 @@ class mohdareenApiController extends Controller
                     'deliver_data' => 'required',
                     'paper_Number' => 'required',
                     'session_Date' => 'required',
-                    'mokel_Name' => 'required|exists:clients,client_name',
-                    'khesm_Name' => 'required|exists:clients,client_name',
+                    'mokel_Name' => 'required',
+                    'khesm_Name' => 'required',
                     'case_number' => 'required',
                     'notes' => 'required',
                 ];
@@ -70,8 +70,8 @@ class mohdareenApiController extends Controller
                     'deliver_data' => 'required',
                     'paper_Number' => 'required',
                     'session_Date' => 'required',
-                    'mokel_Name' => 'required|exists:clients,client_name',
-                    'khesm_Name' => 'required|exists:clients,client_name',
+                    'mokel_Name' => 'required',
+                    'khesm_Name' => 'required',
                     'case_number' => 'required',
                     'cat_id' => 'required|exists:categories,id',
                     'notes' => 'required',
@@ -86,6 +86,8 @@ class mohdareenApiController extends Controller
             } else {
                 $input['parent_id'] = $auth_user->id;
             }
+
+
             $mohdr = mohdr::create($input);
             $mohdr = $mohdr->with('category')->latest()->first();
             return msgdata($request, success(), 'success', $mohdr);
