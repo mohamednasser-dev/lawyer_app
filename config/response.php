@@ -140,7 +140,7 @@ return
             ],
         'success' =>
             [
-                'ar' => '  تمت العملية بنجاح ',
+                'ar' => '  تمت العملية بنجاح',
                 'en' => 'Done Successfully',
             ],
         'login_success' =>

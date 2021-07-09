@@ -51,7 +51,8 @@ class sessionNoteApiController extends Controller
             }
             if (!is_array($validate)) {
                 $session_Notes = Session_Notes::create($input);
-                return sendResponse(200, 'تم الاضافه بنجاح', $session_Notes);
+                $data = Session_Notes::with('user')->select('id','note','parent_id','status')->whereId($session_Notes->id)->first()->makeHidden('parent_id');
+                return msgdata($request, success(), 'success', $data);
             } else {
                 return sendResponse(403, $validate[0], null);
             }
