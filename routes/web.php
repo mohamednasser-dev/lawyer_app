@@ -114,6 +114,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('endReservation', 'EndReservationsController@index');
 });
 Route::get('reservtion', 'ReservationController@index');
+
 //lang
 Route::get('lang/{lang}', function ($lang) {
     if(session()->has('lang')) {
