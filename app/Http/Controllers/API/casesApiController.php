@@ -32,27 +32,36 @@ class casesApiController extends Controller
                     $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
                         ->where('to_whome', $user->cat_id)
                         ->where('parent_id', $user->parent_id)
-                        ->with('Clients_custom')
                         ->get()->map(function ($data){
                             $new_string = "";
-                            foreach ($data->Clients_custom as $row){
+                            foreach ($data->Clients_only as $row){
                                 $new_string = $new_string . $row->client_Name.' , ';
                             }
+
+                            $new_khesm = "";
+                            foreach ($data->khesm_only as $row){
+                                $new_khesm = $new_khesm . $row->client_Name.' , ';
+                            }
                             $data->clients = $new_string ;
+                            $data->khesms = $new_khesm ;
                             return $data;
-                        });
+                        })->makeHidden(['clients_only','khesm_only']);
                 } else {
                     $cases = Cases::select('id', 'invetation_num', 'court', 'parent_id')
-                        ->with('Clients_custom')
                         ->where('parent_id', '=', $user->id)
                         ->get()->map(function ($data){
                             $new_string = "";
-                            foreach ($data->Clients_custom as $row){
+                            foreach ($data->Clients_only as $row){
                                 $new_string = $new_string . $row->client_Name.' , ';
                             }
+                            $new_khesm = "";
+                            foreach ($data->khesm_only as $row){
+                                $new_khesm = $new_khesm . $row->client_Name.' , ';
+                            }
                             $data->clients = $new_string ;
+                            $data->khesms = $new_khesm ;
                             return $data;
-                        });
+                        })->makeHidden(['clients_only','khesm_only']);
                 }
                 return sendResponse(200, trans('site_lang.data_dispaly_success'), $cases);
             } else {
