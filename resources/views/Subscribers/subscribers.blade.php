@@ -88,7 +88,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group{{$errors->has('phone')?' has-error':''}}">
 
-                                <input type="text" name="phone" id="phone" class="form-control" placeholder="{{trans('site_lang.subPhone')}}">
+                                <input type="number" name="phone" id="phone" class="form-control" placeholder="{{trans('site_lang.subPhone')}}">
                                 <span class="text-danger" id="phone_error"></span>
                             </div>
                         </div>

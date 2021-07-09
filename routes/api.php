@@ -73,11 +73,6 @@ Route::post('add_category', 'API\CategoryController@store');
 Route::get('category_by_id/{id}', 'API\CategoryController@category_by_id');
 Route::post('edit_category', 'API\CategoryController@update');
 Route::get('delete_category/{id}', 'API\CategoryController@destroy');
-
-
-
-
-
 //not customized yet
 
 //Cases Actions
@@ -112,3 +107,8 @@ Route::get('caseAttachment/{id}', 'API\attachmentApiController@index');
 Route::post('add_case_attachment', 'API\attachmentApiController@store');
 Route::post('update_case_attachment/{id}', 'API\attachmentApiController@update');
 Route::get('remove_attachment/{id}', 'API\attachmentApiController@destroy');
+
+
+
+// registration form
+Route::post('register', 'Landing\RegisterationController@store');
