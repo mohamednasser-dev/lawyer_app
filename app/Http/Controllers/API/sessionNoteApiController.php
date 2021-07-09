@@ -91,7 +91,7 @@ class sessionNoteApiController extends Controller
         if ($user != null) {
             $validate = makeValidate($input,
                 [
-                    'note_id' => 'required|exists:session__notes,id',
+                    'id' => 'required|exists:session__notes,id',
                     'note' => 'required',
                 ]);
             if ($user->type == 'User') {
@@ -102,7 +102,7 @@ class sessionNoteApiController extends Controller
             }
             if (!is_array($validate)) {
                 $data['note'] = $request->note;
-                Session_Notes::where('id',$request->note_id)->update($data);
+                Session_Notes::where('id',$request->id)->update($data);
                 $data = Session_Notes::with('user')->select('id','note','parent_id','status')->whereId($request->note_id)->first()->makeHidden('parent_id');
                 return msgdata($request, success(), 'updated_s', $data);
             } else {
