@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="{{url('/assets/vendors/prismjs/themes/prism.css')}}">
 @endsection
 
-@section('content') 
+@section('content')
 @include('layouts.errors')
 
 <div class="row">
@@ -12,7 +12,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-7 col-md-8">
-                        <h3 class="text-bold">{{trans('site_lang.search_case_attachments')}} 
+                        <h3 class="text-bold">{{trans('site_lang.search_case_attachments')}}
                                                 </div>
                     <div class="col-sm-5 col-md-4">
 
@@ -47,7 +47,14 @@
                                                     @php
                                                         $allowedMimeTypes = ['image/jpeg','image/gif','image/png','image/bmp','image/svg+xml'];
                                                     @endphp
-                                                    @if(! in_array( mime_content_type('uploads/attachments/'.$case_attachment->img_Url), $allowedMimeTypes))
+                                                @php
+                                                try{
+                                                $in_array =   in_array( mime_content_type('uploads/attachments/'.$case_attachment->img_Url), $allowedMimeTypes);
+                                                    }catch (Exception $exception){
+
+                                                    }
+                                                @endphp
+                                                    @if(! $in_array)
                                                         <a href="{{url('uploads/attachments/'.$case_attachment->img_Url) }}"
                                                            target="_blank"> <img
                                                                 src="{{url('uploads/attachments/file.jpg') }}"
