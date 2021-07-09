@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\User;
 use App\category;
-use App\package;
+use App\Package;
 
 class SubscribersController extends Controller
 {
@@ -165,7 +165,7 @@ class SubscribersController extends Controller
         $permissions['daily_report'] = 'yes';
         $permissions['monthly_report'] = 'yes';
         $permissions['category'] = 'yes';
- 
+
         $per = Permission::create($permissions);
         $per->save();
 
