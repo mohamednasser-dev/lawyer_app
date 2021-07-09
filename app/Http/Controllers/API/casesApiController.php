@@ -356,7 +356,6 @@ class casesApiController extends Controller
             }
         }
     }
-
     public function storeCaseClient(Request $request){
         $input = $request->all();
         $rules = null;
@@ -373,8 +372,13 @@ class casesApiController extends Controller
             if ($validator->fails()) {
                 return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
             } else {
-                $data = Case_client::create($input);
-                return msgdata($request, success(), 'success', $data);
+
+                $input_new['case_id'] = $request->case_id ;
+                foreach ($request->client_id as $key=> $row){
+                    $input_new['client_id'] = $row ;
+                    Case_client::create($input_new);
+                }
+                return msgdata($request, success(), 'success', null);
             }
         }
     }
