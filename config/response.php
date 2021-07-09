@@ -7,6 +7,16 @@ return
                 'ar' => 'البريد الإلكتروني موجود من قبل',
                 'en' => 'Name is Required',
             ],
+        'updated_s' =>
+            [
+                'ar' => 'تم التعديل بنجاح',
+                'en' => 'data updated successfully',
+            ],
+        'status_updated_s' =>
+            [
+                'ar' => 'تم التعديل الحالة بنجاح',
+                'en' => 'status changes successfully',
+            ],
         'email' =>
             [
                 'ar' => 'البريد الإلكتروني مطلوب',

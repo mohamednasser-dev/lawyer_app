@@ -23,7 +23,7 @@ class sessionNoteApiController extends Controller
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
                 $session_Notes = Session_Notes::with('user')->select('id', 'note', 'status','parent_id')->where("session_id", $id)->get()->makeHidden('parent_id');
-                return sendResponse(200, 'تم', $session_Notes);
+                return msgdata($request, success(), 'success', $session_Notes);
             } else {
                 return sendResponse(401, trans('site_lang.permission_warrning'), null);
             }
@@ -76,7 +76,8 @@ class sessionNoteApiController extends Controller
                 $status = false;
             }
             $session_Notes->update();
-            return sendResponse(200, 'تم التعديل الحالة بنجاح', $status);
+            $data = Session_Notes::select('status')->find($id)->status;
+            return msgdata($request, success(), 'status_updated_s', $data);
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
@@ -101,8 +102,9 @@ class sessionNoteApiController extends Controller
             }
             if (!is_array($validate)) {
                 $data['note'] = $request->note;
-                $session_Notes = Session_Notes::where('id',$request->note_id)->update($data);
-                return sendResponse(200, 'تم التعديل بنجاح' , null );
+                Session_Notes::where('id',$request->note_id)->update($data);
+                $data = Session_Notes::with('user')->select('id','note','parent_id','status')->whereId($request->note_id)->first()->makeHidden('parent_id');
+                return msgdata($request, success(), 'updated_s', $data);
             } else {
                 return sendResponse(403, $validate[0], null);
             }
