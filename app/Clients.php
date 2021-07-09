@@ -30,7 +30,7 @@ class Clients extends Model
     }
     public function client_notes()
     {
-        return $this->hasMany('App\Client_Note','client_id','id')->select(['id','notes','user_id','client_id']);
+        return $this->hasMany('App\Client_Note','client_id','id')->select(['id','notes as note','user_id','client_id']);
     }
 
     public function  category()

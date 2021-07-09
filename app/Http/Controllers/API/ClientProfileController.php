@@ -66,7 +66,7 @@ class ClientProfileController extends Controller
                 $input['parent_id'] = $auth_user->id;
             }
             $data = Client_Note::create($input);
-            $data = Client_Note::whereId($data->id)->first();
+            $data = Client_Note::with('user')->select('id','notes as note','user_id','client_id')->whereId($data->id)->first();
             return msgdata($request, success(), 'success', $data);
         }
     }
@@ -91,7 +91,7 @@ class ClientProfileController extends Controller
             if ($auth_user->type == 'admin') {
                 $input['notes'] = $request->note;
                 $data = Client_Note::find($request->id)->update($input);
-                $data = Client_Note::whereId($request->id)->with('user')->first();
+                $data = Client_Note::with('user')->select('id','notes as note','user_id','client_id')->whereId($request->id)->first();
                 return msgdata($request, success(), 'success', $data);
             } else {
                 return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
