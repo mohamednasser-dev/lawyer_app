@@ -34,6 +34,16 @@ class Cases extends Model
         return $this->belongsToMany(Clients::class, 'case_clients', 'case_id', 'client_id')->select('client_Name');
     }
 
+
+    public function Clients_only()
+    {
+        return $this->belongsToMany(Clients::class, 'case_clients', 'case_id', 'client_id')->select('client_Name')->where('type','client');
+    }
+    public function khesm_only()
+    {
+        return $this->belongsToMany(Clients::class, 'case_clients', 'case_id', 'client_id')->select('client_Name')->where('type','khesm');
+    }
+
     public function category()
     {
         return $this->hasOne('App\category', 'id', 'to_whome')->select('id','name');

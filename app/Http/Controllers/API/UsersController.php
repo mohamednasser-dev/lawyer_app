@@ -23,12 +23,11 @@ class UsersController extends Controller
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->users;
             if ($enabled == 'yes') {
-
                 $users = null;
                 if ($user->parent_id != null) {
-                    $users = User::select('id','phone','address' ,'name', 'email', 'type', 'parent_id','cat_id')->where('parent_id', $user->parent_id)->with('category')->get();
+                    $users = User::select('id','phone','address' ,'name', 'email', 'type', 'parent_id','cat_id')->where('parent_id', $user->parent_id)->where('id','!=',$user_id)->with('category')->get();
                 } else {
-                    $users = User::select('id','phone','address' , 'name', 'email', 'type', 'parent_id','cat_id')->where('parent_id', $user_id)->orWhere('id', $user_id)->with('category')->get();
+                    $users = User::select('id','phone','address' , 'name', 'email', 'type', 'parent_id','cat_id')->where('parent_id', $user_id)->where('id','!=',$user_id)->with('category')->get();
                 }
                 return msgdata($request, success(), 'success', $users);
 
@@ -113,7 +112,6 @@ class UsersController extends Controller
     {
         $rules = [
             'user_id' => 'required|exists:users,id',
-            'type' => 'required',
             'users' => 'required',
             'clients' => 'required',
             'addcases' => 'required',
@@ -123,16 +121,14 @@ class UsersController extends Controller
             'daily_report' => 'required',
             'monthly_report' => 'required'
         ];
-      
-            
+
+
  $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
              return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         } else {
             $api_token = $request->header('api_token');
             $select_user_id = $request->input('user_id');
-            $type = $request->input('type');
-            $value = $request->input('value');
             $user = check_api_token($api_token);
             if ($user) {
                 $data['users'] = $request->users;
@@ -171,7 +167,7 @@ class UsersController extends Controller
                 'type' => 'required|in:admin,User',
                 'cat_id' => 'required|exists:categories,id'
             ];
-                 
+
  $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
              return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
@@ -189,7 +185,7 @@ class UsersController extends Controller
             } else {
                 $input['parent_id'] = $auth_user->id;
             }
-            
+
             $input['package_id'] = $auth_user->package_id;
             $user = User::create($input);
             $user_id = $user->id;
@@ -220,7 +216,7 @@ class UsersController extends Controller
                 'type' => 'required|in:admin,User',
                 'cat_id' => 'required|exists:categories,id'
             ];
-                
+
  $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
              return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
@@ -228,12 +224,12 @@ class UsersController extends Controller
             if (empty($auth_user)) {
                 return response()->json(msg($request, not_authoize(), 'invalid_data'));
             }
-            
+
             $user = User::find(intval($id))->update($input);
             $user = User::where('id',$id)->with('category')->first();
             return msgdata($request, success(), 'success', $user);
 
-        
+
     }
     }
 
