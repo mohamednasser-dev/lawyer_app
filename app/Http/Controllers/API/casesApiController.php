@@ -168,12 +168,11 @@ class casesApiController extends Controller
                 return sendResponse(403, trans('site_lang.loginWarning'), $dataOut);
             } else {
                 $case = Cases::where('id', $id)->update($input);
-                $data = Cases::where('id', $id)->first();
+                $data = Cases::with('category')->where('id', $id)->first();
+          
                 if ($case == 1) {
-                    $dataOut['status'] = true;
                     return sendResponse(200, trans('site_lang.updatSuccess'), $data);
                 } else {
-                    $dataOut['status'] = false;
                     return sendResponse(401, trans('site_lang.should_enter_correct') , null);
                 }
             }
