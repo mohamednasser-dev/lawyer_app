@@ -22,8 +22,8 @@ class sessionNoteApiController extends Controller
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
-                $session_Notes = Session_Notes::select('id', 'note', 'status')->where("session_id", $id)->get();
-                return sendResponse(200, 'تم', $session_Notes);
+                $session_Notes = Session_Notes::with('user')->select('id', 'note', 'status','parent_id')->where("session_id", $id)->get()->makeHidden('parent_id');
+                return msgdata($request, success(), 'success', $session_Notes);
             } else {
                 return sendResponse(401, trans('site_lang.permission_warrning'), null);
             }
@@ -51,7 +51,8 @@ class sessionNoteApiController extends Controller
             }
             if (!is_array($validate)) {
                 $session_Notes = Session_Notes::create($input);
-                return sendResponse(200, 'تم الاضافه بنجاح', $session_Notes);
+                $data = Session_Notes::with('user')->select('id','note','parent_id','status')->whereId($session_Notes->id)->first()->makeHidden('parent_id');
+                return msgdata($request, success(), 'success', $data);
             } else {
                 return sendResponse(403, $validate[0], null);
             }
@@ -75,7 +76,8 @@ class sessionNoteApiController extends Controller
                 $status = false;
             }
             $session_Notes->update();
-            return sendResponse(200, 'تم التعديل الحالة بنجاح', $status);
+            $data = Session_Notes::select('status')->find($id)->status;
+            return msgdata($request, success(), 'status_updated_s', $data);
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
@@ -100,8 +102,9 @@ class sessionNoteApiController extends Controller
             }
             if (!is_array($validate)) {
                 $data['note'] = $request->note;
-                $session_Notes = Session_Notes::where('id',$request->note_id)->update($data);
-                return sendResponse(200, 'تم التعديل بنجاح' , null );
+                Session_Notes::where('id',$request->note_id)->update($data);
+                $data = Session_Notes::with('user')->select('id','note','parent_id','status')->whereId($request->note_id)->first()->makeHidden('parent_id');
+                return msgdata($request, success(), 'updated_s', $data);
             } else {
                 return sendResponse(403, $validate[0], null);
             }

@@ -26,4 +26,10 @@ class Session_Notes extends Model
         }
     }
 
+    public function  user(){
+
+        return $this->hasOne('App\User','id','parent_id')->select('id','name');
+
+    }
+
 }
