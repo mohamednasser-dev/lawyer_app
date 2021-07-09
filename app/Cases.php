@@ -19,6 +19,15 @@ class Cases extends Model
     {
         return $this->belongsToMany(Clients::class, 'case_clients', 'case_id', 'client_id');
     }
+    public function get_clients()
+    {
+        return $this->belongsToMany(Clients::class, 'case_clients', 'case_id', 'client_id')->where('type','client');
+    }
+
+    public function get_khesm()
+    {
+        return $this->belongsToMany(Clients::class, 'case_clients', 'case_id', 'client_id')->where('type','khesm');
+    }
 
     public function Clients_custom()
     {

@@ -47,7 +47,16 @@ class CaseDetailsController extends Controller
                 return datatables()->of($case)
                     ->addColumn('client_Name', function ($data) {
                         $button = '';
-                        foreach ($data->clients as $client) {
+                        foreach ($data->get_clients as $client) {
+                            if ($button == '') {
+                                $button = $client->client_Name;
+                            } else
+                                $button = $button . '  , ' . $client->client_Name;
+                        }
+                        return $button;
+                    }) ->addColumn('khesm_Name', function ($data) {
+                        $button = '';
+                        foreach ($data->get_khesm as $client) {
                             if ($button == '') {
                                 $button = $client->client_Name;
                             } else
