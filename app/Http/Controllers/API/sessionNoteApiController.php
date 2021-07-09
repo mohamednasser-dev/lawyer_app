@@ -54,7 +54,7 @@ class sessionNoteApiController extends Controller
                 $data = Session_Notes::with('user')->select('id','note','parent_id','status')->whereId($session_Notes->id)->first()->makeHidden('parent_id');
                 return msgdata($request, success(), 'success', $data);
             } else {
-                return sendResponse(403, $validate[0], null);
+                return sendResponse(401, $validate[0], null);
             }
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
@@ -106,7 +106,7 @@ class sessionNoteApiController extends Controller
                 $data = Session_Notes::with('user')->select('id','note','parent_id','status')->whereId($request->note_id)->first()->makeHidden('parent_id');
                 return msgdata($request, success(), 'updated_s', $data);
             } else {
-                return sendResponse(403, $validate[0], null);
+                return sendResponse(401, $validate[0], null);
             }
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
