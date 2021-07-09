@@ -28,10 +28,16 @@ class Clients extends Model
         return $this->belongsToMany(Cases::class, 'case_clients', 'client_id', 'case_id')->with('category')
             ->select('cases.id','invetation_num','inventation_type','circle_num','court','first_session_date','to_whome');
     }
+    public function client_notes_api()
+    {
+        return $this->hasMany('App\Client_Note','client_id','id')->select(['id','notes as note','user_id','client_id']);
+    }
+
     public function client_notes()
     {
         return $this->hasMany('App\Client_Note','client_id','id')->select(['id','notes','user_id','client_id']);
     }
+
 
     public function  category()
     {
