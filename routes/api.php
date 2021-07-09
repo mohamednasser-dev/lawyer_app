@@ -48,7 +48,7 @@ Route::get('select/data/to_add_case', 'API\casesApiController@select_data_to_add
 //client Profile
 Route::get('client_Profile/{id}', 'API\ClientProfileController@client_cases');
 Route::post('add_clientNote', 'API\ClientProfileController@store');
-Route::post('edit_clientNote/{id}', 'API\ClientProfileController@Edit_Note');
+Route::post('edit_clientNote', 'API\ClientProfileController@Edit_Note');
 Route::get('delete_clientNote/{id}', 'API\ClientProfileController@delte_Note');
 
 //client attachments

@@ -33,7 +33,7 @@ class ClientProfileController extends Controller
             }
 
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
 
         }
 
@@ -42,10 +42,10 @@ class ClientProfileController extends Controller
 
     public function store(Request $request)
     {
-        $input = $request->all();
+//        $input = $request->all();
         $rules =
             [
-                'notes' => 'required',
+                'note' => 'required',
                 'client_id' => 'required|exists:clients,id',
             ];
          $validator = Validator::make($request->all(), $rules);
@@ -55,8 +55,9 @@ class ClientProfileController extends Controller
             $api_token = $request->header('api_token');
             $auth_user = check_api_token($api_token);
             if (empty($auth_user)) {
-                return response()->json(msg($request, not_authoize(), 'invalid_data'));
+                return response()->json(msg($request, not_authoize(), 'not_authoize'));
             }
+            $input['notes'] = $request->note ;
             $input['user_id'] = $auth_user->id;
             $input['client_id'] = $request->client_id;
             if ($auth_user->parent_id != null) {
@@ -72,10 +73,10 @@ class ClientProfileController extends Controller
 
     public function Edit_Note(Request $request)
     {
-        $input = $request->all();
+//        $input = $request->all();
         $rules =
             [
-                'notes' => 'required',
+                'note' => 'required',
                 'id'=>'required'
             ];
          $validator = Validator::make($request->all(), $rules);
@@ -85,10 +86,10 @@ class ClientProfileController extends Controller
             $api_token = $request->header('api_token');
             $auth_user = check_api_token($api_token);
             if (empty($auth_user)) {
-                return response()->json(msg($request, not_authoize(), 'invalid_data'));
+                return response()->json(msg($request, not_authoize(), 'not_authoize'));
             }
             if ($auth_user->type == 'admin') {
-                $input_data['notes'] = $request->notes;
+                $input['notes'] = $request->note;
                 $data = Client_Note::find($request->id)->update($input);
                 $data = Client_Note::whereId($request->id)->with('user')->first();
                 return msgdata($request, success(), 'success', $data);
@@ -104,7 +105,7 @@ class ClientProfileController extends Controller
         $api_token = $request->header('api_token');
         $auth_user = check_api_token($api_token);
         if (empty($auth_user)) {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
         if ($auth_user->type == 'admin') {
             Client_Note::findOrFail(intval($id))->delete();
