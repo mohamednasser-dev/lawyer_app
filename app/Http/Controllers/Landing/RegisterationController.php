@@ -8,6 +8,8 @@ use App\Permission;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Validator;
+
 
 class RegisterationController extends Controller
 {
@@ -40,6 +42,8 @@ class RegisterationController extends Controller
     public function store(Request $request)
     {
 
+
+
         app()->setLocale('ar');
         $data = $this->validate(request(), [
             'name' => 'required',
@@ -52,14 +56,44 @@ class RegisterationController extends Controller
 
         ]);
 
+        // $rules = [
+        //     'name' => 'required',
+        //     'email' =>'required|unique:users,email|regex:/(.+)@(.+)\.(.+)/i',
+        //     'password' => 'required',
+        //     'phone' => 'required|unique:users,phone',
+        //     'address' => 'required',
+        //     'cat_name' => 'required',
+        // ];
+        // $validator = Validator::make($request->all(), $rules);
+        // if ($validator->fails()) {
+        //     return response()->json(['error' => "error"]);
+        // }
+
+
         $Cat_data['name'] = $request->cat_name;
         $category = category::create($Cat_data);
+
+        $data['name'] = $request->name;
+        $data['email'] = $request->email;
+        $data['phone'] = $request->phone;
+        $data['address'] = $request->address;
+        $data['cat_name'] = $request->cat_name;
+
         $data['password'] = bcrypt(request('password'));
         $data['cat_id'] = $category->id;
         $data['status'] = 'Demo';
         $data['type'] = 'admin';
         $package = Package::where('name','demo')->first();
-        $data['package_id'] = $package->id;
+        if($package){
+            $data['package_id'] = $package->id;
+        }else{
+            $package =  Package::create(
+                ["name"=>'Demo','cost'=>0,"duration"=>14]
+            );
+
+            $data['package_id'] = $package->id;
+        }
+
         $user_result = User::create($data);
 
         $category->parent_id = $user_result->id;
@@ -78,6 +112,12 @@ class RegisterationController extends Controller
         $per = Permission::create($permissions);
         $per->save();
 
+        return response(
+            [
+                'success' => "تم بنجاح"
+
+            ]
+        );
         return response()->json(['success' => "تم بنجاح"]);
     }
 
