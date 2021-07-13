@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Cases extends Model
 {
     protected $table = 'cases';
-    protected $hidden = ['pivot'];
+    protected $hidden = ['pivot','Clients_only','khesm_only'];
 
     protected $fillable = [
         'mokel_name', 'khesm_name', 'invetation_num', 'circle_num', 'court', 'first_session_date',

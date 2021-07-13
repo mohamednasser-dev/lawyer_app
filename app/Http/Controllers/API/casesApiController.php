@@ -32,7 +32,7 @@ class casesApiController extends Controller
                     $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
                         ->where('to_whome', $user->cat_id)
                         ->where('parent_id', $user->parent_id)
-                        ->get()->map(function ($data){
+                        ->paginate(20)->map(function ($data){
                             $new_string = "";
                             foreach ($data->Clients_only as $row){
                                 $new_string = $new_string . $row->client_Name.' , ';
@@ -45,23 +45,27 @@ class casesApiController extends Controller
                             $data->clients = $new_string ;
                             $data->khesms = $new_khesm ;
                             return $data;
-                        })->makeHidden(['clients_only','khesm_only']);
+                        });
                 } else {
-                    $cases = Cases::select('id', 'invetation_num', 'court', 'parent_id')
+                    $cases = Cases::select('id', 'invetation_num', 'court', 'parent_id')->with('Clients_only')->with('khesm_only')
                         ->where('parent_id', '=', $user->id)
-                        ->get()->map(function ($data){
-                            $new_string = "";
-                            foreach ($data->Clients_only as $row){
-                                $new_string = $new_string . $row->client_Name.' , ';
-                            }
-                            $new_khesm = "";
-                            foreach ($data->khesm_only as $row){
-                                $new_khesm = $new_khesm . $row->client_Name.' , ';
-                            }
-                            $data->clients = $new_string ;
-                            $data->khesms = $new_khesm ;
-                            return $data;
-                        })->makeHidden(['clients_only','khesm_only']);
+                        ->paginate(20);
+                    //TODO Nasser:make pagination in cases
+                    for ($i = 0; $i < count($cases); $i++) {
+                        $cases[$i]['clients'] =
+
+                        $new_string = "";
+                        foreach ($cases[$i]['Clients_only'] as $row){
+                            $new_string = $new_string . $row->client_Name.' , ';
+                        }
+                        $new_khesm = "";
+                        foreach ($cases[$i]['khesm_only'] as $row){
+                            $new_khesm = $new_khesm . $row->client_Name.' , ';
+                        }
+                        $cases[$i]['clients'] = $new_string ;
+                        $cases[$i]['khesms'] = $new_khesm ;
+
+                    }
                 }
                 return sendResponse(200, trans('site_lang.data_dispaly_success'), $cases);
             } else {
@@ -169,7 +173,7 @@ class casesApiController extends Controller
             } else {
                 $case = Cases::where('id', $id)->update($input);
                 $data = Cases::with('category')->where('id', $id)->first();
-          
+
                 if ($case == 1) {
                     return sendResponse(200, trans('site_lang.updatSuccess'), $data);
                 } else {
