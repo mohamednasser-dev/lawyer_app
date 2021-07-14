@@ -33,6 +33,46 @@ class ClientProfileController extends Controller
         }
     }
 
+    public function client_notes_pagination(Request $request, $id)
+    {
+        $api_token = $request->header('api_token');
+        $user = check_api_token($api_token);
+        if ($user) {
+            $user_id = $user->id;
+            $permission = Permission::where('user_id', $user_id)->first();
+            $enabled = $permission->clients;
+            if ($enabled == 'yes') {
+                $client_profile = Client_Note::select(['id','notes as note','user_id','client_id']);->where('client_id', $id)->paginate(20);
+                return msgdata($request, success(), 'success', $client_profile);
+            } else {
+                return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
+            }
+        } else {
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
+        }
+    }
+    public function client_cases_pagination(Request $request, $id)
+    {
+        $api_token = $request->header('api_token');
+        $user = check_api_token($api_token);
+        if ($user) {
+            $user_id = $user->id;
+            $permission = Permission::where('user_id', $user_id)->first();
+            $enabled = $permission->clients;
+            if ($enabled == 'yes') {
+                $cases_selected = Case_client::where('client_id',$id)->select('case_id')->get()->toArray();
+                $client_profile = Cases::with('category')->whereIn('id', $cases_selected)
+                    ->select('cases.id','invetation_num','inventation_type','circle_num','court','first_session_date','to_whome')
+                    ->paginate(20);
+                return msgdata($request, success(), 'success', $client_profile);
+            } else {
+                return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
+            }
+        } else {
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
+        }
+    }
+
     public function store(Request $request)
     {
 //        $input = $request->all();

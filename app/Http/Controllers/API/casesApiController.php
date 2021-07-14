@@ -50,7 +50,7 @@ class casesApiController extends Controller
                     $cases = Cases::select('id', 'invetation_num', 'court', 'parent_id')->with('Clients_only')->with('khesm_only')
                         ->where('parent_id', '=', $user->id)
                         ->paginate(20);
-                    //TODO Nasser:make pagination in cases
+
                     for ($i = 0; $i < count($cases); $i++) {
                         $cases[$i]['clients'] =
 
@@ -274,22 +274,22 @@ class casesApiController extends Controller
         if ($user != null) {
             $client_data = [];
             if($type == 'client'){
-                $clients = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) {
+                $client_data = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) {
                     $query->where('type', 'client');
-                })->get();
-                foreach ($clients as $key => $row) {
-                    $client_data[$key]['id'] = $row->client_data->id;
-                    $client_data[$key]['client_Name'] = $row->client_data->client_Name;
-                }
+                })->paginate(20);
+//                foreach ($clients as $key => $row) {
+//                    $client_data[$key]['id'] = $row->client_data->id;
+//                    $client_data[$key]['client_Name'] = $row->client_data->client_Name;
+//                }
             }else{
-                $khesm = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) {
+                $client_data = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) {
                     $query->where('type', 'khesm');
-                })->get();
+                })->paginate(20);
 
-                foreach ($khesm as $key => $row) {
-                    $client_data[$key]['id'] = $row->client_data->id;
-                    $client_data[$key]['client_Name'] = $row->client_data->client_Name;
-                }
+//                foreach ($khesm as $key => $row) {
+//                    $client_data[$key]['id'] = $row->client_data->id;
+//                    $client_data[$key]['client_Name'] = $row->client_data->client_Name;
+//                }
             }
             return sendResponse(200, trans('site_lang.data_dispaly_success'),$client_data);
         } else {

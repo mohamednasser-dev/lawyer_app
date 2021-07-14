@@ -25,7 +25,7 @@ Route::post('password/reset', 'API\ManulPasswordController@reset');
 //Home Page ..
 Route::get('home_data', 'API\HomePageController@index');
 
-// Users Actions
+// clients Actions
 Route::get('users', 'API\UsersController@index');
 Route::get('select_user', 'API\UsersController@select_user');
 Route::get('user_by_id/{id}', 'API\UsersController@show');
@@ -47,6 +47,8 @@ Route::get('delete_client/{id}', 'API\ClientController@destroy');
 Route::get('select/data/to_add_case', 'API\casesApiController@select_data_to_add_case');
 //client Profile
 Route::get('client_Profile/{id}', 'API\ClientProfileController@client_cases');
+Route::get('client_Profile/notes/pagination/{id}', 'API\ClientProfileController@client_notes_pagination');
+Route::get('client_Profile/cases/pagination/{id}', 'API\ClientProfileController@client_cases_pagination');
 Route::post('add_clientNote', 'API\ClientProfileController@store');
 Route::post('edit_clientNote', 'API\ClientProfileController@Edit_Note');
 Route::get('delete_clientNote/{id}', 'API\ClientProfileController@delte_Note');

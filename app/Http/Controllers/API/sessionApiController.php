@@ -22,7 +22,7 @@ class sessionApiController extends Controller
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
-                $Sessionsdata = Sessions::select('id', 'session_date', 'status')->where("case_id", $id)->orderBy('created_at', 'desc')->get();
+                $Sessionsdata = Sessions::select('id', 'session_date', 'status')->where("case_id", $id)->orderBy('created_at', 'desc')->paginate(20);
                 return sendResponse(200, 'تم', $Sessionsdata);
             } else {
                 return sendResponse(401, trans('site_lang.permission_warrning'), null);

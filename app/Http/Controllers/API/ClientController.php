@@ -24,25 +24,19 @@ class ClientController extends Controller
             if ($enabled == 'yes') {
                 if ($user->parent_id != null) {
                     if ($user_type == 'admin') {
-
                         $clients = Clients::select('id', 'client_Name', 'client_Unit', 'client_Address', 'notes', 'type', 'parent_id', 'cat_id')->where('parent_id', $user->parent_id)
-                            ->with('category')->get();
+                            ->with('category')->paginate(20);
                     } else {
-
                         //type = user ->get all client with same cat_id of this user
                         $clients = Clients::select('id', 'client_Name', 'client_Unit', 'client_Address', 'notes', 'type', 'parent_id', 'cat_id')->where('cat_id', $user->cat_id)
-                            ->with('category')->get();
+                            ->with('category')->paginate(20);
                     }
                 } else {
-
                     $clients = Clients::select('id', 'client_Name', 'client_Unit', 'client_Address', 'notes', 'type', 'parent_id', 'cat_id')->where('parent_id', $user_id)
                         ->with('category')
-                        ->get();
-//                error  ->with('category')
+                        ->paginate(20);
                 }
-
                 return msgdata($request, success(), 'success', $clients);
-
             } else {
                 return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
             }
@@ -50,9 +44,6 @@ class ClientController extends Controller
             return response()->json(msg($request, not_authoize(), 'invalid_data'));
         }
     }
-
-
-
     public function store(Request $request)
     {
         $input = $request->all();
