@@ -17,7 +17,7 @@ class attachmentApiController extends Controller
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
-                $attachments = attachment::select('id','img_Description','img_Url')->where('case_id', $id)->get();
+                $attachments = attachment::select('id','img_Description','img_Url')->where('case_id', $id)->paginate(20);
                 return sendResponse(200, trans('site_lang.data_dispaly_success'),$attachments);
             } else {
                 return sendResponse(401, trans('site_lang.permission_warrning'),null);

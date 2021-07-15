@@ -42,7 +42,7 @@ class ClientProfileController extends Controller
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->clients;
             if ($enabled == 'yes') {
-                $client_profile = Client_Note::select(['id','notes as note','user_id','client_id']);->where('client_id', $id)->paginate(20);
+                $client_profile = Client_Note::select(['id','notes as note','user_id','client_id'])->where('client_id', $id)->paginate(20);
                 return msgdata($request, success(), 'success', $client_profile);
             } else {
                 return response()->json(msg($request, not_acceptable(), 'permission_warrning'));

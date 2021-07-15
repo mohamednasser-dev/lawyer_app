@@ -24,10 +24,10 @@ class mohdareenApiController extends Controller
                 $mohdrs = null;
                 if ($user->parent_id != null) {
                     $mohdrs = mohdr::select('moh_Id', 'mokel_Name', 'khesm_Name', 'paper_Number', 'session_Date', 'status')
-                        ->where('parent_id', $user->parent_id)->get();
+                        ->where('parent_id', $user->parent_id)->paginate(20);
                 } else {
                     $mohdrs = mohdr::select('moh_Id', 'mokel_Name', 'khesm_Name', 'paper_Number', 'session_Date', 'status')
-                        ->where('parent_id', $user->id)->get();
+                        ->where('parent_id', $user->id)->paginate(20);
                 }
 
                 return msgdata($request, success(), 'success', $mohdrs);

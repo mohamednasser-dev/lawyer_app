@@ -19,20 +19,17 @@ class CategoryController extends Controller
             $permission = Permission::where('user_id', $user->id)->first();
             $enabled = $permission->category;
             if ($enabled == 'yes') {
-
                 if ($user->parent_id != null) {
-                    $categories = category::where('parent_id', $user->parent_id)->get();
+                    $categories = category::where('parent_id', $user->parent_id)->paginate(20);
                 } else {
-                    $categories = category::where('parent_id', $user->id)->get();
+                    $categories = category::where('parent_id', $user->id)->paginate(20);
                 }
-
                 return msgdata($request, success(), 'success', $categories);
             } else {
                 return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
             }
         } else {
             return response()->json(msg($request, not_authoize(), 'invalid_data'));
-
         }
     }
 

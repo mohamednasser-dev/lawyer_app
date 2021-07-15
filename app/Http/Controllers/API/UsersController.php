@@ -26,10 +26,10 @@ class UsersController extends Controller
                 $users = null;
                 if ($user->parent_id != null) {
                     $users = User::select('id','phone','address' ,'name', 'email', 'type', 'parent_id','cat_id')
-                        ->where('parent_id', $user->parent_id)->where('id','!=',$user_id)->with('category')->paginate(20);
+                        ->where('parent_id', $user->parent_id)->where('id','!=',$user_id)->with('category')->paginate(10);
                 } else {
                     $users = User::select('id','phone','address' , 'name', 'email', 'type', 'parent_id','cat_id')
-                        ->where('parent_id', $user_id)->where('id','!=',$user_id)->with('category')->paginate(20);
+                        ->where('parent_id', $user_id)->where('id','!=',$user_id)->with('category')->paginate(10);
                 }
                 return msgdata($request, success(), 'success', $users);
 
