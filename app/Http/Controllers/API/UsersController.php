@@ -219,7 +219,7 @@ class UsersController extends Controller
                 'cat_id' => 'required|exists:categories,id'
             ];
 
- $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
              return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         } else {
@@ -227,7 +227,7 @@ class UsersController extends Controller
                 return response()->json(msg($request, not_authoize(), 'invalid_data'));
             }
 
-            $user = User::find(intval($id))->update($input);
+            User::find(intval($id))->update($input);
             $user = User::where('id',$id)->with('category')->first();
             return msgdata($request, success(), 'success', $user);
 

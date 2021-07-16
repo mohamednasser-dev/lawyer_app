@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Database\Eloquent\Model;
 
 class Sessions extends Model
@@ -14,6 +16,7 @@ class Sessions extends Model
     {
         return $this->belongsTo(Cases::class, 'case_Id');
     }
+
 
     public function notes()
     {
@@ -38,5 +41,10 @@ class Sessions extends Model
         } else {
             return trans('site_lang.public_yes_text');
         }
+    }
+
+    public function getMonthAttribute($value)
+    {
+        return Carbon::createFromFormat('m', $value)->translatedformat('F');
     }
 }

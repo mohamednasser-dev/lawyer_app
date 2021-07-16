@@ -27,55 +27,32 @@ class HomePageController extends Controller
                 $cases = Cases::where('parent_id', $user->parent_id)->get();
                 $sessions = Sessions::where('parent_id', $user->parent_id)->get();
                 $mohdreen = mohdr::where('parent_id', $user->parent_id)->get();
-                $coming_session = Sessions::select('id','session_date','month','year','case_Id','status')
-                                            ->whereBetween('session_date', array($today, $date))
-                                            ->where('parent_id', $user->parent_id)
-                                            ->get()
-                                            ->map(function($sessions){
-                                                $case = Cases::findOrFail($sessions->case_Id);
-                                                $sessions->invetation_num = $case->invetation_num ;
-                                                $sessions->month = date('F', strtotime($sessions->session_date));
-                                                return $sessions ;
-                                            });
-                $previous_session = Sessions::select('id','session_date','month','year','case_Id','status')
-                                            ->where('session_date', '<=', $today)
-                                            ->where('status', 'No')
-                                            ->where('parent_id', $user->parent_id)
-                                            ->get()
-                                            ->map(function($sessions){
-                                                $case = Cases::findOrFail($sessions->case_Id);
-                                                $sessions->invetation_num = $case->invetation_num ;
-                                                $sessions->month = date('F', strtotime($sessions->session_date));
-                                                return $sessions ;
-                                            });
-                $mohder = mohdr::select('moh_Id','court_mohdareen','paper_type','session_Date')->whereBetween('session_date', array($today, $datee))->where('parent_id', $user->parent_id)->get();
+                $coming_session = Sessions::select('id', 'session_date', 'month', 'year', 'case_Id', 'status')
+                    ->whereBetween('session_date', array($today, $date))
+                    ->where('parent_id', $user->parent_id)
+                    ->paginate(20);
+                $previous_session = Sessions::select('id', 'session_date', 'month', 'year', 'case_Id', 'status')
+                    ->where('session_date', '<=', $today)
+                    ->where('status', 'No')
+                    ->where('parent_id', $user->parent_id)
+                    ->paginate(20);
+                $mohder = mohdr::select('moh_Id', 'court_mohdareen', 'paper_type', 'session_Date')->whereBetween('session_date', array($today, $datee))->where('parent_id', $user->parent_id)->get();
             } else {
                 $users = User::where('parent_id', $user->id)->get();
                 $cases = Cases::where('parent_id', $user->id)->get();
-                $sessions = Sessions::select('id','session_date','month','year')->where('parent_id', $user->id)->get();
+                $sessions = Sessions::select('id', 'session_date', 'month', 'year')->where('parent_id', $user->id)->get();
                 $mohdreen = mohdr::where('parent_id', $user->id)->get();
-                $coming_session = Sessions::select('id','session_date','month','year','case_Id','status')
-                                            ->whereBetween('session_date', array($today, $date))
-                                            ->where('parent_id', $user->id)
-                                            ->get()
-                                            ->map(function($sessions){
-                                                $case = Cases::findOrFail($sessions->case_Id);
-                                                $sessions->invetation_num = $case->invetation_num ;
-                                                $sessions->month = date('F', strtotime($sessions->session_date));
-                                                return $sessions ;
-                                            });
-                $previous_session = Sessions::select('id','session_date','month','year','case_Id','status')
-                                            ->where('session_date', '<=', $today)
-                                            ->where('status', 'No')
-                                            ->where('parent_id', $user->id)
-                                            ->get()
-                                            ->map(function($sessions){
-                                                $case = Cases::findOrFail($sessions->case_Id);
-                                                $sessions->invetation_num = $case->invetation_num ;
-                                                $sessions->month = date('F', strtotime($sessions->session_date));
-                                                return $sessions ;
-                                            });
-                $mohder = mohdr::select('moh_Id','court_mohdareen','paper_type','session_Date')->whereBetween('session_date', array($today, $datee))->where('parent_id', $user->id)->get();
+                $coming_session = Sessions::select('id', 'session_date', 'month', 'year', 'case_Id', 'status')
+                    ->whereBetween('session_date', array($today, $date))
+                    ->where('parent_id', $user->id)
+                    ->paginate(20);
+                $previous_session = Sessions::select('id', 'session_date', 'month', 'year', 'case_Id', 'status')
+                    ->where('session_date', '<=', $today)
+                    ->where('status', 'No')
+                    ->where('parent_id', $user->id)
+                    ->paginate(20);
+                $mohder = mohdr::select('moh_Id', 'court_mohdareen', 'paper_type', 'session_Date')
+                    ->whereBetween('session_date', array($today, $datee))->where('parent_id', $user->id)->paginate(20);
             }
             $count_data['users'] = count($users);
             $count_data['cases'] = count($cases);
