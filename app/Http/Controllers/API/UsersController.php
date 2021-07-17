@@ -25,11 +25,11 @@ class UsersController extends Controller
             if ($enabled == 'yes') {
                 $users = null;
                 if ($user->parent_id != null) {
-                    $users = User::select('id','phone','address' ,'name', 'email', 'type', 'parent_id','cat_id')
-                        ->where('parent_id', $user->parent_id)->where('id','!=',$user_id)->with('category')->paginate(10);
+                    $users = User::select('id', 'phone', 'address', 'name', 'email', 'type', 'parent_id', 'cat_id')
+                        ->where('parent_id', $user->parent_id)->where('id', '!=', $user_id)->with('category')->paginate(10);
                 } else {
-                    $users = User::select('id','phone','address' , 'name', 'email', 'type', 'parent_id','cat_id')
-                        ->where('parent_id', $user_id)->where('id','!=',$user_id)->with('category')->paginate(10);
+                    $users = User::select('id', 'phone', 'address', 'name', 'email', 'type', 'parent_id', 'cat_id')
+                        ->where('parent_id', $user_id)->where('id', '!=', $user_id)->with('category')->paginate(10);
                 }
                 return msgdata($request, success(), 'success', $users);
 
@@ -54,10 +54,10 @@ class UsersController extends Controller
                 $users = null;
                 $categories = null;
                 if ($user->parent_id != null) {
-                    $user_data = User::select('name', 'type', 'email', 'phone', 'address', 'image', 'parent_id','cat_id')->where('parent_id', $user->parent_id)->with('category')->first();
+                    $user_data = User::select('name', 'type', 'email', 'phone', 'address', 'image', 'parent_id', 'cat_id')->where('parent_id', $user->parent_id)->with('category')->first();
                     $categories = category::where('parent_id', $user->parent_id)->select('id', 'name')->get();
                 } else {
-                    $user_data = User::select('id', 'name', 'type', 'email', 'phone', 'address', 'image', 'parent_id','cat_id')->where('parent_id', $user_id)->orWhere('id', $user_id)->with('category')->first();
+                    $user_data = User::select('id', 'name', 'type', 'email', 'phone', 'address', 'image', 'parent_id', 'cat_id')->where('parent_id', $user_id)->orWhere('id', $user_id)->with('category')->first();
                     $categories = category::where('parent_id', $user_id)->select('id', 'name')->get();
                 }
                 return msgdata($request, success(), 'success', array('user_data' => $user_data, 'categories' => $categories));
@@ -82,10 +82,10 @@ class UsersController extends Controller
                 $users = null;
                 $categories = null;
                 if ($user->parent_id != null) {
-                    $user_data = User::select('id', 'name', 'type', 'email', 'phone', 'address', 'image','cat_id')->with('category')->find($id);
+                    $user_data = User::select('id', 'name', 'type', 'email', 'phone', 'address', 'image', 'cat_id')->with('category')->find($id);
                     $categories = category::where('parent_id', $user->parent_id)->select('id', 'name')->get();
                 } else {
-                    $user_data = User::select('id', 'name', 'type', 'email', 'phone', 'address', 'image', 'parent_id','cat_id')->where('parent_id', $user_id)->orWhere('id', $user_id)->with('category')->first();
+                    $user_data = User::select('id', 'name', 'type', 'email', 'phone', 'address', 'image', 'parent_id', 'cat_id')->where('parent_id', $user_id)->orWhere('id', $user_id)->with('category')->first();
                     $categories = category::where('parent_id', $user_id)->select('id', 'name')->get();
                 }
                 return msgdata($request, success(), 'success', array('user_data' => $user_data, 'categories' => $categories));
@@ -125,9 +125,9 @@ class UsersController extends Controller
         ];
 
 
- $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         } else {
             $api_token = $request->header('api_token');
             $select_user_id = $request->input('user_id');
@@ -170,9 +170,9 @@ class UsersController extends Controller
                 'cat_id' => 'required|exists:categories,id'
             ];
 
- $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         } else {
 
             $api_token = $request->header('api_token');
@@ -194,15 +194,14 @@ class UsersController extends Controller
             $permissions['user_id'] = $user_id;
             $per = Permission::create($permissions);
             $per->save();
-            $user = User::where('id',$user->id)->with('category')->first();
+            $user = User::where('id', $user->id)->with('category')->first();
             return msgdata($request, success(), 'success', $user);
 
 
         }
     }
 
-    public
-    function update(Request $request)
+    public function update(Request $request)
     {
         $input = $request->all();
         $api_token = $request->header('api_token');
@@ -221,18 +220,48 @@ class UsersController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         } else {
             if (empty($auth_user)) {
                 return response()->json(msg($request, not_authoize(), 'invalid_data'));
             }
 
             User::find(intval($id))->update($input);
-            $user = User::where('id',$id)->with('category')->first();
+            $user = User::where('id', $id)->with('category')->first();
             return msgdata($request, success(), 'success', $user);
 
 
+        }
     }
+    public function update_profile(Request $request){
+        $input = $request->all();
+        $api_token = $request->header('api_token');
+        $auth_user = check_api_token($api_token);
+        $id = $auth_user->id ;
+        $rules =
+            [
+                'name' => 'required',
+                'email' => 'required|email|unique:users,email,' . $id,
+                'phone' => 'required|numeric|unique:users,phone,' . $id,
+                'pasword' => 'nullable'
+            ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+        } else {
+            if (empty($auth_user)) {
+                return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            }
+            if($request->password != null){
+                $input['password'] = bcrypt(request('password'));
+            }else{
+                unset($input['password']);
+            }
+            User::find(intval($id))->update($input);
+            $user = User::where('id',$id)->with('category')->first();
+            return msgdata($request, success(), 'success', $user);
+        }
     }
 
     public

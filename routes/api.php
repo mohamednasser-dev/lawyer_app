@@ -31,6 +31,7 @@ Route::get('select_user', 'API\UsersController@select_user');
 Route::get('user_by_id/{id}', 'API\UsersController@show');
 Route::post('add_users', 'API\UsersController@store');
 Route::post('edit_user', 'API\UsersController@update');
+Route::post('update_profile', 'API\UsersController@update_profile');
 Route::get('delete_user/{id}', 'API\UsersController@destroy');
 Route::get('select_user_permission/{id}', 'API\UsersController@select_user_permission');
 Route::post('update_permission', 'API\UsersController@update_permission');
