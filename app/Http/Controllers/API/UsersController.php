@@ -260,7 +260,8 @@ class UsersController extends Controller
             }
             User::find(intval($id))->update($input);
             $user = User::where('id',$id)->with('category')->first();
-            return msgdata($request, success(), 'success', $user);
+            $permission = Permission::where('user_id', $user->id)->first();
+            return msgdata($request, success(), 'success',  array('user' => $user, 'permission' => $permission));
         }
     }
 
