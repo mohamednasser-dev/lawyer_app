@@ -363,7 +363,6 @@ class CaseDetailsController extends Controller
     public function printCase($id)
     {
         $cases = Cases::query()->where("id", "=", $id)->get();
-
         $case = Cases::findOrFail($id);
         $clients = array();
         $khesm = array();
