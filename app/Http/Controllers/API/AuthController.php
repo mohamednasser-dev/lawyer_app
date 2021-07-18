@@ -93,7 +93,7 @@ class AuthController extends Controller
 
             $pdf = PDF::loadView('Reports.CasePDF', ['data' => $cases, 'clients' => $clients, 'khesm' => $khesm, 'Sessions' => $Sessions]);
 
-            return $pdf->stream('print.' . 'pdf');
+            return $pdf->stream('print.pdf' , array("Attachment" => false));
         }else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
