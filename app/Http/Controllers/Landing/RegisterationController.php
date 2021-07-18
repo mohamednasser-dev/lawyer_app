@@ -41,9 +41,6 @@ class RegisterationController extends Controller
      */
     public function store(Request $request)
     {
-
-
-
         app()->setLocale('ar');
         $data = $this->validate(request(), [
             'name' => 'required',
@@ -55,21 +52,6 @@ class RegisterationController extends Controller
 //            'package_id' => 'required',
 
         ]);
-
-        // $rules = [
-        //     'name' => 'required',
-        //     'email' =>'required|unique:users,email|regex:/(.+)@(.+)\.(.+)/i',
-        //     'password' => 'required',
-        //     'phone' => 'required|unique:users,phone',
-        //     'address' => 'required',
-        //     'cat_name' => 'required',
-        // ];
-        // $validator = Validator::make($request->all(), $rules);
-        // if ($validator->fails()) {
-        //     return response()->json(['error' => "error"]);
-        // }
-
-
         $Cat_data['name'] = $request->cat_name;
         $category = category::create($Cat_data);
 
@@ -119,6 +101,72 @@ class RegisterationController extends Controller
             ]
         );
         return response()->json(['success' => "تم بنجاح"]);
+    }
+
+    public function storeApi(Request $request)
+    {
+        app()->setLocale('ar');
+        $rules =
+            [
+                'name' => 'required',
+                'email' =>'required|unique:users,email|regex:/(.+)@(.+)\.(.+)/i',
+                'password' => 'required',
+                'phone' => 'required|unique:users,phone',
+                'address' => 'required',
+                'cat_name' => 'required',
+//            'package_id' => 'required',
+            ];
+
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->all()]);
+        }
+
+
+        $Cat_data['name'] = $request->cat_name;
+        $category = category::create($Cat_data);
+
+        $data['name'] = $request->name;
+        $data['email'] = $request->email;
+        $data['phone'] = $request->phone;
+        $data['address'] = $request->address;
+        $data['cat_name'] = $request->cat_name;
+
+        $data['password'] = bcrypt(request('password'));
+        $data['cat_id'] = $category->id;
+        $data['status'] = 'Demo';
+        $data['type'] = 'admin';
+        $package = Package::where('name','demo')->first();
+        if($package){
+            $data['package_id'] = $package->id;
+        }else{
+            $package =  Package::create(
+                ["name"=>'Demo','cost'=>0,"duration"=>14]
+            );
+
+            $data['package_id'] = $package->id;
+        }
+
+        $user_result = User::create($data);
+
+        $category->parent_id = $user_result->id;
+        $category->update();
+
+        $permissions['user_id'] = $user_result->id;
+        $permissions['users'] = 'yes';
+        $permissions['clients'] = 'yes';
+        $permissions['addcases'] = 'yes';
+        $permissions['search_case'] = 'yes';
+        $permissions['mohdreen'] = 'yes';
+        $permissions['daily_report'] = 'yes';
+        $permissions['monthly_report'] = 'yes';
+        $permissions['category'] = 'yes';
+
+        $per = Permission::create($permissions);
+        $per->save();
+
+        return msgdata($request, success(), 'success', $user_result);
+
     }
 
     /**

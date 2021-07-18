@@ -133,11 +133,6 @@ Route::get('printCase/{id}', 'API\AuthController@printCase');
 
 
 
-
-
-
-
-
-
 // registration form
 Route::post('register', 'Landing\RegisterationController@store');
+Route::post('registeration', 'Landing\RegisterationController@storeApi');
