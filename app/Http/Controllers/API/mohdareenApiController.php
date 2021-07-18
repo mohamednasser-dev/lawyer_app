@@ -40,6 +40,61 @@ class mohdareenApiController extends Controller
 
     }
 
+    public function search(Request $request)
+    {
+        $rules =
+            [
+                'mokel_Name' => 'nullable|string',
+                'khesm_Name' => 'nullable',
+                'paper_Number' => 'nullable',
+
+            ];
+
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+        }
+
+        $api_token = $request->header('api_token');
+        $user = check_api_token($api_token);
+        if ($user && $api_token !=null) {
+            $user_id = $user->id;
+            $permission = Permission::where('user_id', $user_id)->first();
+            $enabled = $permission->mohdreen;
+            if ($enabled == 'yes') {
+                $mohdrs = null;
+                if ($user->parent_id != null) {
+                    $mohdrs = mohdr::select('moh_Id', 'mokel_Name', 'khesm_Name', 'paper_Number', 'session_Date', 'status')
+                        ->where('parent_id', $user->parent_id);
+
+
+                } else {
+                    $mohdrs = mohdr::select('moh_Id', 'mokel_Name', 'khesm_Name', 'paper_Number', 'session_Date', 'status')
+                        ->where('parent_id', $user->id);
+
+                }
+                if ($request->mokel_Name !=null){
+                    $mohdrs =$mohdrs->where('mokel_Name','like','%'.$request->mokel_Name .'%');
+                }
+                if ($request->khesm_Name !=null){
+                   $mohdrs =$mohdrs->where('khesm_Name','like','%'.$request->khesm_Name .'%');
+                }
+                if ($request->paper_Number !=null){
+                    $mohdrs =$mohdrs->where('paper_Number','like','%'.$request->paper_Number .'%');
+                }
+
+                $mohdrs = $mohdrs->paginate(20);
+
+                return msgdata($request, success(), 'success', $mohdrs);
+            } else {
+                return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
+            }
+        } else {
+            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+        }
+
+    }
+
     public function store(Request $request)
     {
         $input = $request->all();

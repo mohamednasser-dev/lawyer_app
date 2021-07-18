@@ -114,7 +114,28 @@ Route::post('add_case_attachment', 'API\attachmentApiController@store');
 Route::post('update_case_attachment/{id}', 'API\attachmentApiController@update');
 Route::get('remove_attachment/{id}', 'API\attachmentApiController@destroy');
 
+//searches
+Route::post('search-users', 'API\UsersController@search');
+Route::post('search-clients', 'API\ClientController@search');
+Route::post('search-cases', 'API\casesApiController@search');
+Route::post('search-session', 'API\sessionApiController@search');
+Route::post('search-note', 'API\sessionNoteApiController@search');
+Route::post('search-client-attachment', 'API\CientAttachmentController@search');
+Route::post('search-case-attachment', 'API\attachmentApiController@search');
+Route::post('search-mohdareen', 'API\mohdareenApiController@search');
+
+
+
+
+
+
+
+
+
+Route::get('printCase/{id}', 'API\AuthController@printCase');
+
 
 
 // registration form
 Route::post('register', 'Landing\RegisterationController@store');
+Route::post('registeration', 'Landing\RegisterationController@storeApi');

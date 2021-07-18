@@ -32,18 +32,18 @@ class casesApiController extends Controller
                     $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
                         ->where('to_whome', $user->cat_id)
                         ->where('parent_id', $user->parent_id)
-                        ->paginate(20)->map(function ($data){
+                        ->paginate(20)->map(function ($data) {
                             $new_string = "";
-                            foreach ($data->Clients_only as $row){
-                                $new_string = $new_string . $row->client_Name.' , ';
+                            foreach ($data->Clients_only as $row) {
+                                $new_string = $new_string . $row->client_Name . ' , ';
                             }
 
                             $new_khesm = "";
-                            foreach ($data->khesm_only as $row){
-                                $new_khesm = $new_khesm . $row->client_Name.' , ';
+                            foreach ($data->khesm_only as $row) {
+                                $new_khesm = $new_khesm . $row->client_Name . ' , ';
                             }
-                            $data->clients = $new_string ;
-                            $data->khesms = $new_khesm ;
+                            $data->clients = $new_string;
+                            $data->khesms = $new_khesm;
                             return $data;
                         });
                 } else {
@@ -55,15 +55,119 @@ class casesApiController extends Controller
                         $cases[$i]['clients'] =
 
                         $new_string = "";
-                        foreach ($cases[$i]['Clients_only'] as $row){
-                            $new_string = $new_string . $row->client_Name.' , ';
+                        foreach ($cases[$i]['Clients_only'] as $row) {
+                            $new_string = $new_string . $row->client_Name . ' , ';
                         }
                         $new_khesm = "";
-                        foreach ($cases[$i]['khesm_only'] as $row){
-                            $new_khesm = $new_khesm . $row->client_Name.' , ';
+                        foreach ($cases[$i]['khesm_only'] as $row) {
+                            $new_khesm = $new_khesm . $row->client_Name . ' , ';
                         }
-                        $cases[$i]['clients'] = $new_string ;
-                        $cases[$i]['khesms'] = $new_khesm ;
+                        $cases[$i]['clients'] = $new_string;
+                        $cases[$i]['khesms'] = $new_khesm;
+
+                    }
+                }
+                return sendResponse(200, trans('site_lang.data_dispaly_success'), $cases);
+            } else {
+                return sendResponse(401, trans('site_lang.permission_warrning'), null);
+            }
+        } else {
+            return sendResponse(403, trans('site_lang.loginWarning'), null);
+        }
+    }
+
+    public function search(Request $request)
+    {
+        $rules =
+            [
+                'mokel_name' => 'nullable|string',
+                'khesm_name' => 'nullable|string',
+                'court' => 'nullable',
+                'invetation_num' => 'nullable',
+            ];
+
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+        }
+        $api_token = $request->header('api_token');
+        $user = User::where('api_token', $api_token)->first();
+        if ($user && $api_token != null) {
+            $user_id = $user->id;
+            $permission = Permission::where('user_id', $user_id)->first();
+            $enabled = $permission->search_case;
+            if ($enabled == 'yes') {
+                $cases = null;
+                if ($user->parent_id != null) {
+                    $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
+                        ->where('to_whome', $user->cat_id)
+                        ->where('parent_id', $user->parent_id);
+                    if ($request->has('mokel_name')) {
+                        $cases = $cases->whereHas('Clients_only', function ($q) use ($request) {
+                            $q->where('client_Name', $request->mokel_name);
+                        });
+                    }if ($request->has('khesm_name')) {
+                        $cases = $cases->whereHas('khesm_only', function ($q) use ($request) {
+                            $q->where('client_Name', $request->mokel_name);
+                        });
+                    }if ($request->has('court')) {
+                        $cases = $cases->where('court',$request->court);
+                    }if ($request->has('invetation_num')) {
+                        $cases = $cases->where('invetation_num',$request->invetation_num);
+                    }
+
+                    $cases = $cases->paginate(20)->map(function ($data) {
+                        $new_string = "";
+                        foreach ($data->Clients_only as $row) {
+                            $new_string = $new_string . $row->client_Name . ' , ';
+                        }
+
+                        $new_khesm = "";
+                        foreach ($data->khesm_only as $row) {
+                            $new_khesm = $new_khesm . $row->client_Name . ' , ';
+                        }
+                        $data->clients = $new_string;
+                        $data->khesms = $new_khesm;
+                        return $data;
+                    });
+                } else {
+                    $cases = Cases::select('id', 'invetation_num', 'court', 'parent_id')
+                        ->with('Clients_only')->with('khesm_only')
+                        ->where('parent_id', '=', $user->id);
+
+                    if ($request->mokel_name !=null) {
+
+                        $cases = $cases
+                            ->whereHas('Clients_only', function ($q) use ($request) {
+                            $q->where('client_Name','like','%'. $request->mokel_name . '%');
+                        });
+
+                    }if ($request->khesm_name !=null) {
+                        $cases = $cases->whereHas('khesm_only', function ($q) use ($request) {
+                            $q->where('client_Name','like','%'. $request->khesm_name . '%');
+                        });
+                    }if ($request->court !=null) {
+                        $cases = $cases->where('court',$request->court);
+                    }if ($request->invetation_num !=null) {
+                        $cases = $cases->where('invetation_num',$request->invetation_num);
+                    }
+
+
+                    $cases = $cases->paginate(20);
+
+                    for ($i = 0; $i < count($cases); $i++) {
+                        $cases[$i]['clients'] =
+
+                        $new_string = "";
+                        foreach ($cases[$i]['Clients_only'] as $row) {
+                            $new_string = $new_string . $row->client_Name . ' , ';
+                        }
+                        $new_khesm = "";
+                        foreach ($cases[$i]['khesm_only'] as $row) {
+                            $new_khesm = $new_khesm . $row->client_Name . ' , ';
+                        }
+                        $cases[$i]['clients'] = $new_string;
+                        $cases[$i]['khesms'] = $new_khesm;
 
                     }
                 }
@@ -141,9 +245,9 @@ class casesApiController extends Controller
                 foreach ($res as $client) {
                     Case_client::create(['case_id' => $case->id, 'client_id' => $client]);
                 }
-                return sendResponse(200, trans('site_lang.add_success') , $case);
+                return sendResponse(200, trans('site_lang.add_success'), $case);
             } else {
-                return sendResponse(401, trans('site_lang.please_empty') , null);
+                return sendResponse(401, trans('site_lang.please_empty'), null);
             }
 
         } else {
@@ -177,7 +281,7 @@ class casesApiController extends Controller
                 if ($case == 1) {
                     return sendResponse(200, trans('site_lang.updatSuccess'), $data);
                 } else {
-                    return sendResponse(401, trans('site_lang.should_enter_correct') , null);
+                    return sendResponse(401, trans('site_lang.should_enter_correct'), null);
                 }
             }
         } else {
@@ -243,7 +347,7 @@ class casesApiController extends Controller
         $api_token = $request->header('api_token');
         $user = User::where('api_token', $api_token)->first();
         if ($user != null) {
-            $case_data = Cases::with('category')->select('id', 'invetation_num', 'inventation_type', 'circle_num', 'court', 'first_session_date','to_whome')->where('id', $id)
+            $case_data = Cases::with('category')->select('id', 'invetation_num', 'inventation_type', 'circle_num', 'court', 'first_session_date', 'to_whome')->where('id', $id)
                 ->first();
             $numbers['sessions_number'] = Sessions::where('case_Id', $id)->get()->count();
             $numbers['attachments_number'] = attachment::where('case_Id', $id)->get()->count();
@@ -267,13 +371,13 @@ class casesApiController extends Controller
         }
     }
 
-    public function caseClientDataByID(Request $request, $id,$type)
+    public function caseClientDataByID(Request $request, $id, $type)
     {
         $api_token = $request->header('api_token');
         $user = User::where('api_token', $api_token)->first();
         if ($user != null) {
             $client_data = [];
-            if($type == 'client'){
+            if ($type == 'client') {
                 $client_data = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) {
                     $query->where('type', 'client');
                 })->paginate(20);
@@ -281,7 +385,7 @@ class casesApiController extends Controller
 //                    $client_data[$key]['id'] = $row->client_data->id;
 //                    $client_data[$key]['client_Name'] = $row->client_data->client_Name;
 //                }
-            }else{
+            } else {
                 $client_data = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) {
                     $query->where('type', 'khesm');
                 })->paginate(20);
@@ -291,7 +395,7 @@ class casesApiController extends Controller
 //                    $client_data[$key]['client_Name'] = $row->client_data->client_Name;
 //                }
             }
-            return sendResponse(200, trans('site_lang.data_dispaly_success'),$client_data);
+            return sendResponse(200, trans('site_lang.data_dispaly_success'), $client_data);
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
@@ -338,7 +442,8 @@ class casesApiController extends Controller
     }
 
     //Case Clients Functions
-    public function caseClientsData(Request $request){
+    public function caseClientsData(Request $request)
+    {
         $rules = [
             'api_token' => 'required',
             'case_id' => 'required|exists:cases,id',
@@ -368,7 +473,9 @@ class casesApiController extends Controller
             }
         }
     }
-    public function storeCaseClient(Request $request){
+
+    public function storeCaseClient(Request $request)
+    {
         $input = $request->all();
         $rules = null;
         $api_token = $request->header('api_token');
@@ -385,9 +492,9 @@ class casesApiController extends Controller
                 return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
             } else {
 
-                $input_new['case_id'] = $request->case_id ;
-                foreach ($request->client_id as $key=> $row){
-                    $input_new['client_id'] = $row ;
+                $input_new['case_id'] = $request->case_id;
+                foreach ($request->client_id as $key => $row) {
+                    $input_new['client_id'] = $row;
                     Case_client::create($input_new);
                 }
                 return msgdata($request, success(), 'success', null);
@@ -412,7 +519,7 @@ class casesApiController extends Controller
             if ($validator->fails()) {
                 return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
             } else {
-                Case_client::where('client_id',$request->client_id)->where('case_id',$request->case_id)->delete();
+                Case_client::where('client_id', $request->client_id)->where('case_id', $request->case_id)->delete();
                 return msg($request, success(), 'deleted_s');
             }
         }

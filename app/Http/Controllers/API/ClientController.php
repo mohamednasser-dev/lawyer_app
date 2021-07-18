@@ -44,6 +44,95 @@ class ClientController extends Controller
             return response()->json(msg($request, not_authoize(), 'invalid_data'));
         }
     }
+
+    public function search(Request $request)
+    {
+
+        $rules =
+            [
+                'name' => 'required|string',
+                'case_id' => 'nullable|exists:cases,id'
+            ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+        }
+
+        $api_token = $request->header('api_token');
+        $user = check_api_token($api_token);
+        if ($user && $api_token != null) {
+            $user_id = $user->id;
+            $user_type = $user->type;
+            $permission = Permission::where('user_id', $user_id)->first();
+            $enabled = $permission->clients;
+            if ($enabled == 'yes') {
+                if ($request->case_id != null) {
+                    if ($user->parent_id != null) {
+                        if ($user_type == 'admin') {
+                            $clients = Clients::
+                            select('id', 'client_Name', 'client_Unit', 'client_Address', 'notes', 'type', 'parent_id', 'cat_id')
+                                ->where('parent_id', $user->parent_id)
+                                ->where('client_Name', 'like', '%' . $request->name . '%')
+                                ->whereHas('cases',function ($q) use ($request){
+                                    $q->where('cases.id',$request->case_id);
+                                })
+                                ->with('category')
+                                ->paginate(20);
+                        } else {
+                            //type = user ->get all client with same cat_id of this user
+                            $clients = Clients::select('id', 'client_Name', 'client_Unit', 'client_Address', 'notes', 'type', 'parent_id', 'cat_id')
+                                ->where('cat_id', $user->cat_id)
+                                ->where('client_Name', 'like', '%' . $request->name . '%')
+                                ->whereHas('cases',function ($q) use ($request){
+                                    $q->where('cases.id',$request->case_id);
+                                })
+                                ->with('category')
+                                ->paginate(20);
+                        }
+                    } else {
+                        $clients = Clients::select('id', 'client_Name', 'client_Unit', 'client_Address', 'notes', 'type', 'parent_id', 'cat_id')
+                            ->where('parent_id', $user_id)
+                            ->where('client_Name', 'like', '%' . $request->name . '%')
+                            ->whereHas('cases',function ($q) use ($request){
+                                $q->where('cases.id',$request->case_id);
+                            })
+                            ->with('category')
+                            ->paginate(20);
+                    }
+                } else {
+                    if ($user->parent_id != null) {
+                        if ($user_type == 'admin') {
+                            $clients = Clients::select('id', 'client_Name', 'client_Unit', 'client_Address', 'notes', 'type', 'parent_id', 'cat_id')
+                                ->where('parent_id', $user->parent_id)
+                                ->where('client_Name', 'like', '%' . $request->name . '%')
+                                ->with('category')
+                                ->paginate(20);
+                        } else {
+                            //type = user ->get all client with same cat_id of this user
+                            $clients = Clients::select('id', 'client_Name', 'client_Unit', 'client_Address', 'notes', 'type', 'parent_id', 'cat_id')
+                                ->where('cat_id', $user->cat_id)
+                                ->where('client_Name', 'like', '%' . $request->name . '%')
+                                ->with('category')
+                                ->paginate(20);
+                        }
+                    } else {
+                        $clients = Clients::select('id', 'client_Name', 'client_Unit', 'client_Address', 'notes', 'type', 'parent_id', 'cat_id')
+                            ->where('parent_id', $user_id)
+                            ->where('client_Name', 'like', '%' . $request->name . '%')
+                            ->with('category')
+                            ->paginate(20);
+                    }
+                }
+                return msgdata($request, success(), 'success', $clients);
+            } else {
+                return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
+            }
+        } else {
+            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+        }
+    }
+
     public function store(Request $request)
     {
         $input = $request->all();
