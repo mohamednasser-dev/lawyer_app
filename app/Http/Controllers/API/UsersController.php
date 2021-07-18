@@ -42,6 +42,54 @@ class UsersController extends Controller
         }
     }
 
+    public function search(Request $request)
+    {
+        $input = $request->all();
+        $rules =
+            [
+                'name' => 'required|string',
+            ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+        }
+
+        $api_token = $request->header('api_token');
+        $user = check_api_token($api_token);
+        if ($user && $api_token !=null) {
+            $user_id = $user->id;
+            $permission = Permission::where('user_id', $user_id)->first();
+            $enabled = $permission->users;
+            if ($enabled == 'yes') {
+                $users = null;
+                if ($user->parent_id != null) {
+                    $users = User::select('id', 'phone', 'address', 'name', 'email', 'type', 'parent_id', 'cat_id')
+                        ->where('parent_id', $user->parent_id)
+                        ->where('id', '!=', $user_id)
+                        ->where('name','like','%'.$request->name .'%')
+                        ->with('category')
+                        ->paginate(10);
+                } else {
+                    $users = User::select('id', 'phone', 'address', 'name', 'email', 'type', 'parent_id', 'cat_id')
+                        ->where('parent_id', $user_id)
+                        ->where('id', '!=', $user_id)
+                        ->where('name','like','%'.$request->name .'%')
+                        ->with('category')
+                        ->paginate(10);
+                }
+                return msgdata($request, success(), 'success', $users);
+
+            } else {
+                return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
+
+            }
+        } else {
+
+            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+        }
+    }
+
     public function select_user(Request $request)
     {
         $api_token = $request->header('api_token');

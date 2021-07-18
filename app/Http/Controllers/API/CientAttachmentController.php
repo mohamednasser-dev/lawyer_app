@@ -39,6 +39,43 @@ class CientAttachmentController extends Controller
 
     }
 
+
+    public function search(Request $request)
+    {
+
+        $rules =
+            [
+                'img_Description' => 'required|string',
+                'client_Id' => 'required',
+            ];
+
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+        }
+        $api_token = $request->header('api_token');
+        $user = check_api_token($api_token);
+        if ($user && $api_token !=null) {
+            $permission = Permission::where('user_id', $user->id)->first();
+            $enabled = $permission->users;
+            if ($enabled == 'yes') {
+
+                $client_attachment = ClientAttachment::where('client_id', $request->client_Id)
+                    ->where('img_Description','like','%'.$request->img_Description.'%')
+                    ->with('client')
+                    ->get();
+                return msgdata($request, success(), 'success', $client_attachment);
+
+            } else {
+                return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
+            }
+        } else {
+            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+
+        }
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *

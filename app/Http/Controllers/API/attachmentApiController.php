@@ -27,6 +27,41 @@ class attachmentApiController extends Controller
         }
     }
 
+
+    public function search(Request $request)
+    {
+
+        $rules =
+            [
+                'img_Description' => 'required|string',
+                'case_Id' => 'required',
+            ];
+
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+        }
+
+        $api_token = $request->header('api_token');
+        $user = User::where('api_token', $api_token)->first();
+        if ($user && $api_token!= null) {
+            $user_id= $user->id;
+            $permission = Permission::where('user_id', $user_id)->first();
+            $enabled = $permission->search_case;
+            if ($enabled == 'yes') {
+                $attachments = attachment::select('id','img_Description','img_Url')
+                    ->where('img_Description','like','%'.$request->img_Description.'%')
+                    ->where('case_id', $request->case_Id)
+                    ->paginate(20);
+                return sendResponse(200, trans('site_lang.data_dispaly_success'),$attachments);
+            } else {
+                return sendResponse(401, trans('site_lang.permission_warrning'),null);
+            }
+        } else {
+            return sendResponse(403,  trans('site_lang.loginWarning'), null);
+        }
+    }
+
     public function store(Request $request)
     {
         $input = $request->all();
