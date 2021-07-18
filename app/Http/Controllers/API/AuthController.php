@@ -72,7 +72,7 @@ class AuthController extends Controller
     public function printCase(Request $request,$id)
     {
 
-        $api_token = $request->header('api_token');
+        $api_token = $request->api_token;
         $user = User::where('api_token', $api_token)->first();
         if ($user && $api_token != null) {
             $cases = Cases::query()->where("id",  $id)->get();
