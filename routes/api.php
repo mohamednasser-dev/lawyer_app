@@ -24,6 +24,9 @@ Route::get('password/forgot/{email}', 'API\ManulPasswordController@forgot');
 Route::post('password/reset', 'API\ManulPasswordController@reset');
 //Home Page ..
 Route::get('home_data', 'API\HomePageController@index');
+Route::get('coming_session_pagination', 'API\HomePageController@coming_session_pagination');
+Route::get('previous_session_pagination', 'API\HomePageController@previous_session_pagination');
+Route::get('mohder_pagination', 'API\HomePageController@mohder_pagination');
 
 // clients Actions
 Route::get('users', 'API\UsersController@index');
