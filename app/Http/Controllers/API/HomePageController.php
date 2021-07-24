@@ -62,7 +62,7 @@ class HomePageController extends Controller
             return msgdata($request, success(), 'success', array('count_data' => $count_data, 'coming_session' => $coming_session, 'previous_session' => $previous_session, 'mohder' => $mohder));
 
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 
@@ -90,7 +90,7 @@ class HomePageController extends Controller
             return msgdata($request, success(), 'success',   $coming_session);
 
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 
@@ -116,7 +116,7 @@ class HomePageController extends Controller
             return msgdata($request, success(), 'success',$previous_session);
 
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 
@@ -137,7 +137,7 @@ class HomePageController extends Controller
             }
             return msgdata($request, success(), 'success', $mohder);
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 }

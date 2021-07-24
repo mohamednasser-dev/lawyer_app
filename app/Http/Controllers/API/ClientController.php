@@ -41,7 +41,7 @@ class ClientController extends Controller
                 return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
             }
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 
@@ -129,7 +129,7 @@ class ClientController extends Controller
                 return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
             }
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 
@@ -140,7 +140,7 @@ class ClientController extends Controller
         $api_token = $request->header('api_token');
         $auth_user = check_api_token($api_token);
         if (empty($auth_user)) {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         } else {
             if ($auth_user->type == 'User') {
                 $rules = [
@@ -195,7 +195,7 @@ class ClientController extends Controller
 
             }
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 
@@ -220,7 +220,7 @@ class ClientController extends Controller
             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         }
         if (empty($auth_user)) {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
 
         $user = Clients::find(intval($id))->update($input);
@@ -234,7 +234,7 @@ class ClientController extends Controller
         $api_token = $request->header('api_token');
         $auth_user = check_api_token($api_token);
         if (empty($auth_user)) {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
         $user = Clients::find(intval($id))->delete();
         return msg($request, success(), 'success');

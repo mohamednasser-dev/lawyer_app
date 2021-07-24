@@ -54,7 +54,7 @@ class AuthController extends Controller
         $user = check_api_token($api_token);
 
         if (!$user) {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
 
         }
         $user->api_token = null;
@@ -62,7 +62,7 @@ class AuthController extends Controller
             return response()->json(msg($request, success(), 'logout_success'));
 
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 

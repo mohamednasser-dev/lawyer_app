@@ -29,7 +29,7 @@ class CategoryController extends Controller
                 return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
             }
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 
@@ -56,7 +56,7 @@ class CategoryController extends Controller
         $api_token = $request->header('api_token');
         $auth_user = check_api_token($api_token);
         if (empty($auth_user)) {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
 
         $rules =
@@ -85,7 +85,7 @@ class CategoryController extends Controller
         $api_token = $request->header('api_token');
         $user = check_api_token($api_token);
         if (!$user) {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         } else {
             $cat_data = category::whereId($id)->first();
             return msgdata($request, success(), 'success', $cat_data);
@@ -127,7 +127,7 @@ class CategoryController extends Controller
         $api_token = $request->header('api_token');
         $auth_user = check_api_token($api_token);
         if (empty($auth_user)) {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
         if ($auth_user->type == 'admin') {
             $rules =
@@ -160,7 +160,7 @@ class CategoryController extends Controller
         $auth_user = check_api_token($api_token);
 
         if (empty($auth_user)) {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
         if ($auth_user->type == 'admin') {
             try{

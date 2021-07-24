@@ -338,7 +338,7 @@ class casesApiController extends Controller
                 return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
             }
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 
@@ -481,7 +481,7 @@ class casesApiController extends Controller
         $api_token = $request->header('api_token');
         $auth_user = check_api_token($api_token);
         if (empty($auth_user)) {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         } else {
             $rules = [
                 'client_id' => 'required',
@@ -509,7 +509,7 @@ class casesApiController extends Controller
         $api_token = $request->header('api_token');
         $auth_user = check_api_token($api_token);
         if (empty($auth_user)) {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         } else {
             $rules = [
                 'client_id' => 'required|exists:clients,id',

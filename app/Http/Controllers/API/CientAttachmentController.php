@@ -26,14 +26,14 @@ class CientAttachmentController extends Controller
             $enabled = $permission->users;
             if ($enabled == 'yes') {
 
-                $client_attachment = ClientAttachment::where('client_id', $id)->with('client')->get();
+                $client_attachment = ClientAttachment::select('id','img_Description','img_Url')->where('client_id', $id)->paginate(20);
                 return msgdata($request, success(), 'success', $client_attachment);
 
             } else {
                 return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
             }
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
 
         }
 
@@ -70,7 +70,7 @@ class CientAttachmentController extends Controller
                 return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
             }
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
 
         }
 
@@ -141,7 +141,7 @@ class CientAttachmentController extends Controller
 
 
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 
@@ -223,7 +223,7 @@ class CientAttachmentController extends Controller
 
 
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 
@@ -247,7 +247,7 @@ class CientAttachmentController extends Controller
 
 
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
 
         }
     }

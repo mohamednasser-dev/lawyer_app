@@ -18,23 +18,23 @@ class attachmentApiController extends Controller
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
                 $attachments = attachment::select('id','img_Description','img_Url')->where('case_id', $id)->paginate(20);
-                foreach ($attachments as $key=>$row){
-                    $image = $row->img_Url;
-                    dd($image);
-                    $extension = $image->getClientOriginalExtension();
-
-                    $list_video_ext = array('flv', 'mp4', 'm3u8', 'ts', '3gp', 'mov', 'avi', 'wmv');
-                    $list_image_ext = array('png', 'jpeg', 'gif', 'psd');
-                    $list_file_ext = array('pdf', 'csv', 'doc');
-                    if (in_array($extension, $list_video_ext)) {
-                        $attachments[$key]['type'] = 'video';
-                    } elseif (in_array($extension, $list_image_ext)) {
-                        $attachments[$key]['type'] = 'image';
-                    }elseif (in_array($extension, $list_file_ext)) {
-                        $attachments[$key]['type'] = 'file';
-                    }
-
-                }
+//                foreach ($attachments as $key=>$row){
+//                    $image = $row->img_Url;
+////                    dd($image);
+//                    $extension = $image->getClientOriginalExtension();
+//
+//                    $list_video_ext = array('flv', 'mp4', 'm3u8', 'ts', '3gp', 'mov', 'avi', 'wmv');
+//                    $list_image_ext = array('png', 'jpeg', 'gif', 'psd');
+//                    $list_file_ext = array('pdf', 'csv', 'doc');
+//                    if (in_array($extension, $list_video_ext)) {
+//                        $attachments[$key]['type'] = 'video';
+//                    } elseif (in_array($extension, $list_image_ext)) {
+//                        $attachments[$key]['type'] = 'image';
+//                    }elseif (in_array($extension, $list_file_ext)) {
+//                        $attachments[$key]['type'] = 'file';
+//                    }
+//
+//                }
                 return sendResponse(200, trans('site_lang.data_dispaly_success'),$attachments);
             } else {
                 return sendResponse(401, trans('site_lang.permission_warrning'),null);

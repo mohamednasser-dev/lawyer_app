@@ -86,7 +86,7 @@ class UsersController extends Controller
             }
         } else {
 
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 
@@ -114,7 +114,7 @@ class UsersController extends Controller
                 return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
             }
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 
@@ -141,7 +141,7 @@ class UsersController extends Controller
                 return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
             }
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 
@@ -154,7 +154,7 @@ class UsersController extends Controller
             return msgdata($request, success(), 'success', $user_permissions);
 
         } else {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
 
@@ -199,7 +199,7 @@ class UsersController extends Controller
                 return msg($request, success(), 'per_updated');
 
             } else {
-                return response()->json(msg($request, not_authoize(), 'invalid_data'));
+                return response()->json(msg($request, not_authoize(), 'not_authoize'));
             }
         }
     }
@@ -227,7 +227,7 @@ class UsersController extends Controller
             $auth_user = check_api_token($api_token);
 
             if (empty($auth_user)) {
-                return response()->json(msg($request, not_authoize(), 'invalid_data'));
+                return response()->json(msg($request, not_authoize(), 'not_authoize'));
             }
             $input['password'] = bcrypt(request('password'));
             if ($auth_user->parent_id != null) {
@@ -271,7 +271,7 @@ class UsersController extends Controller
             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         } else {
             if (empty($auth_user)) {
-                return response()->json(msg($request, not_authoize(), 'invalid_data'));
+                return response()->json(msg($request, not_authoize(), 'not_authoize'));
             }
 
             User::find(intval($id))->update($input);
@@ -299,7 +299,7 @@ class UsersController extends Controller
             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         } else {
             if (empty($auth_user)) {
-                return response()->json(msg($request, not_authoize(), 'invalid_data'));
+                return response()->json(msg($request, not_authoize(), 'not_authoize'));
             }
             if($request->password != null){
                 $input['password'] = bcrypt(request('password'));
@@ -319,7 +319,7 @@ class UsersController extends Controller
         $api_token = $request->header('api_token');
         $auth_user = check_api_token($api_token);
         if (empty($auth_user)) {
-            return response()->json(msg($request, not_authoize(), 'invalid_data'));
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
         $permission = Permission::where('user_id', $id)->delete();
         $user = User::find(intval($id))->delete();
