@@ -16,7 +16,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'type', 'password','email','cat_id','parent_id','phone','address','package_id','status','image'
+        'name', 'type', 'password','email','cat_id','parent_id','phone','address','package_id',
+        'status','image'
     ];
 
  public function category(){
@@ -59,5 +60,13 @@ class User extends Authenticatable
         }else{
             return trans('site_lang.statusDeactive');
         }
+    }
+    public function getImageAttribute($image)
+    {
+//default.png
+        if (!empty($image)){
+            return  $image;
+        }
+        return 'default.png';
     }
 }
