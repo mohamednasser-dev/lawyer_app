@@ -44,9 +44,8 @@ class mohdareenApiController extends Controller
     {
         $rules =
             [
-                'mokel_Name' => 'nullable|string',
-                'khesm_Name' => 'nullable',
-                'paper_Number' => 'nullable',
+                'search' => 'required|string',
+
 
             ];
 
@@ -74,14 +73,11 @@ class mohdareenApiController extends Controller
 
                 }
                 if ($request->mokel_Name !=null){
-                    $mohdrs =$mohdrs->where('mokel_Name','like','%'.$request->mokel_Name .'%');
+                    $mohdrs =$mohdrs->where('mokel_Name','like','%'.$request->search .'%')
+                        ->orWhere('khesm_Name','like','%'.$request->search .'%')
+                        ->orWhere('paper_Number','like','%'.$request->search .'%');
                 }
-                if ($request->khesm_Name !=null){
-                   $mohdrs =$mohdrs->where('khesm_Name','like','%'.$request->khesm_Name .'%');
-                }
-                if ($request->paper_Number !=null){
-                    $mohdrs =$mohdrs->where('paper_Number','like','%'.$request->paper_Number .'%');
-                }
+
 
                 $mohdrs = $mohdrs->paginate(20);
 

@@ -78,12 +78,11 @@ class casesApiController extends Controller
 
     public function search(Request $request)
     {
+
         $rules =
             [
-                'mokel_name' => 'nullable|string',
-                'khesm_name' => 'nullable|string',
-                'court' => 'nullable',
-                'invetation_num' => 'nullable',
+                'search' => 'required|string',
+
             ];
 
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
@@ -102,19 +101,13 @@ class casesApiController extends Controller
                     $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
                         ->where('to_whome', $user->cat_id)
                         ->where('parent_id', $user->parent_id);
-                    if ($request->has('mokel_name')) {
-                        $cases = $cases->whereHas('Clients_only', function ($q) use ($request) {
-                            $q->where('client_Name', $request->mokel_name);
+
+                    $cases = $cases->where('court', $request->search)
+                        ->orWhere('invetation_num', $request->search)
+                        ->orwhereHas('Clients_custom', function ($q) use ($request) {
+                            $q->where('client_Name', $request->search);
                         });
-                    }if ($request->has('khesm_name')) {
-                        $cases = $cases->whereHas('khesm_only', function ($q) use ($request) {
-                            $q->where('client_Name', $request->mokel_name);
-                        });
-                    }if ($request->has('court')) {
-                        $cases = $cases->where('court',$request->court);
-                    }if ($request->has('invetation_num')) {
-                        $cases = $cases->where('invetation_num',$request->invetation_num);
-                    }
+
 
                     $cases = $cases->paginate(20)->map(function ($data) {
                         $new_string = "";
@@ -135,22 +128,14 @@ class casesApiController extends Controller
                         ->with('Clients_only')->with('khesm_only')
                         ->where('parent_id', '=', $user->id);
 
-                    if ($request->mokel_name !=null) {
+                    $cases = $cases->where('court', $request->search)
+                        ->orWhere('invetation_num', $request->search)
+                        ->orwhereHas('Clients_custom', function ($q) use ($request) {
+                        $q->where('client_Name', $request->search);
+                    });
 
-                        $cases = $cases
-                            ->whereHas('Clients_only', function ($q) use ($request) {
-                            $q->where('client_Name','like','%'. $request->mokel_name . '%');
-                        });
 
-                    }if ($request->khesm_name !=null) {
-                        $cases = $cases->whereHas('khesm_only', function ($q) use ($request) {
-                            $q->where('client_Name','like','%'. $request->khesm_name . '%');
-                        });
-                    }if ($request->court !=null) {
-                        $cases = $cases->where('court',$request->court);
-                    }if ($request->invetation_num !=null) {
-                        $cases = $cases->where('invetation_num',$request->invetation_num);
-                    }
+
 
 
                     $cases = $cases->paginate(20);
