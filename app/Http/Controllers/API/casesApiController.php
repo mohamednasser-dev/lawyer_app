@@ -102,10 +102,10 @@ class casesApiController extends Controller
                         ->where('to_whome', $user->cat_id)
                         ->where('parent_id', $user->parent_id);
 
-                    $cases = $cases->where('court', $request->search)
-                        ->orWhere('invetation_num', $request->search)
-                        ->orwhereHas('Clients_custom', function ($q) use ($request) {
-                            $q->where('client_Name', $request->search);
+                    $cases = $cases->where('court','like','%'.$request->search.'%')
+                        ->orWhere('invetation_num','like','%'.$request->search.'%')
+                        ->orwhereHas('clients', function ($q) use ($request) {
+                            $q->where('client_Name','like','%'.$request->search.'%');
                         });
 
 
@@ -124,16 +124,16 @@ class casesApiController extends Controller
                         return $data;
                     });
                 } else {
+
                     $cases = Cases::select('id', 'invetation_num', 'court', 'parent_id')
                         ->with('Clients_only')->with('khesm_only')
                         ->where('parent_id', '=', $user->id);
 
-                    $cases = $cases->where('court', $request->search)
-                        ->orWhere('invetation_num', $request->search)
-                        ->orwhereHas('Clients_custom', function ($q) use ($request) {
-                        $q->where('client_Name', $request->search);
-                    });
-
+                    $cases = $cases->where('court','like','%'.$request->search.'%')
+                        ->orWhere('invetation_num','like','%'.$request->search.'%')
+                        ->orwhereHas('clients', function ($q) use ($request) {
+                            $q->where('client_Name','like','%'.$request->search.'%');
+                        });
 
 
 
