@@ -72,11 +72,10 @@ class mohdareenApiController extends Controller
                         ->where('parent_id', $user->id);
 
                 }
-                if ($request->mokel_Name !=null){
                     $mohdrs =$mohdrs->where('mokel_Name','like','%'.$request->search .'%')
                         ->orWhere('khesm_Name','like','%'.$request->search .'%')
                         ->orWhere('paper_Number','like','%'.$request->search .'%');
-                }
+
 
 
                 $mohdrs = $mohdrs->paginate(20);
