@@ -98,7 +98,15 @@ class ClientProfileController extends Controller
 
         if (request()->ajax()) {
 
-            return datatables()->of(Cases::whereIn('id', $cases_id)->with('to_whome'))->make(true);
+            return datatables()->of(Cases::whereIn('id', $cases_id)->with('to_whome'))
+                ->addColumn('action', function ($data) {
+                    $var = url('openCaseDetails/' . $data->id . '/show');
+                    $button = '<a data-case-id="' . $data->id . '" id="showCaseData" class="btn btn-xs btn-primary" target="_blank"  href="' . $var . '"><i
+                                    class="fa fa-eye-slash" ></i>&nbsp;&nbsp;' . trans('site_lang.home_see_more') . '</a>';
+
+                    return $button;
+                })
+                ->make(true);
 
         }
 

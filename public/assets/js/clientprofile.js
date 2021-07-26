@@ -17,7 +17,6 @@
             columns: [{
                     data: 'id',
                     name: 'id',
-
                     className: 'center'
                 },
                 {
@@ -91,9 +90,15 @@
                 }, {
                     data: 'to_whome.name',
                     name: 'to_whome.name',
-
+                    orderable: false,
                     className: 'center'
                 },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    className: 'center'
+                }
 
             ]
 
@@ -105,7 +110,7 @@
 
 
 
-    // 
+    //
 
     var client_id;
 
@@ -167,7 +172,7 @@
         })
     });
     $('#client_notes').on('submit', function(event) {
-        //  note_ids = $(this).data('id');  
+        //  note_ids = $(this).data('id');
         console.log(note_id);
         event.preventDefault();
         $.ajax({
@@ -187,4 +192,3 @@
             }
         })
     });
- 

@@ -5,7 +5,7 @@
 
 @section('content')
 
-<div class="row"> 
+<div class="row">
     <div class="col-sm-5 col-md-4 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
@@ -121,6 +121,8 @@
                                 <th class="center">المحكمة</th>
                                 <th class="center">تاريخ اول جلسة</th>
                                 <th class="center">موجهه الى</th>
+                                <th></th>
+
                             </tr>
                         </thead>
                     </table>
