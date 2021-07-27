@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 
 <head>
 	<meta charset="UTF-8">
@@ -14,7 +14,7 @@
 	<link rel="stylesheet" href="{{url('/assets/fonts/feather-font/css/iconfont.css')}}">
 	<link rel="stylesheet" href="{{url('/assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
 	<!-- endinject -->
-  <!-- Layout styles -->  
+  <!-- Layout styles -->
 	<link rel="stylesheet" href="{{url('/assets/css/demo_2/style.css')}}">
   <!-- End layout styles -->
   <link rel="shortcut icon" href="{{url('/assets/images/favicon.png')}}" />
@@ -50,7 +50,7 @@
                                         <h5 class="text-muted font-weight-normal mb-4">{{trans('site_lang.auth_cont_title')}}</h5>
                                         <form class="form-login" action="{{ route('login') }}" method="POST">
                                             @csrf
-                                           
+
                                             <div class="form-group">
                                                 <!-- <label for="exampleInputEmail1">Email address</label> -->
                                                 <input type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" name="email" placeholder="{{trans('site_lang.users_email')}}">
@@ -75,7 +75,7 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                             
+
                                             <div class="mt-3">
 
                                                 <button type="submit" class="btn btn-primary btn-block">
@@ -93,7 +93,7 @@
         </div>
     </div>
 
-    
+
 	<!-- core:js -->
 	<script src="{{url('/assets/vendors/core/core.js')}}"></script>
 	<!-- endinject -->

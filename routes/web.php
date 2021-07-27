@@ -108,9 +108,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('packages/update', 'PackagesController@update')->name('packages.update');
     Route::resource('subscribers', 'SubscribersController');
     Route::get('subSearch', 'SubscribersController@search');
-    Route::get('subscribers/updateStatus/{id}', 'SubscribersController@updateStatus');
+    Route::get('subscribers/updateStatus/{id}', 'SubscribersController@updateStatus')->name('subscribers.updateStatus');
     Route::post('subscribers/update', 'SubscribersController@update')->name('subscribers.update');
     Route::get('subscribers/{id}/delete', 'SubscribersController@destroy');
+    Route::get('subscribers/search/new', 'SubscribersController@search_new')->name('subscribers.search');
     Route::get('endReservation', 'EndReservationsController@index');
 });
 Route::get('reservtion', 'ReservationController@index');

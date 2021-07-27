@@ -14,23 +14,35 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
+                <form action="{{route('subscribers.search')}}" method="get">
+
                 <div class="row">
                     <div class="col-md-6">
                         <a class="btn btn-primary" id="addSubscribersModal"><i class="fa fa-plus"></i>{{trans('site_lang.clients_add_new_client_text')}} </a>
                     </div>
-                    <div class="form-group{{$errors->has('package_id')?' has-error':''}} col-md-6" style="padding-right: 50px; padding-left: 50px;">
-                        <select class="form-control select2-arrow" name="cmb_package_id" id="cmb_package_id">
-                            <option value="">
-                                &nbsp;{{trans('site_lang.subPackage')}}</option>
-                            @foreach($packages as $package)
-                            <option value='{{$package->id}}'>{{$package->name}}</option>
-                            @endforeach
-                        </select>
-                        <span class="text-danger" id="To_error"></span>
-                    </div>
+
+                        <div class="form-group{{$errors->has('package_id')?' has-error':''}} col-md-4" style="padding-right: 50px; padding-left: 50px;">
+                            <select class="form-control select2-arrow" name="cmb_package_id" id="cmb_package_id">
+                                <option value="">
+                                    &nbsp;{{trans('site_lang.subPackage')}}</option>
+                                @foreach($packages as $package)
+                                    @if($package->id == $selected_package)
+                                        <option value='{{$package->id}}' selected>{{$package->name}}</option>
+                                    @else
+                                        <option value='{{$package->id}}'>{{$package->name}}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                            <span class="text-danger" id="To_error"></span>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <button class="btn btn-success" id="addSubscribersModal">{{trans('site_lang.search')}} </button>
+                        </div>
+
                 </div>
+                </form>
                 <div class="table-responsive">
-                    <table id="subscribers_tbl" class="table table-bordered">
+                    <table id="subscribers_tbl"  class="table table-bordered">
                         <thead>
                             <tr>
                                 <th class="center">#</th>
@@ -40,9 +52,41 @@
                                 <th class="center">{{trans('site_lang.subPhone')}}</th>
                                 <th class="center">{{trans('site_lang.clients_client_address')}}</th>
                                 <th class="center">{{trans('site_lang.subStatus')}}</th>
-                                <th class="center"></th>
+                                <th class="center">{{trans('site_lang.chooses')}}</th>
                             </tr>
                         </thead>
+                        <tbody>
+                        @foreach($data as $key=> $row)
+                            <tr>
+                                <td>{{$key+1}}</td>
+                                <td>{{$row->name}}</td>
+                                <td> @if($row->package_id != null){{$row->Package->name}} @endif</td>
+                                <td>{{$row->email}}</td>
+                                <td>{{$row->phone}}</td>
+                                <td>{{$row->address}}</td>
+                                <td>
+                                    @if ($row->status == trans('site_lang.statusDeactive'))
+                                        <a class="btn btn-sm" data-user-id="{{$row->id}}" id="change-user-status" href="{{route('subscribers.updateStatus',$row->id)}}">
+                                            <span class="btn btn-danger text-bold"> {{$row->status}}</span></a>
+                                    @elseif ($row->status == trans('site_lang.statusDemo'))
+                                        <a class="btn btn-sm" data-user-Id="{{$row->id}}" id="change-user-status" href="{{route('subscribers.updateStatus',$row->id)}}">
+                                            <span class="btn btn-warning text-bold">{{$row->status}}</span></a>
+                                    @else
+                                        <a class="btn btn-sm" data-user-Id="{{$row->id}}" id="change-user-status" href="{{route('subscribers.updateStatus',$row->id)}}">
+                                            <span class="btn btn-success text-bold">{{$row->status}}</span></a>
+                                    @endif
+                                </td>
+                                <td>
+                                    <button data-client-id="{{$row->id}}" id="editClient" class="btn btn-xs btn-outline-success" >
+                                        <i class="fa fa-edits"></i>&nbsp;&nbsp; {{trans('site_lang.public_edit_btn_text')}}</button>
+                                    &nbsp;&nbsp;
+                                    <button data-client-id="{{$row->id}}" id="deleteClient"  class="btn btn-xs btn-outline-danger">
+                                        <i class="fa fa-times fa fa-white"></i>&nbsp;&nbsp; {{trans('site_lang.public_delete_text')}} </button>
+
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -213,114 +257,114 @@
         }
     });
     $(document).ready(function() {
-        var pack_id;
-        $('#subscribers_tbl').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "{{ url('subscribers') }}",
-            },
-            columns: [{
-                    data: 'id',
-                    name: 'id',
-                    className: 'center'
-                }, {
-                    data: 'name',
-                    name: 'name',
-                    className: 'center'
+        {{--var pack_id;--}}
+        {{--$('#subscribers_tbl').DataTable({--}}
+        {{--    processing: true,--}}
+        {{--    serverSide: true,--}}
+        {{--    ajax: {--}}
+        {{--        url: "{{ url('subscribers') }}",--}}
+        {{--    },--}}
+        {{--    columns: [{--}}
+        {{--            data: 'id',--}}
+        {{--            name: 'id',--}}
+        {{--            className: 'center'--}}
+        {{--        }, {--}}
+        {{--            data: 'name',--}}
+        {{--            name: 'name',--}}
+        {{--            className: 'center'--}}
 
-                }, {
-                    data: 'package_id.name',
-                    name: 'package_id.name',
-                    className: 'center'
+        {{--        }, {--}}
+        {{--            data: 'package_id.name',--}}
+        {{--            name: 'package_id.name',--}}
+        {{--            className: 'center'--}}
 
-                }, {
-                    data: 'email',
-                    name: 'email',
-                    className: 'center'
+        {{--        }, {--}}
+        {{--            data: 'email',--}}
+        {{--            name: 'email',--}}
+        {{--            className: 'center'--}}
 
-                }, {
-                    data: 'phone',
-                    name: 'phone',
-                    className: 'center'
+        {{--        }, {--}}
+        {{--            data: 'phone',--}}
+        {{--            name: 'phone',--}}
+        {{--            className: 'center'--}}
 
-                }, {
-                    data: 'address',
-                    name: 'address',
-                    className: 'center'
+        {{--        }, {--}}
+        {{--            data: 'address',--}}
+        {{--            name: 'address',--}}
+        {{--            className: 'center'--}}
 
-                }, {
-                    data: 'status',
-                    name: 'status',
-                    className: 'center'
+        {{--        }, {--}}
+        {{--            data: 'status',--}}
+        {{--            name: 'status',--}}
+        {{--            className: 'center'--}}
 
-                },
+        {{--        },--}}
 
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    className: 'center'
-                }
-            ]
-        });
+        {{--        {--}}
+        {{--            data: 'action',--}}
+        {{--            name: 'action',--}}
+        {{--            orderable: false,--}}
+        {{--            className: 'center'--}}
+        {{--        }--}}
+        {{--    ]--}}
+        {{--});--}}
 
-        $("#cmb_package_id").change(function() {
-            pack_id = $('#cmb_package_id').val();
-            console.log('this is =' + pack_id);
+        {{--$("#cmb_package_id").change(function() {--}}
+        {{--    pack_id = $('#cmb_package_id').val();--}}
+        {{--    console.log('this is =' + pack_id);--}}
 
-            $('#subscribers_tbl').DataTable({
+        {{--    $('#subscribers_tbl').DataTable({--}}
 
-                        processing: true,
-                        serverSide: true,
-                        ajax: {
-                        url: "{{ url('subSearch') }}",
-                    },
-                    columns: [{
-                        data: 'id',
-                        name: 'id',
-                        className: 'center'
-                    }, {
-                        data: 'name',
-                        name: 'name',
-                        className: 'center'
+        {{--                processing: true,--}}
+        {{--                serverSide: true,--}}
+        {{--                ajax: {--}}
+        {{--                url: "{{ url('subSearch') }}",--}}
+        {{--            },--}}
+        {{--            columns: [{--}}
+        {{--                data: 'id',--}}
+        {{--                name: 'id',--}}
+        {{--                className: 'center'--}}
+        {{--            }, {--}}
+        {{--                data: 'name',--}}
+        {{--                name: 'name',--}}
+        {{--                className: 'center'--}}
 
-                    }, {
-                        data: 'package_id.name',
-                        name: 'package_id.name',
-                        className: 'center'
+        {{--            }, {--}}
+        {{--                data: 'package_id.name',--}}
+        {{--                name: 'package_id.name',--}}
+        {{--                className: 'center'--}}
 
-                    }, {
-                        data: 'email',
-                        name: 'email',
-                        className: 'center'
+        {{--            }, {--}}
+        {{--                data: 'email',--}}
+        {{--                name: 'email',--}}
+        {{--                className: 'center'--}}
 
-                    }, {
-                        data: 'phone',
-                        name: 'phone',
-                        className: 'center'
+        {{--            }, {--}}
+        {{--                data: 'phone',--}}
+        {{--                name: 'phone',--}}
+        {{--                className: 'center'--}}
 
-                    }, {
-                        data: 'address',
-                        name: 'address',
-                        className: 'center'
+        {{--            }, {--}}
+        {{--                data: 'address',--}}
+        {{--                name: 'address',--}}
+        {{--                className: 'center'--}}
 
-                    }, {
-                        data: 'status',
-                        name: 'status',
-                        className: 'center'
+        {{--            }, {--}}
+        {{--                data: 'status',--}}
+        {{--                name: 'status',--}}
+        {{--                className: 'center'--}}
 
-                    },
+        {{--            },--}}
 
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            className: 'center'
-                        }
-                    ]
-                });
-        });
+        {{--                {--}}
+        {{--                    data: 'action',--}}
+        {{--                    name: 'action',--}}
+        {{--                    orderable: false,--}}
+        {{--                    className: 'center'--}}
+        {{--                }--}}
+        {{--            ]--}}
+        {{--        });--}}
+        {{--});--}}
 
         $('#addSubscribersModal').click(function() {
             $('#modal_title').text("{{trans('site_lang.clients_add_new_client_text')}}");

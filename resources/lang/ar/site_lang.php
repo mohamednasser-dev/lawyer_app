@@ -7,6 +7,8 @@ return [
     'should_choose_case_models' => 'يجب اختيار دعوى بشكل صحيح ... !',
     'should_enter_correct' => 'يجب ادخال البيانات بشكل صحيح',
     'please_empty' => "من فضلك قم بافراغ خانه الموكلين والخصوم واخترهم",
+    'search' => "بحث",
+    'chooses' => "الاجرائات",
 
 
 
