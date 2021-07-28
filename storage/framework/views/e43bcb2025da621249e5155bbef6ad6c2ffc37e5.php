@@ -1,6 +1,6 @@
 <nav class="sidebar">
     <div class="sidebar-header">
-        <a href="#" class="sidebar-brand">
+        <a href="<?php echo e(url('/')); ?>" class="sidebar-brand">
            Lawyer<span> App</span>
         </a>
         <div class="sidebar-toggler not-active">
@@ -11,7 +11,6 @@
     </div>
     <div class="sidebar-body">
         <ul class="nav">
-            <li class="nav-item nav-category">Main</li>
             <?php
             $user_type = auth()->user()->type;
             if($user_type != 'manager'){
@@ -93,27 +92,25 @@
             <?php
             }
             ?>
-            <?php
-            $user_type = auth()->user()->type;
-            if($user_type == 'manager'){
-            ?>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#tables" role="button" aria-expanded="false" aria-controls="tables">
-                    <i class="link-icon" data-feather="layout"></i>
-                    <span class="link-title"><?php echo e(trans('site_lang.side_ControlPanel')); ?></span>
-                    <i class="link-arrow" data-feather="chevron-down"></i>
-                </a>
-                <div class="collapse" id="tables">
-                    <ul class="nav sub-menu">
-                        <li class="nav-item">
-                            <a href="<?php echo e(url('/packages')); ?>" class="nav-link"><?php echo e(trans('site_lang.side_Packages')); ?></a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <?php
-            }
-            ?>
+            <?php if( auth()->user()->type == 'manager'): ?>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#tables" role="button" aria-expanded="false" aria-controls="tables">
+                        <i class="link-icon" data-feather="layout"></i>
+                        <span class="link-title"><?php echo e(trans('site_lang.side_ControlPanel')); ?></span>
+                        <i class="link-arrow" data-feather="chevron-down"></i>
+                    </a>
+                    <div class="collapse" id="tables">
+                        <ul class="nav sub-menu">
+                            <li class="nav-item">
+                                <a href="<?php echo e(url('/subscribers')); ?>" class="nav-link"><?php echo e(trans('site_lang.side_clients')); ?></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?php echo e(url('/packages')); ?>" class="nav-link"><?php echo e(trans('site_lang.side_Packages')); ?></a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            <?php endif; ?>
         </ul>
     </div>
 </nav>

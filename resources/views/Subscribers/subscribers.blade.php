@@ -190,11 +190,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="put" id="edit_subscribe">
+{{--                id="edit_subscribe"--}}
+                <form method="post"  action="{{route('subscribers.update')}}">
                     <input type="hidden" id="token" name="_token" value="{{csrf_token()}}">
                     <input type="hidden" name="id" id="edit_id">
                     <div class="row">
-
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
                                 <select id="package_id_dialog" class="form-control select2-arrow" name="package_id">
@@ -438,7 +438,7 @@
                 }
             });
 
-
+0
         });
 
         $(document).on('click', '#editClient', function() {
@@ -505,12 +505,13 @@
             $.ajax({
                 url: "subscribers/" + client_id + "/delete",
                 beforeSend: function() {
-                    $('#ok_button').text("{{trans('site_lang.public_continue_delete_modal_text ')}}");
+                    $('#ok_button').text("جارى الحذف ...");
                 },
                 success: function(data) {
                     setTimeout(function() {
                         $('#confirmModal').modal('hide');
-                        $('#subscribers_tbl').DataTable().ajax.reload();
+                        window.location.reload();
+                        // $('#subscribers_tbl').DataTable().ajax.reload();
                     }, 100);
                 }
             })

@@ -20,8 +20,6 @@ class SubscribersController extends Controller
     {
         $user_type = auth()->user()->type;
         if ($user_type == 'manager') {
-
-
                 $data = User::where('parent_id', null)->where('package_id','!=',null)->where('type', '!=', 'manager')
                     ->get();
 //                    ->addColumn('status', function ($data) {
@@ -62,36 +60,13 @@ class SubscribersController extends Controller
         $selected_package = $request->cmb_package_id;
         $user_type = auth()->user()->type;
         if ($user_type == 'manager') {
-//                return datatables()->of(User::where('parent_id', $request->cmb_package_id)->where('type', '!=', 'manager')
-//                    ->with('package_id')
-//                    ->get())
-//                    ->addColumn('status', function ($data) {
-//                                 if ($data->status == trans('site_lang.statusDeactive')) {
-//                            $html = '<p class="btn btn-sm" data-user-id="' . $data->id . '" id="change-user-status">
-//                            <span class="btn btn-danger text-bold"> ' . $data->status . '</span></p>';
-//                        } else if ($data->status == trans('site_lang.statusDemo')) {
-//                            $html = '<p class="btn btn-sm" data-user-Id="' . $data->id . '" id="change-user-status">
-//                            <span class="btn btn-warning text-bold"> ' . $data->status . '</span></p>';
-//                        } else {
-//                            $html = '<p class="btn btn-sm" data-user-Id="' . $data->id . '" id="change-user-status">
-//                            <span class="btn btn-success text-bold"> ' . $data->status . '</span></p>';
-//                        }
-//
-//                        return $html;
-//                    })
-//                    ->addColumn('action', function ($data) {
-//                        $button = '<button data-client-id="' . $data->id . '" id="editClient" class="btn btn-xs btn-outline-success" ><i
-//                                    class="fa fa-edit"></i>&nbsp;&nbsp;' . trans('site_lang.public_edit_btn_text') . '</button>';
-//                        $button .= '&nbsp;&nbsp;';
-//                        $button .= '<button data-client-id="' . $data->id . '" id="deleteClient"  class="btn btn-xs btn-outline-danger"" ><i
-//                                    class="fa fa-times fa fa-white"></i>&nbsp;&nbsp;' . trans('site_lang.public_delete_text') . '</button>';
-//                        return $button;
-//                    })
-//                    ->rawColumns(['status', 'action'])
-//                    ->make(true);
-
-            $data = User::where('parent_id', null)->where('package_id',$request->cmb_package_id)->where('type', '!=', 'manager')
-                ->get();
+            if ($request->cmb_package_id != null){
+                $data = User::where('parent_id', null)->where('package_id', $request->cmb_package_id)->where('type', '!=', 'manager')
+                    ->get();
+            }else{
+                $data = User::where('parent_id', null)->where('package_id','!=',null)->where('type', '!=', 'manager')
+                    ->get();
+            }
             $packages = Package::all();
             return view('Subscribers.subscribers', compact('packages','data','selected_package'));
         } else {
@@ -265,8 +240,8 @@ class SubscribersController extends Controller
 
 
          User::where('parent_id',$request->id)->update($data);
-        return response(['success' => trans('site_lang.public_success_text')]);
-
+         return back();
+//        return response(['success' => trans('site_lang.public_success_text')]);
     }
 
     /**
@@ -279,5 +254,6 @@ class SubscribersController extends Controller
     {
         $data = User::findOrFail($id);
         $data->delete();
+        return back();
     }
 }
