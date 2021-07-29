@@ -125,7 +125,7 @@
                                 <td class="hidden-xs center"><?php echo e($session->session_date); ?></td>
                                 <td class="hidden-xs center"><?php echo e($session->status); ?></td>
                                 <td class="hidden-xs center"><?php echo e($session->month); ?></td>
-                                <td class="hidden-xs center"><?php echo e($session->case_Id); ?></td>
+                                <td class="hidden-xs center"><?php echo e($session->cases->invetation_num); ?></td>
 
                             </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -164,14 +164,13 @@
                                 <td class="hidden-xs center"><?php echo e($sessionNo->session_date); ?></td>
                                 <td class="hidden-xs center"><?php echo e($sessionNo->status); ?></td>
                                 <td class="hidden-xs center"><?php echo e($sessionNo->month); ?></td>
-                                <td class="hidden-xs center"><?php echo e($sessionNo->case_Id); ?></td>
-
-
+                                <td class="hidden-xs center"><?php echo e($sessionNo->cases->invetation_num); ?></td>
                             </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
 
                     </table>
+<?php echo e($sessionNo->paginate()); ?>
 
                 </div>
             </div>
@@ -209,7 +208,11 @@
                                 <td class="hidden-xs center"><?php echo e($mohder->session_Date); ?></td>
                                 <td class="hidden-xs center"><?php echo e($mohder->case_number); ?></td>
                                 <td class="hidden-xs center">
-                                    <a id="showMohdar" class="btn btn-xs" data-placement="top" data-original-title="show" data-moh-Id="<?php echo e($mohder->moh_Id); ?>"><i class="fa fa-eye"></i></a></td>
+                                    <a id="showMohdar" class="btn btn-xs btn-blue tooltips" data-placement="top"
+                                       data-original-title="<?php echo e(trans('site_lang.home_see_more')); ?>" data-mohid="<?php echo e($mohder->moh_Id); ?>"><i
+                                            class="fa fa-eye-slash"></i>
+                                    </a>
+
                             </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
@@ -321,7 +324,7 @@
                 </div>
                 <div class="modal-footer">
                     <button data-dismiss="modal" class="btn btn-default" type="button">
-                        Close
+                        الغاء
                     </button>
 
                 </div>
@@ -337,35 +340,35 @@
 <!-- modal session note -->
 
 <?php $__env->stopSection(); ?>
-<?php $__env->startSection('scripts'); ?>
+<?php $__env->startSection('custom-scripts'); ?>
 
-<script>
-    $(document).ready(function() {
-        $(document).on('click', '#showMohdar', function() {
-            var id = $(this).data('moh-Id');
-            console.log(id);
-            $.ajax({
-                url: "mohdareendata/" + id,
-                dataType: "json",
-                success: function(html) {
-                    $('#court_mohdareen_show').html(html.data.court_mohdareen);
-                    $('#paper_type_show').html(html.data.paper_type);
-                    $('#deliver_data_show').html(html.data.deliver_data);
-                    $('#session_Date_show').html(html.data.session_Date);
-                    $('#case_number_show').html(html.data.case_number);
-                    $('#paper_Number_show').html(html.data.paper_Number);
-                    $('#mokel_Name_show').html(html.data.mokel_Name);
-                    $('#khesm_Name_show').html(html.data.khesm_Name);
-                    $('#notes_show').html(html.data.notes);
-                    $('.modal-title').text("المحضر");
-                    $('#show_mohdar_model').modal('show');
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '#showMohdar', function() {
+                var id = $(this).data('mohid');
+                console.log(id);
+                $.ajax({
+                    url: "mohdareendata/" + id,
+                    dataType: "json",
+                    success: function(html) {
+                        $('#court_mohdareen_show').html(html.data.court_mohdareen);
+                        $('#paper_type_show').html(html.data.paper_type);
+                        $('#deliver_data_show').html(html.data.deliver_data);
+                        $('#session_Date_show').html(html.data.session_Date);
+                        $('#case_number_show').html(html.data.case_number);
+                        $('#paper_Number_show').html(html.data.paper_Number);
+                        $('#mokel_Name_show').html(html.data.mokel_Name);
+                        $('#khesm_Name_show').html(html.data.khesm_Name);
+                        $('#notes_show').html(html.data.notes);
+                        $('.modal-title').text("تفاصيل المحضر");
+                        $('#show_mohdar_model').modal('show');
 
-                }
-            })
+                    }
+                })
+            });
+
         });
-
-    });
-</script>
+    </script>
 
 <script src="<?php echo e(url('/assets/vendors/datatables.net/jquery.dataTables.js')); ?>"></script>
 <script src="<?php echo e(url('/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js')); ?>"></script>

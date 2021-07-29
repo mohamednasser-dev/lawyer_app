@@ -7,6 +7,11 @@ return
                 'ar' => 'البريد الإلكتروني موجود من قبل',
                 'en' => 'Name is Required',
             ],
+        'you_not_admin' =>
+            [
+                'ar' => 'يجب أن تكون ادمين للاشتراك فالباقة',
+                'en' => 'Name is Required',
+            ],
         'updated_s' =>
             [
                 'ar' => 'تم التعديل بنجاح',

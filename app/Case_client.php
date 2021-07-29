@@ -23,7 +23,7 @@ class Case_client extends Model
     }
     public function client_data()
     {
-        return $this->belongsTo(Clients::class, 'client_id')->select('id','client_Name');
+        return $this->belongsTo(Clients::class, 'client_id');
     }
 
 }

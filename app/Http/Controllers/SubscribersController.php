@@ -229,7 +229,7 @@ class SubscribersController extends Controller
 
         $old_date = $user->created_at;
         $old_duration = Package::select('duration')->where('id', $request->id)->first();
-        $old_date = $old_date->addMonths($old_duration);
+        $old_date = $old_date->addMonths($old_duration->duration);
         $user->created_at = $old_date;
         $user->package_id = $request->package_id;
         $user->status = "Active";

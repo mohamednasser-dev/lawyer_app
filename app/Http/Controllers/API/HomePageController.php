@@ -29,6 +29,7 @@ class HomePageController extends Controller
                 $mohdreen = mohdr::where('parent_id', $user->parent_id)->get();
                 $coming_session = Sessions::select('id', 'session_date', 'month', 'year', 'case_Id', 'status')
                     ->whereBetween('session_date', array($today, $date))
+                    ->where('status', 'No')
                     ->where('parent_id', $user->parent_id)
                     ->paginate(20);
                 $previous_session = Sessions::select('id', 'session_date', 'month', 'year', 'case_Id', 'status')
@@ -36,7 +37,7 @@ class HomePageController extends Controller
                     ->where('status', 'No')
                     ->where('parent_id', $user->parent_id)
                     ->paginate(20);
-                $mohder = mohdr::select('mokel_Name','khesm_Name', 'session_Date','moh_Id','paper_Number' , 'status')
+                $mohder = mohdr::select('mokel_Name','khesm_Name', 'session_Date','moh_Id','paper_Number' , 'status')->where('status', 'No')
                     ->whereBetween('session_date', array($today, $datee))->where('parent_id', $user->parent_id)->paginate(20);
             } else {
                 $users = User::where('parent_id', $user->id)->get();
@@ -45,6 +46,7 @@ class HomePageController extends Controller
                 $mohdreen = mohdr::where('parent_id', $user->id)->get();
                 $coming_session = Sessions::select('id', 'session_date', 'month', 'year', 'case_Id', 'status')
                     ->whereBetween('session_date', array($today, $date))
+                    ->where('status', 'No')
                     ->where('parent_id', $user->id)
                     ->paginate(20);
                 $previous_session = Sessions::select('id', 'session_date', 'month', 'year', 'case_Id', 'status')
@@ -52,7 +54,7 @@ class HomePageController extends Controller
                     ->where('status', 'No')
                     ->where('parent_id', $user->id)
                     ->paginate(20);
-                $mohder = mohdr::select('mokel_Name','khesm_Name', 'session_Date','moh_Id','paper_Number' , 'status')
+                $mohder = mohdr::select('mokel_Name','khesm_Name', 'session_Date','moh_Id','paper_Number' , 'status')->where('status', 'No')
                     ->whereBetween('session_date', array($today, $datee))->where('parent_id', $user->id)->paginate(20);
             }
             $count_data['users'] = count($users);
@@ -78,11 +80,13 @@ class HomePageController extends Controller
             if ($user->parent_id != null) {
                 $coming_session = Sessions::select('id', 'session_date', 'month', 'year', 'case_Id', 'status')
                     ->whereBetween('session_date', array($today, $date))
+                    ->where('status', 'No')
                     ->where('parent_id', $user->parent_id)
                     ->paginate(20);
             } else {
                 $coming_session = Sessions::select('id', 'session_date', 'month', 'year', 'case_Id', 'status')
                     ->whereBetween('session_date', array($today, $date))
+                    ->where('status', 'No')
                     ->where('parent_id', $user->id)
                     ->paginate(20);
             }
@@ -129,10 +133,10 @@ class HomePageController extends Controller
             $today = Carbon::today();
             $datee = Carbon::today()->addDays(15);
             if ($user->parent_id != null) {
-                $mohder = mohdr::select('mokel_Name','khesm_Name', 'session_Date','moh_Id','paper_Number' , 'status')
+                $mohder = mohdr::select('mokel_Name','khesm_Name', 'session_Date','moh_Id','paper_Number' , 'status')->where('status', 'No')
                     ->whereBetween('session_date', array($today, $datee))->where('parent_id', $user->parent_id)->paginate(20);
             } else {
-                $mohder = mohdr::select('mokel_Name','khesm_Name', 'session_Date','moh_Id','paper_Number' , 'status')
+                $mohder = mohdr::select('mokel_Name','khesm_Name', 'session_Date','moh_Id','paper_Number' , 'status')->where('status', 'No')
                     ->whereBetween('session_date', array($today, $datee))->where('parent_id', $user->id)->paginate(20);
             }
             return msgdata($request, success(), 'success', $mohder);
