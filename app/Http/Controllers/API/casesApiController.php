@@ -327,6 +327,57 @@ class casesApiController extends Controller
         }
     }
 
+    public function select_clients_to_add_new_client(Request $request,$case_id)
+    {
+        $api_token = $request->header('api_token');
+        $user = check_api_token($api_token);
+        if ($user) {
+            $user_id = $user->id;
+            $user_type = $user->type;
+            $permission = Permission::where('user_id', $user_id)->first();
+            $enabled = $permission->clients;
+            if ($enabled == 'yes') {
+                $clients = Case_client::where('case_id',$case_id)->select('client_id')->get()->toArray();
+                if ($user->parent_id != null) {
+                    if ($user_type == 'admin') {
+
+                        $data['clients'] = Clients::select('id', 'client_Name')->whereNotIn('id',$clients)
+                            ->where('type', 'client')
+                            ->where('parent_id', $user->parent_id)
+                            ->get();
+                        $data['khesms'] = Clients::select('id', 'client_Name')->whereNotIn('id',$clients)
+                            ->where('type', 'khesm')
+                            ->where('parent_id', $user->parent_id)
+                            ->get();
+                    } else {
+                        //type = user ->get all client with same cat_id of this user
+                        $data['clients'] = Clients::select('id', 'client_Name')->whereNotIn('id',$clients)
+                            ->where('type', 'client')
+                            ->where('cat_id', $user->cat_id)
+                            ->get();
+                        $data['khesms'] = Clients::select('id', 'client_Name')->whereNotIn('id',$clients)
+                            ->where('type', 'khesm')
+                            ->where('parent_id', $user->cat_id)
+                            ->get();
+                    }
+                } else {
+                    $data['clients'] = Clients::select('id', 'client_Name')->whereNotIn('id',$clients)
+                        ->where('type', 'client')
+                        ->where('parent_id', $user_id)
+                        ->get();
+                    $data['khesms'] = Clients::select('id', 'client_Name')->whereNotIn('id',$clients)
+                        ->where('type', 'khesm')
+                        ->where('parent_id', $user_id)
+                        ->get();
+                }
+                return msgdata($request, success(), 'success', $data);
+            } else {
+                return response()->json(msg($request, not_acceptable(), 'permission_warrning'));
+            }
+        } else {
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
+        }
+    }
     public function caseData(Request $request, $id)
     {
         $api_token = $request->header('api_token');

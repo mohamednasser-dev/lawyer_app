@@ -49,6 +49,7 @@ Route::get('delete_client/{id}', 'API\ClientController@destroy');
 
 //case actions
 Route::get('select/data/to_add_case', 'API\casesApiController@select_data_to_add_case');
+Route::get('select/clients/to_add_new_client/{case_id}', 'API\casesApiController@select_clients_to_add_new_client');
 //client Profile
 Route::get('client_Profile/{id}', 'API\ClientProfileController@client_cases');
 Route::get('client_Profile/notes/pagination/{id}', 'API\ClientProfileController@client_notes_pagination');
