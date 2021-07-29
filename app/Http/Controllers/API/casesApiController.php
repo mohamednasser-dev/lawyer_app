@@ -363,21 +363,21 @@ class casesApiController extends Controller
         if ($user != null) {
             $client_data = [];
             if ($type == 'client') {
-                $clients = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) {
+                $client_data = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) {
                     $query->where('type', 'client');
                 })->get();
-                foreach ($clients as $key => $row) {
-                    $client_data[$key]['id'] = $row->client_data->id;
-                    $client_data[$key]['client_Name'] = $row->client_data->client_Name;
-                }
+//                foreach ($clients as $key => $row) {
+//                    $client_data[$key]['id'] = $row->client_data->id;
+//                    $client_data[$key]['client_Name'] = $row->client_data->client_Name;
+//                }
             } else {
-                $khesm = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) {
+                $client_data = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) {
                     $query->where('type', 'khesm');
                 })->get();
-                foreach ($khesm as $key => $row) {
-                    $client_data[$key]['id'] = $row->client_data->id;
-                    $client_data[$key]['client_Name'] = $row->client_data->client_Name;
-                }
+//                foreach ($khesm as $key => $row) {
+//                    $client_data[$key]['id'] = $row->client_data->id;
+//                    $client_data[$key]['client_Name'] = $row->client_data->client_Name;
+//                }
             }
             return sendResponse(200, trans('site_lang.data_dispaly_success'), $client_data);
         } else {
