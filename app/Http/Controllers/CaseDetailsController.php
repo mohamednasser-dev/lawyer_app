@@ -25,7 +25,6 @@ class CaseDetailsController extends Controller
      */
     public function index()
     {
-
         $user_id = auth()->user()->id;
         $permission = Permission::where('user_id', $user_id)->first();
         $enabled = $permission->search_case;
@@ -54,7 +53,7 @@ class CaseDetailsController extends Controller
                                 $button = $button . '  , ' . $client->client_Name;
                         }
                         return $button;
-                    }) ->addColumn('khesm_Name', function ($data) {
+                    })->addColumn('khesm_Name', function ($data) {
                         $button = '';
                         foreach ($data->khesm_only as $client) {
                             if ($button == '') {
@@ -176,7 +175,7 @@ class CaseDetailsController extends Controller
                 }
             }
             $session = Sessions::select('id')->where('case_Id', $id)->get();
-             $res = [
+            $res = [
                 "case" => $case,
                 "to_whom" => $case->category->name,
                 "clients" => $clients_array,
@@ -194,7 +193,6 @@ class CaseDetailsController extends Controller
     public function openCaseDetails($id)
     {
         $categories = category::select('id', 'name')->where('parent_id', auth()->user()->id)->get();
-
         return view('cases.case_details', compact("id", "categories"));
     }
 
@@ -303,8 +301,10 @@ class CaseDetailsController extends Controller
     public function getClientByType($type, $caseId)
     {
         $exists_clients_ids = Case_client::select('client_id')->where("case_id", "=", $caseId)->get();
+
         $clients = Clients::query()->orWhereNotIn('id', $exists_clients_ids)
             ->where("type", "=", $type)->where('parent_id', '=', getQuery())->get();
+//        dd($clients);
         $clientsArr = array();
         foreach ($clients as $key => $client) {
             $id = $client['id'];

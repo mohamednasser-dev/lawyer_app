@@ -11,7 +11,7 @@ class Case_client extends Model
         'case_id', 'client_id'
     ];
     protected $hidden = ['created_at', 'updated_at'];
-    protected $appends = ['client_Name', 'client_type'];
+//    protected $appends = ['client_Name', 'client_type','id'];
 
     public function case()
     {
