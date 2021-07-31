@@ -25,6 +25,6 @@ class ClientAttachment extends Model
 
     public function getTypeAttribute()
     {
-        return mime_content_type('uploads/attachments/' . $this->img_Url);
+        return mime_content_type('uploads/client/attachments/' . $this->img_Url);
     }
 }
