@@ -409,27 +409,24 @@ class casesApiController extends Controller
 
     public function caseClientDataByID(Request $request, $id, $type)
     {
+
         $api_token = $request->header('api_token');
         $user = User::where('api_token', $api_token)->first();
         if ($user != null) {
             $client_data = [];
-            if ($type == 'client') {
-                $client_data = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) {
-                    $query->where('type', 'client');
+                $clients = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) use ($type) {
+                    $query->where('type', $type);
                 })->get();
-//                foreach ($clients as $key => $row) {
-//                    $client_data[$key]['id'] = $row->client_data->id;
-//                    $client_data[$key]['client_Name'] = $row->client_data->client_Name;
-//                }
-            } else {
-                $client_data = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) {
-                    $query->where('type', 'khesm');
-                })->get();
-//                foreach ($khesm as $key => $row) {
-//                    $client_data[$key]['id'] = $row->client_data->id;
-//                    $client_data[$key]['client_Name'] = $row->client_data->client_Name;
-//                }
-            }
+                foreach ($clients as $key => $row) {
+                    $client_data[$key]['id'] = $row->client_data->id;
+                    $client_data[$key]['client_Name'] = $row->client_data->client_Name;
+                    $client_data[$key]['client_Unit'] = $row->client_data->client_Unit;
+                    $client_data[$key]['client_Address'] = $row->client_data->client_Address;
+                    $client_data[$key]['notes'] = $row->client_data->notes;
+                    $client_data[$key]['type'] = $row->client_data->type;
+                    $client_data[$key]['parent_id'] = $row->client_data->parent_id;
+                    $client_data[$key]['cat_id'] = $row->client_data->cat_id;
+                }
             return sendResponse(200, trans('site_lang.data_dispaly_success'), $client_data);
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);

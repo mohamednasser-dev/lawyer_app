@@ -94,6 +94,10 @@ Route::post('caseClients/store', 'API\casesApiController@storeCaseClient');
 Route::post('caseClients/destroy', 'API\casesApiController@destroyCaseClient');
 Route::get('caseClients/data_by_id/{id}/{type}', 'API\casesApiController@caseClientDataByID');
 
+//packages
+Route::get('packages', 'API\packagesApiController@packages');
+Route::get('packages/subscripe/{package_id}', 'API\packagesApiController@store');
+
 //Cases Session Actions
 Route::get('case/sessions/{id}', 'API\sessionApiController@index');
 Route::post('addSession', 'API\sessionApiController@store');
