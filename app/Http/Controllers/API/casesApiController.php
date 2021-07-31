@@ -102,10 +102,10 @@ class casesApiController extends Controller
                         ->where('to_whome', $user->cat_id)
                         ->where('parent_id', $user->parent_id);
 
-                    $cases = $cases->where('court','like','%'.$request->search.'%')
-                        ->orWhere('invetation_num','like','%'.$request->search.'%')
+                    $cases = $cases->where('court', 'like', '%' . $request->search . '%')
+                        ->orWhere('invetation_num', 'like', '%' . $request->search . '%')
                         ->orwhereHas('clients', function ($q) use ($request) {
-                            $q->where('client_Name','like','%'.$request->search.'%');
+                            $q->where('client_Name', 'like', '%' . $request->search . '%');
                         });
 
 
@@ -129,13 +129,11 @@ class casesApiController extends Controller
                         ->with('Clients_only')->with('khesm_only')
                         ->where('parent_id', '=', $user->id);
 
-                    $cases = $cases->where('court','like','%'.$request->search.'%')
-                        ->orWhere('invetation_num','like','%'.$request->search.'%')
+                    $cases = $cases->where('court', 'like', '%' . $request->search . '%')
+                        ->orWhere('invetation_num', 'like', '%' . $request->search . '%')
                         ->orwhereHas('clients', function ($q) use ($request) {
-                            $q->where('client_Name','like','%'.$request->search.'%');
+                            $q->where('client_Name', 'like', '%' . $request->search . '%');
                         });
-
-
 
 
                     $cases = $cases->paginate(20);
@@ -327,7 +325,7 @@ class casesApiController extends Controller
         }
     }
 
-    public function select_clients_to_add_new_client(Request $request,$case_id)
+    public function select_clients_to_add_new_client(Request $request, $case_id)
     {
         $api_token = $request->header('api_token');
         $user = check_api_token($api_token);
@@ -337,35 +335,35 @@ class casesApiController extends Controller
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->clients;
             if ($enabled == 'yes') {
-                $clients = Case_client::where('case_id',$case_id)->select('client_id')->get()->toArray();
+                $clients = Case_client::where('case_id', $case_id)->select('client_id')->get()->toArray();
                 if ($user->parent_id != null) {
                     if ($user_type == 'admin') {
 
-                        $data['clients'] = Clients::select('id', 'client_Name')->whereNotIn('id',$clients)
+                        $data['clients'] = Clients::select('id', 'client_Name')->whereNotIn('id', $clients)
                             ->where('type', 'client')
                             ->where('parent_id', $user->parent_id)
                             ->get();
-                        $data['khesms'] = Clients::select('id', 'client_Name')->whereNotIn('id',$clients)
+                        $data['khesms'] = Clients::select('id', 'client_Name')->whereNotIn('id', $clients)
                             ->where('type', 'khesm')
                             ->where('parent_id', $user->parent_id)
                             ->get();
                     } else {
                         //type = user ->get all client with same cat_id of this user
-                        $data['clients'] = Clients::select('id', 'client_Name')->whereNotIn('id',$clients)
+                        $data['clients'] = Clients::select('id', 'client_Name')->whereNotIn('id', $clients)
                             ->where('type', 'client')
                             ->where('cat_id', $user->cat_id)
                             ->get();
-                        $data['khesms'] = Clients::select('id', 'client_Name')->whereNotIn('id',$clients)
+                        $data['khesms'] = Clients::select('id', 'client_Name')->whereNotIn('id', $clients)
                             ->where('type', 'khesm')
                             ->where('parent_id', $user->cat_id)
                             ->get();
                     }
                 } else {
-                    $data['clients'] = Clients::select('id', 'client_Name')->whereNotIn('id',$clients)
+                    $data['clients'] = Clients::select('id', 'client_Name')->whereNotIn('id', $clients)
                         ->where('type', 'client')
                         ->where('parent_id', $user_id)
                         ->get();
-                    $data['khesms'] = Clients::select('id', 'client_Name')->whereNotIn('id',$clients)
+                    $data['khesms'] = Clients::select('id', 'client_Name')->whereNotIn('id', $clients)
                         ->where('type', 'khesm')
                         ->where('parent_id', $user_id)
                         ->get();
@@ -378,6 +376,7 @@ class casesApiController extends Controller
             return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
     }
+
     public function caseData(Request $request, $id)
     {
         $api_token = $request->header('api_token');
@@ -414,19 +413,19 @@ class casesApiController extends Controller
         $user = User::where('api_token', $api_token)->first();
         if ($user != null) {
             $client_data = [];
-                $clients = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) use ($type) {
-                    $query->where('type', $type);
-                })->get();
-                foreach ($clients as $key => $row) {
-                    $client_data[$key]['id'] = $row->client_data->id;
-                    $client_data[$key]['client_Name'] = $row->client_data->client_Name;
-                    $client_data[$key]['client_Unit'] = $row->client_data->client_Unit;
-                    $client_data[$key]['client_Address'] = $row->client_data->client_Address;
-                    $client_data[$key]['notes'] = $row->client_data->notes;
-                    $client_data[$key]['type'] = $row->client_data->type;
-                    $client_data[$key]['parent_id'] = $row->client_data->parent_id;
-                    $client_data[$key]['cat_id'] = $row->client_data->cat_id;
-                }
+            $clients = Case_client::where('case_id', $id)->with('client_data')->whereHas('client_data', function ($query) use ($type) {
+                $query->where('type', $type);
+            })->get();
+            foreach ($clients as $key => $row) {
+                $client_data[$key]['id'] = $row->client_data->id;
+                $client_data[$key]['client_Name'] = $row->client_data->client_Name;
+                $client_data[$key]['client_Unit'] = $row->client_data->client_Unit;
+                $client_data[$key]['client_Address'] = $row->client_data->client_Address;
+                $client_data[$key]['notes'] = $row->client_data->notes;
+                $client_data[$key]['type'] = $row->client_data->type;
+                $client_data[$key]['parent_id'] = $row->client_data->parent_id;
+                $client_data[$key]['cat_id'] = $row->client_data->cat_id;
+            }
             return sendResponse(200, trans('site_lang.data_dispaly_success'), $client_data);
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);

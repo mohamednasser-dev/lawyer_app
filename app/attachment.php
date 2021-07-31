@@ -15,13 +15,6 @@ class attachment extends Model
 
     public function getTypeAttribute()
     {
-//dd($this->img_Url->getClientOriginalExtension());
-        $type = "";
-//        if(mime_content_type('uploads/attachments/'.$this->img_Url) =='application/pdf'){
-//            $type = 'file';
-//        }else {
-//            $type = 'image';
-//        }
         return mime_content_type('uploads/attachments/'.$this->img_Url);
     }
 }
