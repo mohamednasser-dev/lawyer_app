@@ -45,4 +45,5 @@ class Cases extends Model
     {
         return $this->hasOne('App\category', 'id', 'to_whome');
     }
+
 }

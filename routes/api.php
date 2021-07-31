@@ -125,18 +125,11 @@ Route::post('search-client-attachment', 'API\CientAttachmentController@search');
 Route::post('search-case-attachment', 'API\attachmentApiController@search');
 Route::post('search-mohdareen', 'API\mohdareenApiController@search');
 
-
-
-
-
-
-
-
-
 Route::get('printCase/{id}', 'API\AuthController@printCase');
-
-
 
 // registration form
 Route::post('register', 'Landing\RegisterationController@store');
 Route::post('registeration', 'Landing\RegisterationController@storeApi');
+//Reports
+Route::post('report_monthly', 'API\ReportsApiController@searchMonthly');
+Route::post('report_daily', 'API\ReportsApiController@searchDaily');
