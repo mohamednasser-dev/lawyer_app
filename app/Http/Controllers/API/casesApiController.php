@@ -426,6 +426,7 @@ class casesApiController extends Controller
                 $client_data[$key]['parent_id'] = $row->client_data->parent_id;
                 $client_data[$key]['cat_id'] = $row->client_data->cat_id;
             }
+
             return sendResponse(200, trans('site_lang.data_dispaly_success'), $client_data);
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);

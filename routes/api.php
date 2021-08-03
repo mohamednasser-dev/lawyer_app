@@ -131,6 +131,9 @@ Route::post('search-mohdareen', 'API\mohdareenApiController@search');
 
 Route::get('printCase/{id}', 'API\AuthController@printCase');
 
+Route::get('printSearchMonthly/{month}/{year}/{type}', 'API\ReportsApiController@printSearchMonthly');
+Route::get('printSearchDaily/{date}/{type}', 'API\ReportsApiController@printSearchDaily');
+
 // registration form
 Route::post('register', 'Landing\RegisterationController@store');
 Route::post('registeration', 'Landing\RegisterationController@storeApi');

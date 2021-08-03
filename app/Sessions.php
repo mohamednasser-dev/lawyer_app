@@ -22,10 +22,10 @@ class Sessions extends Model
         return $this->hasMany(Session_Notes::class, 'session_Id');
     }
 
-    public function lastNote()
-    {
-        return $this->hasOne(Session_Notes::class, 'session_Id')->select('id', 'session_Id', 'note')->latest("note");
-    }
+//    public function lastNote()
+//    {
+//        return $this->hasOne(Session_Notes::class, 'session_Id')->select('id', 'session_Id', 'note')->latest("note");
+//    }
 
     public function clients()
     {
@@ -34,7 +34,9 @@ class Sessions extends Model
 
     public function Printnotes()
     {
-        return $this->hasOne(Session_Notes::class, 'session_Id');
+//        return $this->hasOne(Session_Notes::class, 'session_Id');
+        return $this->hasOne(Session_Notes::class, 'session_Id')->select('id', 'session_Id', 'note')->latest("note");
+
     }
 
     public function Sessions_notes()
