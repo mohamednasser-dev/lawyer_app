@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth']], function () {
 //cases
     Route::resource('cases', 'CasesController');
     Route::get('addCase', 'CasesController@getClients');
+    Route::get('printCase/{id}', 'API\AuthController@printCase')->name('print.case.details');
 // Mohdareen
     Route::resource('mohdareen', 'MohdareenController');
     Route::get('mohdareen/getCase/{case_num}', 'MohdareenController@getCaseToSelect');

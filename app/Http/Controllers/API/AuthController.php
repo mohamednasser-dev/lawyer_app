@@ -74,7 +74,7 @@ class AuthController extends Controller
 
         $api_token = $request->api_token;
         $user = User::where('api_token', $api_token)->first();
-        if ($user && $api_token != null) {
+        if ($user != null) {
             $cases = Cases::query()->where("id",  $id)->get();
             $case = Cases::findOrFail($id);
             $clients = array();
