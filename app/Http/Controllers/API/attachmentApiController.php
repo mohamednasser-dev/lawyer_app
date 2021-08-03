@@ -113,7 +113,7 @@ class attachmentApiController extends Controller
                 $attachment = attachment::create($input);
                 return sendResponse(200, trans('site_lang.add_success'), $attachment);
             } else {
-                return sendResponse(403, $validate[0], null);
+                return sendResponse(401, $validate[0], null);
             }
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
