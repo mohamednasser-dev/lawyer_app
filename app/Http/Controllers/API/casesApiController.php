@@ -27,6 +27,8 @@ class casesApiController extends Controller
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
                 if ($user->parent_id == $user->id) {
+                    return $user->parent_id;
+
                     $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
                         ->where('parent_id', $user->id)
                         ->paginate(20);
