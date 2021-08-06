@@ -26,7 +26,6 @@ class casesApiController extends Controller
             $permission = Permission::where('user_id', $user->id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
-                return $user->id;
                 if ($user->parent_id == $user->id) {
                     $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
                         ->where('parent_id', $user->id)
