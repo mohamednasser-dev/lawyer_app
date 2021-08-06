@@ -23,14 +23,13 @@ class casesApiController extends Controller
         $user = check_api_token($request->header('api_token'));
 
         if ($user != null) {
-            $user_id = $user->id;
-            $permission = Permission::where('user_id', $user_id)->first();
+            $permission = Permission::where('user_id', $user->id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
-                $cases = null;
+                return $user->parent_id;
                 if ($user->parent_id == null) {
                     $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
-                        ->where('parent_id',  $user->id)
+                        ->where('parent_id', $user->id)
                         ->paginate(20);
                 } else {
                     $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
