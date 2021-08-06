@@ -26,7 +26,7 @@ class casesApiController extends Controller
             $permission = Permission::where('user_id', $user->id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
-                if ($user->parent_id == $user->id) {
+                if ($user->parent_id == null) {
                     $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
                         ->where('parent_id', $user->id)
                         ->paginate(20);
@@ -36,7 +36,6 @@ class casesApiController extends Controller
                         ->where('parent_id', $user->parent_id)
                         ->paginate(20);
                 }
-
                 $cases->setCollection(
                     $cases->getCollection()
                         ->map(function ($data) {
