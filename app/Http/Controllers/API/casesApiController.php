@@ -28,45 +28,46 @@ class casesApiController extends Controller
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
                 $cases = null;
-                if ($user->parent_id != null) {
-                    $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
-                        ->where('to_whome', $user->cat_id)
-                        ->where('parent_id', $user->parent_id)
-                        ->paginate(20)->map(function ($data) {
-                            $new_string = "";
-                            foreach ($data->Clients_only as $row) {
-                                $new_string = $new_string . $row->client_Name . ' , ';
-                            }
-
-                            $new_khesm = "";
-                            foreach ($data->khesm_only as $row) {
-                                $new_khesm = $new_khesm . $row->client_Name . ' , ';
-                            }
-                            $data->clients = $new_string;
-                            $data->khesms = $new_khesm;
-                            return $data;
-                        });
-                } else {
-                    $cases = Cases::select('id', 'invetation_num', 'court', 'parent_id')->with('Clients_only')->with('khesm_only')
-                        ->where('parent_id', '=', $user->id)
-                        ->paginate(20);
-
-                    for ($i = 0; $i < count($cases); $i++) {
-                        $cases[$i]['clients'] =
-
+//                if ($user->parent_id != null) {
+                $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
+                    ->where('to_whome', $user->cat_id)
+                    ->where('parent_id', $user->parent_id != null ? $user->parent_id : $user->id)
+                    ->paginate(20)->map(function ($data) {
                         $new_string = "";
-                        foreach ($cases[$i]['Clients_only'] as $row) {
+                        foreach ($data->Clients_only as $row) {
                             $new_string = $new_string . $row->client_Name . ' , ';
                         }
+
                         $new_khesm = "";
-                        foreach ($cases[$i]['khesm_only'] as $row) {
+                        foreach ($data->khesm_only as $row) {
                             $new_khesm = $new_khesm . $row->client_Name . ' , ';
                         }
-                        $cases[$i]['clients'] = $new_string;
-                        $cases[$i]['khesms'] = $new_khesm;
-
-                    }
-                }
+                        $data->clients = $new_string;
+                        $data->khesms = $new_khesm;
+                        return $data;
+                    });
+//                }
+//                else {
+//                    $cases = Cases::select('id', 'invetation_num', 'court', 'parent_id')->with('Clients_only')->with('khesm_only')
+//                        ->where('parent_id', '=', $user->id)
+//                        ->paginate(20);
+//
+//                    for ($i = 0; $i < count($cases); $i++) {
+//                        $cases[$i]['clients'] =
+//
+//                        $new_string = "";
+//                        foreach ($cases[$i]['Clients_only'] as $row) {
+//                            $new_string = $new_string . $row->client_Name . ' , ';
+//                        }
+//                        $new_khesm = "";
+//                        foreach ($cases[$i]['khesm_only'] as $row) {
+//                            $new_khesm = $new_khesm . $row->client_Name . ' , ';
+//                        }
+//                        $cases[$i]['clients'] = $new_string;
+//                        $cases[$i]['khesms'] = $new_khesm;
+//
+//                    }
+//                }
                 return sendResponse(200, trans('site_lang.data_dispaly_success'), $cases);
             } else {
                 return sendResponse(401, trans('site_lang.permission_warrning'), null);
