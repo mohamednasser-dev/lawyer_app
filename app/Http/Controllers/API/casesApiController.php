@@ -28,11 +28,16 @@ class casesApiController extends Controller
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
                 $cases = null;
-//                if ($user->parent_id != null) {
-                $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
-                    ->where('to_whome', 0)
-                    ->where('parent_id', $user->parent_id != null ? $user->parent_id : $user->id)
-                    ->paginate(20);
+                if ($user->parent_id == null) {
+                    $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
+                        ->where('parent_id',  $user->id)
+                        ->paginate(20);
+                } else {
+                    $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
+                        ->where('to_whome', $user->cat_id)
+                        ->where('parent_id', $user->parent_id)
+                        ->paginate(20);
+                }
 
                 $cases->setCollection(
                     $cases->getCollection()
