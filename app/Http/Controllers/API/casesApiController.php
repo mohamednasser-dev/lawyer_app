@@ -30,9 +30,10 @@ class casesApiController extends Controller
                 $cases = null;
 //                if ($user->parent_id != null) {
                 $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
-                    ->where('to_whome', $user->cat_id)
+                    ->where('to_whome', 0)
                     ->where('parent_id', $user->parent_id != null ? $user->parent_id : $user->id)
                     ->paginate(20);
+
                 $cases->setCollection(
                     $cases->getCollection()
                         ->map(function ($data) {
