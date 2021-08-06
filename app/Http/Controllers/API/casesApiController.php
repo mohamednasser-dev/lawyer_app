@@ -20,8 +20,8 @@ class casesApiController extends Controller
     //Cases Functions
     public function index(Request $request)
     {
-        $api_token = $request->header('api_token');
-        $user = User::where('api_token', $api_token)->first();
+        $user = check_api_token($request->header('api_token'));
+
         if ($user != null) {
             $user_id = $user->id;
             $permission = Permission::where('user_id', $user_id)->first();
@@ -32,26 +32,62 @@ class casesApiController extends Controller
                 $cases = Cases::select('id', 'invetation_num', 'court', 'to_whome', 'parent_id')
                     ->where('to_whome', $user->cat_id)
                     ->where('parent_id', $user->parent_id != null ? $user->parent_id : $user->id)
-                    ->paginate(20)->map(function ($data) {
-                        $new_string = "";
-                        foreach ($data->Clients_only as $row) {
-                            $new_string = $new_string . $row->client_Name . ' , ';
-                        }
+                    ->paginate(20);
+                $cases->setCollection(
+                    $cases->getCollection()
+                        ->map(function ($data) {
+                            $new_string = "";
+                            $new_khesm = "";
+                            foreach ($data->Clients_only as $row) {
+                                $new_string = $new_string . $row->client_Name . ' , ';
+                            }
+                            foreach ($data->khesm_only as $row) {
+                                $new_khesm = $new_khesm . $row->client_Name . ' , ';
+                            }
 
-                        $new_khesm = "";
-                        foreach ($data->khesm_only as $row) {
-                            $new_khesm = $new_khesm . $row->client_Name . ' , ';
-                        }
-                        $data->clients = $new_string;
-                        $data->khesms = $new_khesm;
-                        return $data;
-                    });
-//                }
-//                else {
+                            $data->clients = rtrim($new_string, ", ");
+                            $data->khesms = rtrim($new_khesm, ", ");
+                            return $data;
+                        })
+
+                );
+//                        ->map(function ($data) {
+//                            $new_string = "";
+//                            foreach ($data->Clients_only as $row) {
+//                                $new_string = $new_string . $row->client_Name . ' , ';
+//                            }
+//
+//                            $new_khesm = "";
+//                            foreach ($data->khesm_only as $row) {
+//                                $new_khesm = $new_khesm . $row->client_Name . ' , ';
+//                            }
+//                            $data->clients = $new_string;
+//                            $data->khesms = $new_khesm;
+//                            return $data;
+//                        });
+//                } else {
 //                    $cases = Cases::select('id', 'invetation_num', 'court', 'parent_id')->with('Clients_only')->with('khesm_only')
 //                        ->where('parent_id', '=', $user->id)
 //                        ->paginate(20);
+//                    $cases->setCollection(
+//                        $cases->getCollection()
+//                            ->map(function ($data) {
+//                                $new_string = "";
+//                                $new_khesm = "";
+//                                foreach ($data->Clients_only as $row) {
+//                                    $new_string = $new_string . $row->client_Name . ' , ';
+//                                }
+//                                foreach ($data->khesm_only as $row) {
+//                                    $new_khesm = $new_khesm . $row->client_Name . ' , ';
+//                                }
 //
+//                                $data->clients = rtrim($new_string, ", ");
+//                                $data->khesms = rtrim($new_khesm, ", ");
+//                                return $data;
+//                            })
+//
+//                    );
+
 //                    for ($i = 0; $i < count($cases); $i++) {
 //                        $cases[$i]['clients'] =
 //
@@ -67,7 +103,7 @@ class casesApiController extends Controller
 //                        $cases[$i]['khesms'] = $new_khesm;
 //
 //                    }
-//                }
+//            }
                 return sendResponse(200, trans('site_lang.data_dispaly_success'), $cases);
             } else {
                 return sendResponse(401, trans('site_lang.permission_warrning'), null);
@@ -77,7 +113,8 @@ class casesApiController extends Controller
         }
     }
 
-    public function search(Request $request)
+    public
+    function search(Request $request)
     {
 
         $rules =
@@ -164,7 +201,8 @@ class casesApiController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public
+    function store(Request $request)
     {
         $input = $request->all();
         $validate = null;
@@ -239,7 +277,8 @@ class casesApiController extends Controller
         }
     }
 
-    public function update(Request $request)
+    public
+    function update(Request $request)
     {
         $input = $request->all();
         $validate = Validator::make($input, [
@@ -273,7 +312,8 @@ class casesApiController extends Controller
         }
     }
 
-    public function select_data_to_add_case(Request $request)
+    public
+    function select_data_to_add_case(Request $request)
     {
         $api_token = $request->header('api_token');
         $user = check_api_token($api_token);
@@ -326,7 +366,8 @@ class casesApiController extends Controller
         }
     }
 
-    public function select_clients_to_add_new_client(Request $request, $case_id)
+    public
+    function select_clients_to_add_new_client(Request $request, $case_id)
     {
         $api_token = $request->header('api_token');
         $user = check_api_token($api_token);
@@ -378,7 +419,8 @@ class casesApiController extends Controller
         }
     }
 
-    public function caseData(Request $request, $id)
+    public
+    function caseData(Request $request, $id)
     {
         $api_token = $request->header('api_token');
         $user = User::where('api_token', $api_token)->first();
@@ -407,7 +449,8 @@ class casesApiController extends Controller
         }
     }
 
-    public function caseClientDataByID(Request $request, $id, $type)
+    public
+    function caseClientDataByID(Request $request, $id, $type)
     {
 
         $api_token = $request->header('api_token');
@@ -434,7 +477,8 @@ class casesApiController extends Controller
         }
     }
 
-    public function getSessionNotes(Request $request, $id)
+    public
+    function getSessionNotes(Request $request, $id)
     {
         $api_token = $request->header('api_token');
         $user = User::where('api_token', $api_token)->first();
@@ -450,7 +494,8 @@ class casesApiController extends Controller
         }
     }
 
-    public function destroy(Request $request, $id)
+    public
+    function destroy(Request $request, $id)
     {
         $api_token = $request->header('api_token');
         $user = User::where('api_token', $api_token)->first();
@@ -474,8 +519,9 @@ class casesApiController extends Controller
         }
     }
 
-    //Case Clients Functions
-    public function caseClientsData(Request $request)
+//Case Clients Functions
+    public
+    function caseClientsData(Request $request)
     {
         $rules = [
             'api_token' => 'required',
@@ -507,7 +553,8 @@ class casesApiController extends Controller
         }
     }
 
-    public function storeCaseClient(Request $request)
+    public
+    function storeCaseClient(Request $request)
     {
         $input = $request->all();
         $rules = null;
@@ -535,7 +582,8 @@ class casesApiController extends Controller
         }
     }
 
-    public function destroyCaseClient(Request $request)
+    public
+    function destroyCaseClient(Request $request)
     {
         $input = $request->all();
         $rules = null;
