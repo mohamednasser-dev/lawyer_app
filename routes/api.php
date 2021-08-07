@@ -130,6 +130,7 @@ Route::post('search-case-attachment', 'API\attachmentApiController@search');
 Route::post('search-mohdareen', 'API\mohdareenApiController@search');
 
 Route::get('printCase/{id}', 'API\AuthController@printCase');
+Route::get('print_session_notes/{id}', 'API\sessionNoteApiController@print_session_notes');
 
 Route::get('printSearchMonthly/{month}/{year}/{type}', 'API\ReportsApiController@printSearchMonthly');
 Route::get('printSearchDaily/{date}/{type}', 'API\ReportsApiController@printSearchDaily');
