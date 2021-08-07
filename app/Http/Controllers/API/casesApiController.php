@@ -345,7 +345,7 @@ class casesApiController extends Controller
                             ->get();
                         $data['khesms'] = Clients::select('id', 'client_Name')
                             ->where('type', 'khesm')
-                            ->where('parent_id', $user->cat_id)
+                            ->where('cat_id', $user->cat_id)
                             ->get();
                         $data['categories'] = category::select('id', 'name')->where('parent_id', $user->cat_id)->get();
                     }
