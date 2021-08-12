@@ -34,15 +34,15 @@
                    id="PrintdailyTable">
                 <thead>
                 <tr>
-                    <th style="text-align: center;">{{trans('site_lang.mohdar_notes')}}</th>
-                    <th style="text-align: center;">{{trans('site_lang.home_session_date')}}</th>
-                    <th style="text-align: center;">{{trans('site_lang.add_case_court')}}</th>
-                    <th style="text-align: center;">{{trans('site_lang.add_case_inventation_type')}}</th>
-                    <th style="text-align: center;">{{trans('site_lang.add_case_circle_num')}}</th>
-                    <th style="text-align: center;">{{trans('site_lang.home_session_case_number')}}</th>
-                    <th style="text-align: center;">{{trans('site_lang.clients_client_type_khesm')}}</th>
-                    <th style="text-align: center;">{{trans('site_lang.clients_client_type_client')}}</th>
-                    <th style="text-align: center;">#</th>
+                    <th class="text-center">{{trans('site_lang.mohdar_notes')}}</th>
+                    <th class="text-center">{{trans('site_lang.home_session_date')}}</th>
+                    <th class="text-center">{{trans('site_lang.add_case_court')}}</th>
+                    <th class="text-center">{{trans('site_lang.add_case_inventation_type')}}</th>
+                    <th class="text-center">{{trans('site_lang.add_case_circle_num')}}</th>
+                    <th class="text-center">{{trans('site_lang.home_session_case_number')}}</th>
+                    <th class="text-center">{{trans('site_lang.clients_client_type_khesm')}}</th>
+                    <th class="text-center">{{trans('site_lang.clients_client_type_client')}}</th>
+                    <th>#</th>
                 </tr>
                 </thead>
 
@@ -55,23 +55,19 @@
 
                 @foreach($data as $key=> $row)
                     <tr>
-                        @if ($row->Printnotes ==null)
-                            <td style="text-align: center;">----</td>
+                        @if ($row->printnotes ==null)
+                            <td class="text-center">----</td>
                         @else
-                            <td style="text-align: center;">{{$row->Printnotes->note}}</td>
+                            <td class="text-center">{{$row->printnotes->note}}</td>
                         @endif
-                        <td style="text-align: center;">{{$row->session_date}}</td>
-                        <td style="text-align: center;">{{$row->cases->court}}</td>
-                        <td style="text-align: center;">{{$row->cases->inventation_type}}</td>
-                        <td style="text-align: center;">{{$row->cases->circle_num}}</td>
-                        <td style="text-align: center;">{{$row->cases->invetation_num}}</td>
-                        <td style="text-align: center;">{{$khesm[$i]}}</td>
-                        <td style="text-align: center;">{{$clients[$i]}}</td>
-                        <td style="text-align: center;">
-                            {{$i}}
-                        </td>
-
-
+                        <td class="text-center">{{$row->session_date}}</td>
+                        <td class="text-center">{{$row->cases->court}}</td>
+                        <td class="text-center">{{$row->cases->inventation_type}}</td>
+                        <td class="text-center">{{$row->cases->circle_num}}</td>
+                        <td class="text-center">{{$row->cases->invetation_num}}</td>
+                        <td class="text-center">{{$row->khesm}}</td>
+                        <td class="text-center">{{$row->client}}</td>
+                        <td class="text-center">{{$i}}</td>
                     </tr>
                     @php
                         $i=$i+1;

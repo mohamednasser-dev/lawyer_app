@@ -19,33 +19,46 @@ class ReportsApiController extends Controller
         $api_token = $request->api_token;
         $user = User::where('api_token', $api_token)->first();
         if ($user != null) {
-            $data = Sessions::with('cases', 'Printnotes')
+            $data = Sessions::with('cases', 'Printnotes', 'clients')
                 ->where('month', '=', $month)
                 ->where('year', '=', $year)
                 ->where('parent_id', $user->parent_id != null ? $user->parent_id : $user->id)
                 ->whereHas('cases', function ($q) use ($user, $type) {
                     if ($type != 0) // for get reports with some category if equal 0 will get all categories reports
                         $q->where('to_whome', '=', $type);
-                })
-                ->get();
-            $khesm = null;
-            $case_client = null;
-            $khesm_arr[] = null;
-            $client_arr[] = null;
-            foreach ($data as $result) {
-                $case = Cases::findOrFail($result->case_Id);
-                $clients = $case->clients;
-                foreach ($clients as $key => $client) {
-                    if ($client->type == trans('site_lang.clients_client_type_khesm')) {
-                        $khesm = $client->client_Name;
-                    } else {
-                        $case_client = $client->client_Name;
+                })->get()
+//            $khesm = null;
+//            $case_client = null;
+//            $khesm_arr[] = null;
+//            $client_arr[] = null;
+//            foreach ($data as $result) {
+//                $case = Cases::findOrFail($result->case_Id);
+//                $clients = $case->clients;
+//                foreach ($clients as $key => $client) {
+//                    if ($client->type == trans('site_lang.clients_client_type_khesm')) {
+//                        $khesm = $client->client_Name;
+//                    } else {
+//                        $case_client = $client->client_Name;
+//                    }
+//                }
+//                $khesm_arr[] = $khesm;
+//                $client_arr[] = $case_client;
+//            }
+                ->map(function ($data) {
+                    $new_string = "";
+                    $new_khesm = "";
+                    foreach ($data->clients as $row) {
+                        if ($row->client_type == trans("site_lang.clients_client_type_khesm")) {
+                            $new_khesm = $new_khesm . $row->client_Name . ' , ';
+                        } else
+                            $new_string = $new_string . $row->client_Name . ' , ';
                     }
-                }
-                $khesm_arr[] = $khesm;
-                $client_arr[] = $case_client;
-            }
-            $pdf = PDF::loadView('Reports.MonthlyPDF', ['data' => $data, 'month' => $month, 'year' => $year, 'khesm' => $khesm_arr, 'clients' => $client_arr]);//    }else{
+                    $data->client = rtrim($new_string, ", ");
+                    $data->khesm = rtrim($new_khesm, ", ");
+                    unset($data->clients);
+                    return $data;
+                });
+            $pdf = PDF::loadView('Reports.MonthlyPDF', ['data' => $data, 'month' => $month, 'year' => $year]);//    }else{
             return $pdf->stream('Monthly report' . $month . '/' . $year . '.pdf');
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
@@ -57,29 +70,6 @@ class ReportsApiController extends Controller
         $api_token = $request->api_token;
         $user = User::where('api_token', $api_token)->first();
         if ($user != null) {
-//            $khesm = null;
-//            $clients = null;
-//            $data = Sessions::with('cases', 'Printnotes')
-//                ->where('session_date', $date)
-//                ->where('parent_id', $user->parent_id != null ? $user->parent_id : $user->id)
-//                ->whereHas('cases', function ($q) use ($user, $type) {
-//                    if ($type != 0) // for get reports with some category if equal 0 will get all categories reports
-//                        $q->where('to_whome', '=', $type);
-//                })->get();
-//
-//            if ($data->count() > 0) {
-//                foreach ($data as $result) {
-//                    $case = Cases::findOrFail($result->case_Id);
-//                    $clients = $case->clients;
-//                    foreach ($clients as $key => $client) {
-//                        if ($client->type == trans('site_lang.clients_client_type_khesm')) {
-//                            $khesm = $client;
-//                        } else {
-//                            $clients = $client;
-//                        }
-//                    }
-//                }
-//            }
             $data = Sessions::with('cases', 'Printnotes', 'clients')
                 ->where('session_date', $date)
                 ->where('parent_id', $user->parent_id != null ? $user->parent_id : $user->id)
@@ -101,8 +91,6 @@ class ReportsApiController extends Controller
                     unset($data->clients);
                     return $data;
                 });
-
-//            return $data;
             $pdf = PDF::loadView('Reports.Daily_api_pdf', ['data' => $data, 'id' => $date]);
             return $pdf->stream('Daily report' . $date . '.pdf');
         } else {
