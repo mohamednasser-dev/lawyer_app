@@ -15,19 +15,18 @@ class packagesApiController extends Controller
 {
     public function packages(Request $request)
     {
-        $mohdrs = null;
-        $data= Package::select('id','name', 'cost', 'duration')->get();
+        $data = Package::select('id', 'name', 'cost', 'duration', 'desc')->where('type', 'users')->get();
         return msgdata($request, success(), 'success', $data);
 
     }
 
-    public function store(Request $request,$package_id)
+    public function store(Request $request, $package_id)
     {
         $api_token = $request->header('api_token');
         $user = check_api_token($api_token);
         if ($user) {
             $user_id = $user->id;
-            if($user->type == 'admin'){
+            if ($user->type == 'admin') {
                 $selected_user = User::find($user_id);
 
                 $old_date = $selected_user->created_at;
@@ -37,7 +36,7 @@ class packagesApiController extends Controller
                 $selected_user->package_id = $package_id;
                 $selected_user->save();
                 return msg($request, success(), 'success');
-            }else{
+            } else {
                 return response()->json(msg($request, failed(), 'you_not_admin'));
             }
         } else {
