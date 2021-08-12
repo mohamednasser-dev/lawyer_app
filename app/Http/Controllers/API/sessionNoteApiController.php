@@ -4,11 +4,13 @@ namespace App\Http\Controllers\API;
 
 use App\Permission;
 use App\Session_Notes;
-use App\Sessions;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Validator;
+use PDF;
+
 
 class sessionNoteApiController extends Controller
 {
@@ -32,6 +34,19 @@ class sessionNoteApiController extends Controller
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
 
+    }
+
+    public function print_session_notes(Request $request, $id)
+    {
+        $api_token = $request->api_token;
+        $user = User::where('api_token', $api_token)->first();
+        if ($user != null) {
+            $notes = DB::table('session__notes')->where('session_Id', '=', $id)->orderBy('id', 'desc')->get();
+            $pdf = PDF::loadView('exports.session_notes_export', compact('notes'));
+            return $pdf->stream('document.pdf');
+        } else {
+            return sendResponse(403, trans('site_lang.loginWarning'), null);
+        }
     }
 
     public function search(Request $request)

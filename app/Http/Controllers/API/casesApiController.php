@@ -507,6 +507,7 @@ class casesApiController extends Controller
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
                 Case_client::where('case_id', $id)->delete();
+                attachment::where('case_id', $id)->delete();
                 $caseSessions = Sessions::where('case_id', $id)->get();
                 foreach ($caseSessions as $caseSessions) {
                     $session_note = Session_Notes::where('session_Id', $caseSessions->id)->delete();
