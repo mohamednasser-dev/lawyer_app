@@ -94,7 +94,7 @@
 
                         </div>
                         <div class="form-group right">
-                            <button data-dismiss="modal" class="btn btn-default" type="button">
+                            <button data-dismiss="modal" class="btn btn-danger" type="button">
                                 {{trans('site_lang.public_close_btn_text')}}
                             </button>
                             <input type="hidden" name="hidden_id" id="hidden_id"/>
