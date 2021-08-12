@@ -85,7 +85,7 @@
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group{{$errors->has('description')?' has-error':''}}">
                                         <textarea type="text" name="description" id="description"
-                                                  class="form-control"
+                                                  class="form-control" rows="3"
                                                   placeholder="{{trans('site_lang.description')}}"
                                                   value="{{ old('description') }}"></textarea>
                                     <span class="text-danger" id="package_description_error"></span>
