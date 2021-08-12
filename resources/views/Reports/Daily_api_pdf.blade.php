@@ -53,9 +53,9 @@
                 @foreach($data as $key=> $row)
                     <tr>
                         @if ($row->printnotes ==null)
-                            <td>----</td>
+                            <td class="text-center">----</td>
                         @else
-                            <td>{{$row->printnotes->note}}</td>
+                            <td class="text-center">{{$row->printnotes->note}}</td>
                         @endif
                         <td class="text-center">{{$row->session_date}}</td>
                         <td class="text-center">{{$row->cases->court}}</td>
