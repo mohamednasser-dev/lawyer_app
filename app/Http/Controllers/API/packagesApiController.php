@@ -15,7 +15,7 @@ class packagesApiController extends Controller
 {
     public function packages(Request $request)
     {
-        $data = Package::select('id', 'name', 'cost', 'duration', 'desc')->where('type', 'users')->get();
+        $data = Package::select('id', 'name', 'cost', 'duration', 'description')->where('type', 'users')->get();
         return msgdata($request, success(), 'success', $data);
 
     }
