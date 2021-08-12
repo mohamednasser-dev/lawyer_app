@@ -172,7 +172,7 @@ class ReportsController extends Controller
                 $data->client = rtrim($new_string, ", ");
                 $data->khesm = rtrim($new_khesm, ", ");
                 unset($data->clients);
-                $sessions_table [] = view('Reports.reports_daily_item', compact('result'))->render();
+                $sessions_table [] = view('Reports.reports_daily_item', compact('data'))->render();
 //                return $data;
             });
 
