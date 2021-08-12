@@ -1,6 +1,6 @@
 <tr>
-    <td>{{$clients->client_Name}}</td>
-    <td>{{$khesm->client_Name}}</td>
+    <td>{{$result->client}}</td>
+    <td>{{$result->khesm}}</td>
     <td>{{$result->cases->invetation_num}}</td>
     <td>{{$result->cases->circle_num}}</td>
     <td>{{$result->cases->inventation_type}}</td>

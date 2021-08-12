@@ -27,23 +27,6 @@ class ReportsApiController extends Controller
                     if ($type != 0) // for get reports with some category if equal 0 will get all categories reports
                         $q->where('to_whome', '=', $type);
                 })->get()
-//            $khesm = null;
-//            $case_client = null;
-//            $khesm_arr[] = null;
-//            $client_arr[] = null;
-//            foreach ($data as $result) {
-//                $case = Cases::findOrFail($result->case_Id);
-//                $clients = $case->clients;
-//                foreach ($clients as $key => $client) {
-//                    if ($client->type == trans('site_lang.clients_client_type_khesm')) {
-//                        $khesm = $client->client_Name;
-//                    } else {
-//                        $case_client = $client->client_Name;
-//                    }
-//                }
-//                $khesm_arr[] = $khesm;
-//                $client_arr[] = $case_client;
-//            }
                 ->map(function ($data) {
                     $new_string = "";
                     $new_khesm = "";
