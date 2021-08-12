@@ -17,7 +17,7 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $api_token = $request->header('api_token');
-        $user = check_api_token($update_profileapi_token);
+        $user = check_api_token($api_token);
         if ($user) {
             $user_id = $user->id;
             $permission = Permission::where('user_id', $user_id)->first();
