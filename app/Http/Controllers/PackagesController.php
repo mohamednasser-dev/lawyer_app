@@ -63,6 +63,7 @@ class PackagesController extends Controller
                 'description' => 'required',
             ]);
         }
+        return $data;
         Package::create($data);
         return response()->json(['success' => trans('site_lang.public_success_text')]);
     }
