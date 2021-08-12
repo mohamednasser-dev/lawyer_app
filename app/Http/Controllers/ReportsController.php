@@ -151,7 +151,7 @@ class ReportsController extends Controller
 //                    $clients = $client;
 //                }
 //            }
-        $data = Sessions::with('cases', 'Printnotes', 'clients')
+        Sessions::with('cases', 'Printnotes', 'clients')
             ->where('month', '=', $month)
             ->where('year', '=', $year)
             ->where('parent_id', getQuery())
@@ -162,19 +162,18 @@ class ReportsController extends Controller
             ->map(function ($data) {
                 $new_string = "";
                 $new_khesm = "";
-                foreach ($data as $report) {
-                    foreach ($data->clients as $result) {
-                        if ($result->client_type == trans("site_lang.clients_client_type_khesm")) {
-                            $new_khesm = $new_khesm . $result->client_Name . ' , ';
-                        } else
-                            $new_string = $new_string . $result->client_Name . ' , ';
-                    }
-
-                    $data->client = rtrim($new_string, ", ");
-                    $data->khesm = rtrim($new_khesm, ", ");
-                    unset($data->clients);
-                    $sessions_table [] = view('Reports.reports_daily_item', compact('report'))->render();
+                foreach ($data->clients as $result) {
+                    if ($result->client_type == trans("site_lang.clients_client_type_khesm")) {
+                        $new_khesm = $new_khesm . $result->client_Name . ' , ';
+                    } else
+                        $new_string = $new_string . $result->client_Name . ' , ';
                 }
+
+                $data->client = rtrim($new_string, ", ");
+                $data->khesm = rtrim($new_khesm, ", ");
+                unset($data->clients);
+                $sessions_table [] = view('Reports.reports_daily_item', compact('data'))->render();
+                return $sessions_table;
 //                return $data;
             });
 
