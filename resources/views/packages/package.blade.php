@@ -229,6 +229,7 @@
                         $('#package_Name_error').empty();
                         $('#packae_cost_error').empty();
                         $('#package_duration_error').empty();
+                        $('#package_description_error').empty();
                     },
                     success: function(data) {
                         $('#add_package_model').modal('hide');
@@ -241,6 +242,7 @@
                             $('#package_Name_error').html(data_error.responseJSON.errors.name);
                             $('#packae_cost_error').html(data_error.responseJSON.errors.cost);
                             $('#package_duration_error').html(data_error.responseJSON.errors.duration);
+                            $('#package_description_error').html(data_error.responseJSON.errors.description);
                         }
                     }
                 });
@@ -258,11 +260,10 @@
                     $('#name').val(html.data.name);
                     $('#cost').val(html.data.cost);
                     $('#duration').val(html.data.duration);
+                    $('#description').val(html.data.description);
                     $('#id').val(html.data.id);
                     $('#modal_title').text("{{trans('site_lang.package_edit_client_text')}}");
                     $('#add_client').val("{{trans('site_lang.public_edit_btn_text')}}");
-
-
                 }
             })
         });

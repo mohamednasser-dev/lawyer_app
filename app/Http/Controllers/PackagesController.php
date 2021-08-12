@@ -90,6 +90,7 @@ class PackagesController extends Controller
                 'name' => 'required',
                 'cost' => 'required',
                 'duration' => 'required',
+                'description' => 'required',
             ]);
 
             Package::find($request->id)->update($data);
