@@ -86,25 +86,22 @@ class ReportsApiController extends Controller
                 ->whereHas('cases', function ($q) use ($type, $user) {
                     if ($type != 0) // for get reports with some category if equal 0 will get all categories reports
                         $q->where('to_whome', '=', $type);
-                })->get();
-            $data->setCollection(
-                $data->getCollection()
-                    ->map(function ($data) {
-                        $new_string = "";
-                        $new_khesm = "";
-                        foreach ($data->clients as $row) {
-                            if ($row->client_type == trans("site_lang.clients_client_type_khesm")) {
-                                $new_khesm = $new_khesm . $row->client_Name . ' , ';
-                            } else
-                                $new_string = $new_string . $row->client_Name . ' , ';
-                        }
-                        $data->client = rtrim($new_string, ", ");
-                        $data->khesm = rtrim($new_khesm, ", ");
-                        unset($data->clients);
-                        return $data;
-                    })
+                })->get()
+                ->map(function ($data) {
+                    $new_string = "";
+                    $new_khesm = "";
+                    foreach ($data->clients as $row) {
+                        if ($row->client_type == trans("site_lang.clients_client_type_khesm")) {
+                            $new_khesm = $new_khesm . $row->client_Name . ' , ';
+                        } else
+                            $new_string = $new_string . $row->client_Name . ' , ';
+                    }
+                    $data->client = rtrim($new_string, ", ");
+                    $data->khesm = rtrim($new_khesm, ", ");
+                    unset($data->clients);
+                    return $data;
+                });
 
-            );
             return $data;
             $pdf = PDF::loadView('Reports.Daily_api_pdf', ['data' => $data, 'id' => $date]);
             return $pdf->stream('Daily report' . $date . '.pdf');
