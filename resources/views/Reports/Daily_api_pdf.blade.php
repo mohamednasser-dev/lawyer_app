@@ -33,15 +33,15 @@
                    id="PrintdailyTable">
                 <thead>
                 <tr>
-                    <th style="width: 10%;" >{{trans('site_lang.mohdar_notes')}}</th>
-                    <th style="width: 10%;" >{{trans('site_lang.home_session_date')}}</th>
-                    <th style="width: 10%;" >{{trans('site_lang.add_case_court')}}</th>
-                    <th style="width: 10%;" >{{trans('site_lang.add_case_inventation_type')}}</th>
-                    <th style="width: 10%;" >{{trans('site_lang.add_case_circle_num')}}</th>
-                    <th style="width: 10%;" >{{trans('site_lang.home_session_case_number')}}</th>
-                    <th style="width: 10%;" >{{trans('site_lang.clients_client_type_khesm')}}</th>
-                    <th style="width: 10%;" >{{trans('site_lang.clients_client_type_client')}}</th>
-                    <th style="width: 10%;" >#</th>
+                    <th>{{trans('site_lang.mohdar_notes')}}</th>
+                    <th>{{trans('site_lang.home_session_date')}}</th>
+                    <th>{{trans('site_lang.add_case_court')}}</th>
+                    <th>{{trans('site_lang.add_case_inventation_type')}}</th>
+                    <th>{{trans('site_lang.add_case_circle_num')}}</th>
+                    <th>{{trans('site_lang.home_session_case_number')}}</th>
+                    <th>{{trans('site_lang.clients_client_type_khesm')}}</th>
+                    <th>{{trans('site_lang.clients_client_type_client')}}</th>
+                    <th>#</th>
                 </tr>
                 </thead>
 
