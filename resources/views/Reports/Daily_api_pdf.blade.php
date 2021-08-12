@@ -33,21 +33,19 @@
                    id="PrintdailyTable">
                 <thead>
                 <tr>
-                    <th>{{trans('site_lang.mohdar_notes')}}</th>
+                    <th class="text-center">{{trans('site_lang.mohdar_notes')}}</th>
                     <th>{{trans('site_lang.home_session_date')}}</th>
                     <th>{{trans('site_lang.add_case_court')}}</th>
                     <th>{{trans('site_lang.add_case_inventation_type')}}</th>
                     <th>{{trans('site_lang.add_case_circle_num')}}</th>
                     <th>{{trans('site_lang.home_session_case_number')}}</th>
-                    <th>{{trans('site_lang.clients_client_type_khesm')}}</th>
+                    <th class="text-center">{{trans('site_lang.clients_client_type_khesm')}}</th>
                     <th>{{trans('site_lang.clients_client_type_client')}}</th>
                     <th>#</th>
                 </tr>
                 </thead>
 
                 <tbody>
-
-                {{--                @foreach($data as $caseSession)--}}
                 @php
                     $i=1;
                 @endphp
