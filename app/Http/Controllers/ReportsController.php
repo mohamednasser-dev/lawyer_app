@@ -163,7 +163,7 @@ class ReportsController extends Controller
                 $new_string = "";
                 $new_khesm = "";
                 foreach ($data as $report) {
-                    foreach ($report->clients as $result) {
+                    foreach ($data->clients as $result) {
                         if ($result->client_type == trans("site_lang.clients_client_type_khesm")) {
                             $new_khesm = $new_khesm . $result->client_Name . ' , ';
                         } else
