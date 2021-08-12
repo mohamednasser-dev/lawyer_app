@@ -121,65 +121,32 @@ class ReportsController extends Controller
     public function searchMonthly($month, $year, $type)
     {
         $sessions_table = array();
-
-//        if ($type == 'all') {
-//            $results = Sessions::with('cases', 'Printnotes')
-//                ->where('month', '=', $month)
-//                ->where('year', '=', $year)
-//                ->where('parent_id',getQuery())
-//                ->get();
-//        } else {
-//            $results = Sessions::with('cases', 'Printnotes')
-//                ->where('month', '=', $month)
-//                ->where('year', '=', $year)
-//                ->where('parent_id',getQuery())
-//                ->whereHas('cases', function ($q) use ($type) {
-//                    $q->where('to_whome', '=', $type);
-//                })
-//                ->get();
-//        }
-//
-//
-//        foreach ($results as $result) {
-//            $case = Cases::findOrFail($result->case_Id);
-//            $clients = $case->clients;
-//
-//            foreach ($clients as $key => $client) {
-//                if ($client->type == trans('site_lang.clients_client_type_khesm')) {
-//                    $khesm = $client;
-//                } else {
-//                    $clients = $client;
-//                }
-//            }
-        Sessions::with('cases', 'Printnotes', 'clients')
+        $results = Sessions::with('cases', 'Printnotes', 'clients')
             ->where('month', '=', $month)
             ->where('year', '=', $year)
             ->where('parent_id', getQuery())
             ->whereHas('cases', function ($q) use ($type) {
                 if ($type != 0) // for get reports with some category if equal 0 will get all categories reports
                     $q->where('to_whome', '=', $type);
-            })->get()
-            ->map(function ($data) {
-                $new_string = "";
-                $new_khesm = "";
-                foreach ($data->clients as $result) {
-                    if ($result->client_type == trans("site_lang.clients_client_type_khesm")) {
-                        $new_khesm = $new_khesm . $result->client_Name . ' , ';
-                    } else
-                        $new_string = $new_string . $result->client_Name . ' , ';
+            })->get();
+        foreach ($results as $result) {
+            $case = Cases::findOrFail($result->case_Id);
+            $clients = $case->clients;
+
+            foreach ($clients as $key => $client) {
+                if ($client->type == trans('site_lang.clients_client_type_khesm')) {
+                    $khesm = $khesm . $client->client_Name . ' , ';
+                } else {
+                    $clients = $clients . $client->client_Name . ' , ';
+
                 }
+            }
+//            $khesm== rtrim($khesm, ", ");
+//            $clients== rtrim($clients, ", ");
 
-                $data->client = rtrim($new_string, ", ");
-                $data->khesm = rtrim($new_khesm, ", ");
-                unset($data->clients);
-                $sessions_table [] = view('Reports.reports_daily_item', compact('data'))->render();
-                dd($sessions_table);
-//                return response(['status' => true, 'result' => $sessions_table]);
-//                return $data;
-            });
-
-//        }
-//        return response(['status' => true, 'result' => $sessions_table]);
+            $sessions_table [] = view('Reports.reports_daily_item', compact('result', 'khesm', 'clients'))->render();
+        }
+        return response(['status' => true, 'result' => $sessions_table]);
     }
 
 
