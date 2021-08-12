@@ -102,7 +102,7 @@ class ReportsApiController extends Controller
                     return $data;
                 });
 
-            return $data;
+//            return $data;
             $pdf = PDF::loadView('Reports.Daily_api_pdf', ['data' => $data, 'id' => $date]);
             return $pdf->stream('Daily report' . $date . '.pdf');
         } else {

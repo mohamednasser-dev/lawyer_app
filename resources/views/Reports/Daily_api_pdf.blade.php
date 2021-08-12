@@ -54,18 +54,18 @@
 
                 @foreach($data as $key=> $row)
                     <tr>
-                        @if ($row->Printnotes ==null)
+                        @if ($row->printnotes ==null)
                             <td>----</td>
                         @else
-                            <td>{{$row->Printnotes->note}}</td>
+                            <td>{{$row->printnotes->note}}</td>
                         @endif
                         <td>{{$row->session_date}}</td>
                         <td>{{$row->cases->court}}</td>
                         <td>{{$row->cases->inventation_type}}</td>
                         <td>{{$row->cases->circle_num}}</td>
                         <td>{{$row->cases->invetation_num}}</td>
-                        <td>{{$khesm->client_Name}}</td>
-                        <td>{{$clients->client_Name}}</td>
+                        <td>{{$row->khesm}}</td>
+                        <td>{{$row->client}}</td>
                         <td>{{$i}}</td>
                     </tr>
                     @php
