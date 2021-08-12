@@ -1,14 +1,14 @@
 <tr>
-    <td>{{$report->client}}</td>
-    <td>{{$report->khesm}}</td>
-    <td>{{$report->cases->invetation_num}}</td>
-    <td>{{$report->cases->circle_num}}</td>
-    <td>{{$report->cases->inventation_type}}</td>
-    <td>{{$report->cases->court}}</td>
-    <td>{{$report->session_date}}</td>
-    @if ($report->printnotes ==null)
+    <td>{{$data->client}}</td>
+    <td>{{$data->khesm}}</td>
+    <td>{{$data->cases->invetation_num}}</td>
+    <td>{{$data->cases->circle_num}}</td>
+    <td>{{$data->cases->inventation_type}}</td>
+    <td>{{$data->cases->court}}</td>
+    <td>{{$data->session_date}}</td>
+    @if ($data->printnotes ==null)
         <td>----</td>
     @else
-        <td>{{$report->printnotes->note}}</td>
+        <td>{{$data->printnotes->note}}</td>
     @endif
 </tr>
