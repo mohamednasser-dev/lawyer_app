@@ -121,23 +121,14 @@ class ReportsController extends Controller
     {
         $sessions_table = array();
 
-        if ($type == 'all') {
-            $results = Sessions::with('cases', 'Printnotes')
-                ->where('month', '=', $month)
-                ->where('year', '=', $year)
-                ->where('parent_id',getQuery())
-                ->get();
-        } else {
-            $results = Sessions::with('cases', 'Printnotes')
-                ->where('month', '=', $month)
-                ->where('year', '=', $year)
-                ->where('parent_id',getQuery())
-                ->whereHas('cases', function ($q) use ($type) {
+        $results = Sessions::with('cases', 'Printnotes', 'clients')
+            ->where('month', '=', $month)
+            ->where('year', '=', $year)
+            ->where('parent_id', getQuery())
+            ->whereHas('cases', function ($q) use ($type) {
+                if ($type != 0) // for get reports with some category if equal 0 will get all categories reports
                     $q->where('to_whome', '=', $type);
-                })
-                ->get();
-        }
-
+            })->get();
 
         foreach ($results as $result) {
             $case = Cases::findOrFail($result->case_Id);
