@@ -173,7 +173,8 @@ class ReportsController extends Controller
                 $data->khesm = rtrim($new_khesm, ", ");
                 unset($data->clients);
                 $sessions_table [] = view('Reports.reports_daily_item', compact('data'))->render();
-                return response(['status' => true, 'result' => $sessions_table]);
+                dd($sessions_table);
+//                return response(['status' => true, 'result' => $sessions_table]);
 //                return $data;
             });
 
