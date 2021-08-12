@@ -34,13 +34,13 @@
                 <thead>
                 <tr>
                     <th class="text-center">{{trans('site_lang.mohdar_notes')}}</th>
-                    <th>{{trans('site_lang.home_session_date')}}</th>
-                    <th>{{trans('site_lang.add_case_court')}}</th>
-                    <th>{{trans('site_lang.add_case_inventation_type')}}</th>
-                    <th>{{trans('site_lang.add_case_circle_num')}}</th>
-                    <th>{{trans('site_lang.home_session_case_number')}}</th>
+                    <th class="text-center">{{trans('site_lang.home_session_date')}}</th>
+                    <th class="text-center">{{trans('site_lang.add_case_court')}}</th>
+                    <th class="text-center">{{trans('site_lang.add_case_inventation_type')}}</th>
+                    <th class="text-center">{{trans('site_lang.add_case_circle_num')}}</th>
+                    <th class="text-center">{{trans('site_lang.home_session_case_number')}}</th>
                     <th class="text-center">{{trans('site_lang.clients_client_type_khesm')}}</th>
-                    <th>{{trans('site_lang.clients_client_type_client')}}</th>
+                    <th class="text-center">{{trans('site_lang.clients_client_type_client')}}</th>
                     <th>#</th>
                 </tr>
                 </thead>
@@ -57,14 +57,14 @@
                         @else
                             <td>{{$row->printnotes->note}}</td>
                         @endif
-                        <td>{{$row->session_date}}</td>
-                        <td>{{$row->cases->court}}</td>
-                        <td>{{$row->cases->inventation_type}}</td>
-                        <td>{{$row->cases->circle_num}}</td>
-                        <td>{{$row->cases->invetation_num}}</td>
-                        <td>{{$row->khesm}}</td>
-                        <td>{{$row->client}}</td>
-                        <td>{{$i}}</td>
+                        <td class="text-center">{{$row->session_date}}</td>
+                        <td class="text-center">{{$row->cases->court}}</td>
+                        <td class="text-center">{{$row->cases->inventation_type}}</td>
+                        <td class="text-center">{{$row->cases->circle_num}}</td>
+                        <td class="text-center">{{$row->cases->invetation_num}}</td>
+                        <td class="text-center">{{$row->khesm}}</td>
+                        <td class="text-center">{{$row->client}}</td>
+                        <td class="text-center">{{$i}}</td>
                     </tr>
                     @php
                         $i=$i+1;
