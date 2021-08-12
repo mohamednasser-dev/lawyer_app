@@ -131,10 +131,10 @@ class ReportsController extends Controller
             })->get();
 
         foreach ($results as $result) {
-            $case = Cases::findOrFail($result->case_Id);
-            $clients = $case->clients;
+//            $case = Cases::findOrFail($result->case_Id);
+//            $clients = $case->clients;
 
-            foreach ($clients as $key => $client) {
+            foreach ($results->clients as $key => $client) {
                 if ($client->type == trans('site_lang.clients_client_type_khesm')) {
                     $khesm = $client;
                 } else {
