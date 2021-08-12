@@ -37,7 +37,7 @@
     </div>
 </div>
 <!-- end: PAGE -->
- 
+
 <div id="add_package_model"  role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -80,8 +80,15 @@
                                         <span class="text-danger" id="package_duration_error"></span>
                                     </div>
                                 </div>
-
-
+                                  <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="form-group{{$errors->has('description')?' has-error':''}}">
+                                        <input type="text" name="description" id="description"
+                                               class="form-control"
+                                               placeholder="{{trans('site_lang.description')}}"
+                                               value="{{ old('description') }}">
+                                        <span class="text-danger" id="package_description_error"></span>
+                                    </div>
+                                </div>
 
                             </div>
                             <div class="form-group right">
@@ -177,7 +184,7 @@
             event.preventDefault();
             console.log($('#add_client').val());
             if ($('#add_client').val() == "{{trans('site_lang.public_add_btn_text')}}") {
-               
+
                 $.ajax({
                     url: "{{route('packages.store')}}",
                     method: 'post',
@@ -190,6 +197,7 @@
                         $('#package_Name_error').empty();
                         $('#packae_cost_error').empty();
                         $('#package_duration_error').empty();
+                        $('#package_description_error').empty();
 
                     },
                     success: function(data) {
@@ -203,6 +211,7 @@
                             $('#package_Name_error').html(data_error.responseJSON.errors.name);
                             $('#packae_cost_error').html(data_error.responseJSON.errors.cost);
                             $('#package_duration_error').html(data_error.responseJSON.errors.duration);
+                            $('#package_description_error').html(data_error.responseJSON.errors.description);
 
                         }
                     }

@@ -55,6 +55,7 @@ return [
     'side_reports_monthly' => 'التقارير الشهرية',
     'side_ControlPanel' => 'لوحة التحكم',
     'side_Packages' => 'العروض',
+    'description' => 'الوصف',
     'side_packageClient' => 'عملاء الموقع',
     'side_ClientReservation' => 'متابعة العملاء',
     'side_exit' => 'تسجيل الخروج',

@@ -28,7 +28,6 @@ class packagesApiController extends Controller
             $user_id = $user->id;
             if ($user->type == 'admin') {
                 $selected_user = User::find($user_id);
-
                 $old_date = $selected_user->created_at;
                 $new_duration = Package::select('duration')->where('id', $package_id)->first();
                 $new_date = $old_date->addMonths($new_duration->duration);

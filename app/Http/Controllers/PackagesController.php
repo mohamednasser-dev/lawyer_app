@@ -53,12 +53,14 @@ class PackagesController extends Controller
                 'name' => 'required',
                 'cost' => 'required',
                 'duration' => 'required',
+                'description' => 'required',
             ]);
         } else {
             $data = $this->validate(request(), [
                 'name' => 'required',
                 'cost' => 'required',
                 'duration' => 'required',
+                'description' => 'required',
             ]);
         }
         Package::create($data);
