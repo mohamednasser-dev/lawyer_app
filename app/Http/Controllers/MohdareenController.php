@@ -81,6 +81,7 @@ class MohdareenController extends Controller
             $categories = category::where('parent_id', getQuery())->select('id', 'name')->get();
             return view('mohdareen/mohdareen', compact('categories'));
         } else {
+            session()->flash('danger', trans('site_lang.not_authorized_to_enter'));
             return redirect(url('home'));
         }
     }

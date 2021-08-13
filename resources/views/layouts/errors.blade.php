@@ -10,7 +10,11 @@
     </div>
 @endif
 
-
+@if(Session::has('danger'))
+    <div class="alert alert-danger">
+        <p>{{ Session('danger') }}</p>
+    </div>
+@endif
 
 
 @if(session('success'))

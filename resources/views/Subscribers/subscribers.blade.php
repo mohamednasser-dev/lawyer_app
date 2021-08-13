@@ -78,7 +78,7 @@
                                 </td>
                                 <td>
                                     <button data-client-id="{{$row->id}}" id="editClient" class="btn btn-xs btn-outline-success" >
-                                        <i class="fa fa-edits"></i>&nbsp;&nbsp; {{trans('site_lang.public_edit_btn_text')}}</button>
+                                        <i class="fa fa-edits"></i>&nbsp;&nbsp; {{trans('site_lang.edit_package')}}</button>
                                     &nbsp;&nbsp;
                                     <button data-client-id="{{$row->id}}" id="deleteClient"  class="btn btn-xs btn-outline-danger">
                                         <i class="fa fa-times fa fa-white"></i>&nbsp;&nbsp; {{trans('site_lang.public_delete_text')}} </button>
@@ -105,7 +105,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" id="subscribers">
+{{--                id="subscribers"--}}
+                <form method="post" action="{{route('subscribers.store')}}">
                     <input type="hidden" id="token" name="_token" value="{{csrf_token()}}">
                     <input type="hidden" name="id" id="id">
                     <div class="row">

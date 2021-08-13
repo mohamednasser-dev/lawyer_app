@@ -170,6 +170,21 @@ class SubscribersController extends Controller
         $data['cat_id'] = $category->id;
         $data['status'] = 'Active';
         $data['type'] = 'admin';
+        $package = Package::find($request->package_id);
+
+        $mytime = Carbon::now();
+        $today = Carbon::parse($mytime->toDateTimeString())->format('Y-m-d H:i');
+        $final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
+        $warning_final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
+
+        //to generate expiry date ...
+        $expire_date = $final_today->addMonths($package->duration);
+        $data['expiry_date'] = $expire_date;
+
+        //for generate warning date ...
+        $for_warning_date = $warning_final_today->addMonths($package->duration);
+        $warning_date = $for_warning_date->subDays(10);
+        $data['warning_date'] = $warning_date;
         $user_result = User::create($data);
 
         $category->parent_id = $user_result->id;
@@ -186,9 +201,10 @@ class SubscribersController extends Controller
         $permissions['category'] = 'yes';
 
         $per = Permission::create($permissions);
+        session()->flash('success', trans('site_lang.add_success'));
         $per->save();
-
-        return response()->json(['success' => trans('site_lang.public_success_text')]);
+        return back();
+//        return response()->json(['success' => trans('site_lang.public_success_text')]);
     }
 
     /**
@@ -226,11 +242,22 @@ class SubscribersController extends Controller
     public function update(Request $request)
     {
         $user = User::where('id', $request->id)->first();
+        $package = Package::find($request->package_id);
 
-        $old_date = $user->created_at;
-        $old_duration = Package::select('duration')->where('id', $request->id)->first();
-        $old_date = $old_date->addMonths($old_duration->duration);
-        $user->created_at = $old_date;
+        $mytime = Carbon::now();
+        $today = Carbon::parse($mytime->toDateTimeString())->format('Y-m-d H:i');
+        $final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
+        $warning_final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
+
+        //to generate expiry date ...
+        $expire_date = $final_today->addMonths($package->duration);
+        $user->expiry_date = $expire_date;
+
+        //for generate warning date ...
+        $for_warning_date = $warning_final_today->addMonths($package->duration);
+        $warning_date = $for_warning_date->subDays(10);
+        $user->warning_date = $warning_date;
+
         $user->package_id = $request->package_id;
         $user->status = "Active";
 

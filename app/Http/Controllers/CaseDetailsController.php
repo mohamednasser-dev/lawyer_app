@@ -79,6 +79,7 @@ class CaseDetailsController extends Controller
             }
             return view('cases.search_case');
         } else {
+            session()->flash('danger', trans('site_lang.not_authorized_to_enter'));
             return redirect(url('home'));
         }
     }

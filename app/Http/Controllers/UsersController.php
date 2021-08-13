@@ -23,14 +23,15 @@ class UsersController extends Controller
         if ($enabled == 'yes') {
             $users = null;
             if (auth()->user()->parent_id != null) {
-                $users = User::query()->where('parent_id', getQuery())->get();
+                $users = User::query()->where('parent_id', getQuery())->Where('id','!=', auth()->user()->id)->get();
             } else {
-                $users = User::query()->where('parent_id', getQuery())->orWhere('id', getQuery())->get();
+//                ->orWhere('id', getQuery())
+                $users = User::query()->where('parent_id', getQuery())->get();
             }
             $categories = category::where('parent_id', getQuery())->select('id', 'name')->get();
-
             return view('users/users', compact('users', 'categories'));
         } else {
+            session()->flash('danger', trans('site_lang.not_authorized_to_enter'));
             return redirect(url('home'));
         }
     }

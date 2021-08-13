@@ -39,6 +39,7 @@ class CategoryController extends Controller
             }
             return view('categories/categories');
         } else {
+            session()->flash('danger', trans('site_lang.not_authorized_to_enter'));
             return redirect(url('home'));
         }
     }

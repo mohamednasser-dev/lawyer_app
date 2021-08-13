@@ -63,6 +63,7 @@ class ClientsController extends Controller
             $categories = category::select('id', 'name')->where('parent_id', getQuery())->get();
             return view('clients/clients', compact('categories'));
         } else {
+            session()->flash('danger', trans('site_lang.not_authorized_to_enter'));
             return redirect(url('home'));
         }
     }

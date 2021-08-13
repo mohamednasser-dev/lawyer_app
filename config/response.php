@@ -7,6 +7,11 @@ return
                 'ar' => 'البريد الإلكتروني موجود من قبل',
                 'en' => 'Name is Required',
             ],
+        'package_ended' =>
+            [
+                'ar' => 'تم انتهاء الباقة',
+                'en' => 'package ended',
+            ],
         'you_not_admin' =>
             [
                 'ar' => 'يجب أن تكون ادمين للاشتراك فالباقة',

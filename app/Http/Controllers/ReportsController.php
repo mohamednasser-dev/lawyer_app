@@ -38,6 +38,7 @@ class ReportsController extends Controller
         if ($enabled == 'yes') {
             return view('Reports.CasesDailyReport',compact('categories'));
         } else {
+            session()->flash('danger', trans('site_lang.not_authorized_to_enter'));
             return redirect(url('home'));
         }
     }
@@ -52,6 +53,7 @@ class ReportsController extends Controller
             return view('Reports.CasesMonthlyReport',compact('categories'));
 
         } else {
+            session()->flash('danger', trans('site_lang.not_authorized_to_enter'));
             return redirect(url('home'));
         }
     }

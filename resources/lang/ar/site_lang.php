@@ -1,7 +1,13 @@
 <?php
 
 return [
+    //new
+    'edit_package' => 'تعديل العرض',
 
+
+
+    // public use
+    'not_authorized_to_enter' => 'غير مصرح لك الدخول',
     'case_deleted' => 'تم حذف الدعوى  بنجاح',
     'should_choose_case' => 'يجب اختيار جلسة .... !',
     'should_choose_case_models' => 'يجب اختيار دعوى بشكل صحيح ... !',
@@ -10,11 +16,6 @@ return [
     'search' => "بحث",
     'chooses' => "الاجرائات",
     'print' => "طباعه",
-
-
-
-    // public use
-
     'public_add_btn_text' => 'إضافة',
     'loginWarning' => 'يجب تسجيل الدخول',
     'app_name1' => 'توثيق',
@@ -32,7 +33,7 @@ return [
     'public_continue_delete_modal_text' => 'جارى الحذف',
     'profile' => 'الصفحه الشخصية',
     'confirm_password' => 'تأكيد الرقم السري',
-    'updatSuccess' => 'تم التعديل بنجاح !',
+    'updatSuccess' => 'تم التعديل بنجاح',
     'deleted'=>'تم الحذف ',
     'permission_warrning'=>'لا تتملك الصلاحيه لدخول هذه الصفحه',
     'not_allow_delete_cat'=>'يوجد دعاوى مرتبطة بهذا التصنيف.. لايمكنك الحذف',

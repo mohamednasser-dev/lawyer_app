@@ -59,7 +59,7 @@ class PermissionController extends Controller
     public function edit($id)
     {
         $permission = Permission::where('user_id', $id)->first();
-       
+
         return view('permission.permission', \compact('permission'));
     }
 
@@ -87,7 +87,7 @@ class PermissionController extends Controller
 
             ]);
         Permission::where('id', $id)->update($data);
-        session()->flash('success', trans('admin.updatedsuccess'));
+        session()->flash('success', trans('site_lang.updatSuccess'));
         return redirect(url('users'));
     }
 

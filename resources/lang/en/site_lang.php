@@ -2,16 +2,17 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Authentication Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are used during authentication for various
-    | messages that we need to display to the user. You are free to modify
-    | these language lines according to your application's requirements.
-    |
-    */
+    'edit_package' => 'edit package',
+
+    'not_authorized_to_enter' => 'You are not authorized to enter',
+    'case_deleted' => 'The case has been successfully removed',
+    'should_choose_case' => 'You must choose a session .... !',
+    'should_choose_case_models' => 'You must choose a suit correctly ... !',
+    'should_enter_correct' => 'The data must be entered correctly',
+    'please_empty' => "Please empty the clients and opponents field and select them",
+    'search' => "search",
+    'chooses' => "Measures",
+    'print' => "print",
 
     // public use
     'public_add_btn_text' => 'Add',

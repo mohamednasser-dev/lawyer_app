@@ -23,7 +23,6 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-
         $rules = [
             'email' => 'required|email',
             'password' => 'required',
@@ -36,13 +35,30 @@ class AuthController extends Controller
                 'email' => $request->input('email'),
                 'password' => $request->input('password')
             ])) {
-                $user = Auth::user();
-                $user->api_token = str_random(60);
-                $user->save();
-                $permission = Permission::where('user_id', $user->id)->first();
-                return msgdata($request, success(), 'login_success', array('user' => $user, 'permission' => $permission));
-            } else {
+                if(Auth::user()->parent_id == null){
+                        $user = Auth::user();
+                        $user->api_token = str_random(60);
+                        $user->save();
+                        $permission = Permission::where('user_id', $user->id)->first();
+                    if(Auth::user()->expiry_package == 'n'){
+                        return msgdata($request, success(), 'login_success', array('user' => $user, 'permission' => $permission));
+                    }else{
+                        return msgdata($request, success(), 'package_ended', array('user' => $user, 'permission' => $permission));
+                    }
+                }else{
+                    $parent_user = User::where('id',Auth::user()->parent_id)->first();
 
+                        $user = Auth::user();
+                        $user->api_token = str_random(60);
+                        $user->save();
+                        $permission = Permission::where('user_id', $user->id)->first();
+                    if($parent_user->expiry_package == 'n'){
+                        return msgdata($request, success(), 'login_success', array('user' => $user, 'permission' => $permission));
+                    }else{
+                        return msgdata($request, success(), 'package_ended', array('user' => $user, 'permission' => $permission));
+                    }
+                }
+            } else {
                 return response()->json(msg($request, failed(), 'login_warrning'));
             }
         }
