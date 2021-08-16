@@ -133,7 +133,7 @@ class AuthController extends Controller
             $user->save();
             Mail::raw('رمز استعاده كلمه المرور الخاصة بك: ' . $code, function ($message) use ($user) {
                 $message->subject('تطبيق المحاماه');
-                $message->from('taheelpost@gmail.com', 'taheelpost');
+                $message->from('tes@golden-info.com', 'TES');
                 $message->to($user->email);
             });
 
