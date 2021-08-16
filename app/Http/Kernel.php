@@ -63,6 +63,7 @@ class Kernel extends HttpKernel
         'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
         'lang'=> \App\Http\Middleware\lang::class,
         'theme'=> \App\Http\Middleware\theme::class,
+        'Check_package'=> \App\Http\Middleware\Check_package::class,
 
 
     ];

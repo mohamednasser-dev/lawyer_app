@@ -2,18 +2,74 @@
 @section('styles')
 <link rel="stylesheet" href="{{url('/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css')}}">
 <link rel="stylesheet" href="{{url('/assets/vendors/font-awesome/css/font-awesome.min.css')}}">
-
 @endsection
-
 @section('content')
-
 <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
     <div>
         <h4 class="mb-3 mb-md-0">{{trans('site_lang.side_home')}}
         </h4>
     </div>
-
 </div>
+
+@if(auth()->user()->parent_id == null)
+    @php
+        $expiry_date = auth()->user()->expiry_date;
+        $expiry_package = auth()->user()->expiry_package;
+        $package_name = auth()->user()->Package->name ;
+    @endphp
+@else
+    @php
+        $parent_user = \App\User::where('id',auth()->user()->parent_id)->first();
+        $expiry_date = $parent_user->expiry_date;
+        $expiry_package = $parent_user->expiry_package;
+        $package_name = $parent_user->Package->name ;
+    @endphp
+@endif
+
+@if($expiry_package == 'y')
+    <div class="row">
+        <div class="col-12 col-xl-12 stretch-card">
+            <div class="row flex-grow">
+                <div class="col-md-4 grid-margin stretch-card">
+                    <div class="card card-inverse-danger">
+                        <div class="card-body ">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <h6 class="card-title mb-0">{{trans('site_lang.alert')}}</h6>
+                                <div class="dropdown mb-2">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8 col-md-12 col-xl-10">
+                                    <div class="d-flex align-items-baseline">
+                                        <h3 class="mb-7">{{trans('site_lang.package_ended')}} ( {{$package_name}} )</h3>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-md-12 col-xl-10">
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="d-flex align-items-baseline">
+                                            <p class="text-success">
+                                                {{$expiry_date}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-md-12 col-xl-10">
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="d-flex align-items-baseline">
+                                            <a class="btn btn-primary" style="color: white;">{{trans('site_lang.renew_package')}} </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- row -->
+    @else
+
 
 <div class="row">
     <div class="col-12 col-xl-12 stretch-card">
@@ -336,7 +392,7 @@
 </div>
 
 <!-- modal session note -->
-
+@endif
 @endsection
 @section('custom-scripts')
 

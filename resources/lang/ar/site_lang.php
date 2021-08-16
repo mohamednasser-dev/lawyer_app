@@ -2,11 +2,18 @@
 
 return [
     //new
-    'edit_package' => 'تعديل العرض',
+
 
 
 
     // public use
+    'package_ended' => 'تم انتهاء باقة',
+    'renew_package' => 'تجديد الاشتراك',
+
+
+
+    'edit_package' => 'تعديل العرض',
+    'alert' => 'تنبية',
     'not_authorized_to_enter' => 'غير مصرح لك الدخول',
     'case_deleted' => 'تم حذف الدعوى  بنجاح',
     'should_choose_case' => 'يجب اختيار جلسة .... !',

@@ -2,8 +2,8 @@
 
 return [
 
+    'alert' => 'alert',
     'edit_package' => 'edit package',
-
     'not_authorized_to_enter' => 'You are not authorized to enter',
     'case_deleted' => 'The case has been successfully removed',
     'should_choose_case' => 'You must choose a session .... !',
