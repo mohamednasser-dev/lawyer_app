@@ -48,6 +48,7 @@
                                     <div class="auth-form-wrapper px-4 py-5">
                                         <a href="#" class="noble-ui-logo d-block mb-2">Lawyer<span>App</span></a>
                                         <h5 class="text-muted font-weight-normal mb-4">{{trans('site_lang.auth_cont_title')}}</h5>
+                                        @include('layouts.errors')
                                         <form class="form-login" action="{{ route('login') }}" method="POST">
                                             @csrf
 

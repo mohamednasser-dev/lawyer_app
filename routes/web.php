@@ -119,13 +119,16 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('subscribers', 'SubscribersController');
     Route::get('subSearch', 'SubscribersController@search');
-    Route::get('subscribers/updateStatus/{id}', 'SubscribersController@updateStatus')->name('subscribers.updateStatus');
+    Route::get('subscribers/updateStatus/{type}/{id}', 'SubscribersController@updateStatus')->name('subscribers.updateStatus');
+//    Route::get('subscribers/updateStatus/{type}/{id}', 'SubscribersController@updateStatusActive')->name('subscribers.updateStatusActive');
     Route::post('subscribers/update', 'SubscribersController@update')->name('subscribers.update');
     Route::get('subscribers/{id}/delete', 'SubscribersController@destroy');
     Route::get('subscribers/search/new', 'SubscribersController@search_new')->name('subscribers.search');
     Route::get('endReservation', 'EndReservationsController@index');
+
 });
 Route::get('reservtion', 'ReservationController@index');
+
 
 //lang
 Route::get('lang/{lang}', function ($lang) {

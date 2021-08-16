@@ -8,6 +8,7 @@ return [
 
     // public use
     'package_ended' => 'تم انتهاء باقة',
+    'package_warning' => 'سيتم انتهاء الباقة قريبا',
     'renew_package' => 'تجديد الاشتراك',
 
 

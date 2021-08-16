@@ -41,20 +41,10 @@ class HomeController extends Controller
         $user_package = Package::where('id', $package_id)->first();
         $id = getQuery();
         $admin = User::findOrFail($id);
-        $start_date = $admin->created_at;
 
-        $end_date = $start_date->addMonths($user_package->duration)->addDays(7);
-
-        $current_date = Carbon::now();
-        if ($current_date > $end_date) {
-
-            $admin->status = 'Deactive';
-            $admin->save();
+        if ($admin->status == 'Deactive') {
             Auth::logout();
-            return redirect('reservtion')->with('errors', ' تم انتهاء مده الاشتراك من فضلك قم بدفع قيمه الاشتراك !!');
-        } elseif ($admin->status == 'Deactive') {
-            Auth::logout();
-            return redirect('reservtion')->with('errors', ' يوجد خطأ ما يرجى التواصل مع خدمه العملاء !!');
+            return redirect()->back()->with('danger_deactive', '   أنت غير مفعل .... يجب التواصل مع خدمه العملاء للتفعيل');
 
         }
 

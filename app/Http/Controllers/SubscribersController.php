@@ -127,21 +127,20 @@ class SubscribersController extends Controller
     }
 
     // update session status from waiting to done
-    public function updateStatus($id)
+    public function updateStatus($type,$id)
     {
 
         $status = false;
         $user = User::find($id);
-        if ($user->status == trans('site_lang.statusDemo')) {
+
+        if ($type == 'active') {
             $user->status = "Active";
             $user->created_at = Carbon::now();
-            $status = true;
-        } else if ($user->status == trans('site_lang.statusDeactive')) {
-            $user->status = "Active";
-            $user->created_at = Carbon::now();
-            $status = true;
-        } else {
+        } else if ($type == 'deactive') {
             $user->status = "Deactive";
+            $user->created_at = Carbon::now();
+        } else {
+            $user->status = "Active";
             $status = false;
         }
         $user->update();
@@ -149,6 +148,13 @@ class SubscribersController extends Controller
         return back();
 //        return response(['msg' => trans('site_lang.public_success_text'), 'status' => $status]);
 
+    }
+    public function updateStatusActive($id)
+    {
+        $user = User::find($id);
+        $user->status = "Deactive";
+        $user->update();
+        return back();
     }
 
     public function store(Request $request)

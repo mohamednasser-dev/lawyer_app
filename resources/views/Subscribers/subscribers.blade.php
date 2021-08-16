@@ -66,13 +66,13 @@
                                 <td>{{$row->address}}</td>
                                 <td>
                                     @if ($row->status == trans('site_lang.statusDeactive'))
-                                        <a class="btn btn-sm" data-user-id="{{$row->id}}" id="change-user-status" href="{{route('subscribers.updateStatus',$row->id)}}">
+                                        <a class="btn btn-sm" data-user-id="{{$row->id}}" id="change-user-status" href="{{route('subscribers.updateStatus',['type'=>'active','id'=>$row->id])}}">
                                             <span class="btn btn-danger text-bold"> {{$row->status}}</span></a>
                                     @elseif ($row->status == trans('site_lang.statusDemo'))
-                                        <a class="btn btn-sm" data-user-Id="{{$row->id}}" id="change-user-status" href="{{route('subscribers.updateStatus',$row->id)}}">
+                                        <a class="btn btn-sm" data-user-Id="{{$row->id}}" id="change-user-status" href="{{route('subscribers.updateStatus',['type'=>'demo','id'=>$row->id])}}">
                                             <span class="btn btn-warning text-bold">{{$row->status}}</span></a>
                                     @else
-                                        <a class="btn btn-sm" data-user-Id="{{$row->id}}" id="change-user-status" href="{{route('subscribers.updateStatus',$row->id)}}">
+                                        <a class="btn btn-sm" data-user-Id="{{$row->id}}" id="change-user-status" href="{{route('subscribers.updateStatus',['type'=>'deactive','id'=>$row->id])}}">
                                             <span class="btn btn-success text-bold">{{$row->status}}</span></a>
                                     @endif
                                 </td>

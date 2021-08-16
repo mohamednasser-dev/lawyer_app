@@ -65,6 +65,28 @@ class User extends Authenticatable
             return trans('site_lang.statusDeactive');
         }
     }
+
+    public function getExpiryDateAttribute($expire_date)
+    {
+
+        if($this->parent_id != null){
+           $parent_user =  User::find($this->parent_id);
+           return $parent_user->expiry_date;
+        }else{
+            return $expire_date;
+        }
+    }
+
+    public function getWarningDateAttribute($warning_date)
+    {
+
+        if($this->parent_id != null){
+            $parent_user =  User::find($this->parent_id);
+            return $parent_user->warning_date;
+        }else{
+            return $warning_date;
+        }
+    }
     public function getImageAttribute($image)
     {
 //default.png
