@@ -131,11 +131,15 @@ class AuthController extends Controller
         if ($user) {
             $user->code = $code;
             $user->save();
-            Mail::raw('رمز استعاده كلمه المرور الخاصة بك: ' . $code, function ($message) use ($user) {
-                $message->subject('تطبيق المحاماه');
-                $message->from('taheelpost@gmail.com', 'taheelpost');
-                $message->to($user->email);
-            });
+            try {
+                Mail::raw('رمز استعاده كلمه المرور الخاصة بك: ' . $code, function ($message) use ($user) {
+                    $message->subject('تطبيق المحاماه');
+                    $message->from('taheelpost@gmail.com', 'taheelpost');
+                    $message->to($user->email);
+                });
+            } catch (\Swift_TransportException $e) {
+                return response()->json(['status' => 401, 'msg' => $e->getMessage()]);
+            }
 
             return response()->json(msg($request, success(), 'send_reset'));
 
