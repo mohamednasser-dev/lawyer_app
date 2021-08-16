@@ -124,8 +124,8 @@ return
             ],
         'not_found' =>
             [
-                'ar' => ' بيانات الحصه غير موجوده برجاء الانتظار لحين رفع البيانات',
-                'en' => 'Session data not found',
+                'ar' => 'البريد الاليكترونى غير موجود بالنظام',
+                'en' => 'E-mail not found',
             ],
         'permission_warrning' =>
             [
@@ -293,4 +293,15 @@ return
                 'ar' => 'تم الحذف بنجاح',
                 'en' => 'deleted successfully',
             ],
+        'send_reset' =>
+        [
+            'ar' => 'تم ارسال الكود بنجاح',
+            'en' => 'reset code sent',
+        ],'code_confirmed' =>
+        [
+            'ar' => 'تم تأكيد الكود بنجاح',
+            'en' => 'code confirmed successfully',
+        ],
+
+
     ];
