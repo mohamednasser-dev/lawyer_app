@@ -79,6 +79,12 @@
                                     {{trans('site_lang.public_edit_btn_text')}} &nbsp;&nbsp;<i
                                         class="fa fa-arrow-circle-up"></i>
                                 </button>
+
+                                <a class="btn btn-success block" href="{{route('print.case.details',$id)}}" target="_blank" id="btn_case_update"
+                                        name="btn_case_update">
+                                    {{trans('site_lang.print')}} &nbsp;&nbsp;<i
+                                        class="fa fa-print"></i>
+                                </a>
                             </div>
 
                         </fieldset>

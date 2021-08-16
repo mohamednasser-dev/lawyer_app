@@ -10,11 +10,7 @@ use Up;
 use Session;
 class CaseAttachmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index($id)
     {
         $case_id = $id;

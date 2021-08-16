@@ -29,7 +29,7 @@
                             <img width="150" height="150" id='OpenImgUpload' src="{{ asset('uploads/userprofile/'.Auth::user()->image) }}" alt="profile image" class="rounded-circle  center ">
                             <i class="fa fa-camera"></i>
                         </a>
-                       
+
 
                         <input type="file" id='userimg' name="image" class="border" style="display: none;"/>
 
@@ -78,7 +78,7 @@
 
 @endsection
 @section('scripts')
- 
+
 <script src="{{url('/assets/vendors/jquery-validation/jquery.validate.min.js')}}"></script>
 <script src="{{url('/assets/vendors/bootstrap-maxlength/bootstrap-maxlength.min.js')}}"></script>
 <script src="{{url('/assets/vendors/inputmask/jquery.inputmask.min.js')}}"></script>

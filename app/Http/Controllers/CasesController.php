@@ -29,6 +29,7 @@ class CasesController extends Controller
             $categories = category::select('id', 'name')->where('parent_id', '=', getQuery())->get();
             return view('cases.add_case', compact(['clients', 'khesm', 'categories']));
         } else {
+            session()->flash('danger', trans('site_lang.not_authorized_to_enter'));
             return redirect(url('home'));
         }
     }

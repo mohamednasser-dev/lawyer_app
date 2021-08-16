@@ -289,6 +289,7 @@ class UsersController extends Controller
         $rules =
             [
                 'name' => 'required',
+                'image' => 'sometimes|nullable|image|mimes:jpg,jpeg,png,gif,bmp',
                 'email' => 'required|email|unique:users,email,' . $id,
                 'phone' => 'required|numeric|unique:users,phone,' . $id,
                 'pasword' => 'nullable'
@@ -305,6 +306,17 @@ class UsersController extends Controller
                 $input['password'] = bcrypt(request('password'));
             }else{
                 unset($input['password']);
+            }
+            if ($request['image'] != null) {
+
+                // This is Image Information ...
+                $file = $request->file('image');
+                $name = $file->getClientOriginalName();
+                $ext = $file->getClientOriginalExtension();
+                // Move Image To Folder ..
+                $fileNewName = 'img_' . time() . '.' . $ext;
+                $file->move(public_path('uploads/userprofile'), $fileNewName);
+                $input['image'] = $fileNewName;
             }
             User::find(intval($id))->update($input);
             $user = User::where('id',$id)->with('category')->first();

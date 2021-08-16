@@ -4,29 +4,29 @@
     </a>
     <div class="navbar-content">
         <ul class="navbar-nav">
-            <li class="nav-item dropdown">
+{{--            <li class="nav-item dropdown">--}}
 
-                @if(session('lang')=='en')
-                <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="flag-icon flag-icon-us mt-1" title="us" id="us"></i> <span class="font-weight-medium ml-1 mr-1">English</span>
-                </a>
-                @else
-                <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="flag-icon flag-icon-eg mt-1" title="us" id="us"></i> <span class="font-weight-medium ml-1 mr-1">العربيه</span>
-                </a>
-                @endif
-                <div class="dropdown-menu" aria-labelledby="languageDropdown">
-                    <a href="{{url('lang/en')}}" class="dropdown-item py-2"><i class="flag-icon flag-icon-us" title="us" id="us"></i> <span class="ml-1"> English </span></a>
-                    <a href="{{url('lang/ar')}}" class="dropdown-item py-2"><i class="flag-icon flag-icon-eg" title="ar" id="ar"></i> <span class="ml-1"> العربيه </span></a>
+{{--                @if(session('lang')=='en')--}}
+{{--                <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
+{{--                    <i class="flag-icon flag-icon-us mt-1" title="us" id="us"></i> <span class="font-weight-medium ml-1 mr-1">English</span>--}}
+{{--                </a>--}}
+{{--                @else--}}
+{{--                <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
+{{--                    <i class="flag-icon flag-icon-eg mt-1" title="us" id="us"></i> <span class="font-weight-medium ml-1 mr-1">العربيه</span>--}}
+{{--                </a>--}}
+{{--                @endif--}}
+{{--                <div class="dropdown-menu" aria-labelledby="languageDropdown">--}}
+{{--                    <a href="{{url('lang/en')}}" class="dropdown-item py-2"><i class="flag-icon flag-icon-us" title="us" id="us"></i> <span class="ml-1"> English </span></a>--}}
+{{--                    <a href="{{url('lang/ar')}}" class="dropdown-item py-2"><i class="flag-icon flag-icon-eg" title="ar" id="ar"></i> <span class="ml-1"> العربيه </span></a>--}}
 
-                </div>
-            </li>
+{{--                </div>--}}
+{{--            </li>--}}
             <li class="nav-item dropdown nav-apps">
                 <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i data-feather="grid"></i>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="appsDropdown">
-                   
+
                     <div class="dropdown-body">
                         <div class="d-flex align-items-center apps">
                             <a href="{{ url('/users') }}"><i data-feather="users" class="icon-lg"></i>
@@ -43,7 +43,7 @@
                             </a> -->
                         </div>
                     </div>
-                    
+
                 </div>
             </li>
             <li class="nav-item dropdown nav-profile">

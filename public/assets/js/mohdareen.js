@@ -109,7 +109,7 @@ $(document).ready(function () {
                 $('#mokel_Name_show').val(html.data.mokel_Name);
                 $('#khesm_Name_show').val(html.data.khesm_Name);
                 $('#notes_show').val(html.data.notes);
-                $('.modal-title').text(config.trans.edit_public_btn);
+                $('.modal-title').text('تفاصيل المحضر');
                 $('#show_mohdar_model').modal('show');
             }
         })

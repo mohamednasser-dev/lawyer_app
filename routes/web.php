@@ -15,6 +15,10 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', 'HomeController@index');
     Route::get('home', 'HomeController@index')->name('home');
+});
+
+Route::group(['middleware' => ['auth', 'Check_package']], function () {
+
     Route::resource('users', 'UsersController');
     Route::post('users/update', 'UsersController@update')->name('users.update');
     Route::get('users/destroy/{id}', 'UsersController@destroy');
@@ -29,6 +33,7 @@ Route::group(['middleware' => ['auth']], function () {
 //cases
     Route::resource('cases', 'CasesController');
     Route::get('addCase', 'CasesController@getClients');
+    Route::get('printCase/{id}', 'API\AuthController@printCase')->name('print.case.details');
 // Mohdareen
     Route::resource('mohdareen', 'MohdareenController');
     Route::get('mohdareen/getCase/{case_num}', 'MohdareenController@getCaseToSelect');
@@ -99,42 +104,52 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('profile/{id}/edit_notes', 'ClientProfileController@update_note');
     Route::post('profile/store/{id}', 'ClientProfileController@store');
     Route::get('profile/client_cases/{id}', 'ClientProfileController@client_cases');
-//edit user profile
+
+
+});
+Route::group(['middleware' => ['auth']], function () {
+
+    //edit user profile
     Route::get('userprofile', 'ProfileController@edit');
     Route::post('userprofiles', 'ProfileController@submit');
 // Packages
     Route::resource('packages', 'PackagesController');
     Route::get('packages/destroy/{id}', 'PackagesController@destroy');
     Route::post('packages/update', 'PackagesController@update')->name('packages.update');
+
     Route::resource('subscribers', 'SubscribersController');
     Route::get('subSearch', 'SubscribersController@search');
-    Route::get('subscribers/updateStatus/{id}', 'SubscribersController@updateStatus');
+    Route::get('subscribers/updateStatus/{type}/{id}', 'SubscribersController@updateStatus')->name('subscribers.updateStatus');
+//    Route::get('subscribers/updateStatus/{type}/{id}', 'SubscribersController@updateStatusActive')->name('subscribers.updateStatusActive');
     Route::post('subscribers/update', 'SubscribersController@update')->name('subscribers.update');
     Route::get('subscribers/{id}/delete', 'SubscribersController@destroy');
+    Route::get('subscribers/search/new', 'SubscribersController@search_new')->name('subscribers.search');
     Route::get('endReservation', 'EndReservationsController@index');
+
 });
 Route::get('reservtion', 'ReservationController@index');
 
+
 //lang
 Route::get('lang/{lang}', function ($lang) {
-    if(session()->has('lang')) {
+    if (session()->has('lang')) {
         session()->forget('lang');
     }
-    if($lang == 'ar') {
+    if ($lang == 'ar') {
         session()->put('lang', 'ar');
-    }else{
+    } else {
         session()->put('lang', 'en');
 
     }
     return back();
 });
 Route::get('theme/{theme}', function ($theme) {
-    if(session()->has('theme')) {
+    if (session()->has('theme')) {
         session()->forget('theme');
     }
-    if($theme == 'light') {
+    if ($theme == 'light') {
         session()->put('theme', 'light');
-    }else{
+    } else {
         session()->put('theme', 'dark');
     }
     return back();

@@ -38,6 +38,7 @@ class ReportsController extends Controller
         if ($enabled == 'yes') {
             return view('Reports.CasesDailyReport',compact('categories'));
         } else {
+            session()->flash('danger', trans('site_lang.not_authorized_to_enter'));
             return redirect(url('home'));
         }
     }
@@ -52,6 +53,7 @@ class ReportsController extends Controller
             return view('Reports.CasesMonthlyReport',compact('categories'));
 
         } else {
+            session()->flash('danger', trans('site_lang.not_authorized_to_enter'));
             return redirect(url('home'));
         }
     }
@@ -121,29 +123,20 @@ class ReportsController extends Controller
     {
         $sessions_table = array();
 
-        if ($type == 'all') {
-            $results = Sessions::with('cases', 'Printnotes')
-                ->where('month', '=', $month)
-                ->where('year', '=', $year)
-                ->where('parent_id',getQuery())
-                ->get();
-        } else {
-            $results = Sessions::with('cases', 'Printnotes')
-                ->where('month', '=', $month)
-                ->where('year', '=', $year)
-                ->where('parent_id',getQuery())
-                ->whereHas('cases', function ($q) use ($type) {
+        $results = Sessions::with('cases', 'Printnotes', 'clients')
+            ->where('month', '=', $month)
+            ->where('year', '=', $year)
+            ->where('parent_id', getQuery())
+            ->whereHas('cases', function ($q) use ($type) {
+                if ($type != 0) // for get reports with some category if equal 0 will get all categories reports
                     $q->where('to_whome', '=', $type);
-                })
-                ->get();
-        }
-
+            })->get();
 
         foreach ($results as $result) {
-            $case = Cases::findOrFail($result->case_Id);
-            $clients = $case->clients;
+//            $case = Cases::findOrFail($result->case_Id);
+//            $clients = $case->clients;
 
-            foreach ($clients as $key => $client) {
+            foreach ($results->clients as $key => $client) {
                 if ($client->type == trans('site_lang.clients_client_type_khesm')) {
                     $khesm = $client;
                 } else {

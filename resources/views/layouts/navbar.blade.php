@@ -1,6 +1,6 @@
 <nav class="sidebar">
     <div class="sidebar-header">
-        <a href="#" class="sidebar-brand">
+        <a href="{{url('/')}}" class="sidebar-brand">
            Lawyer<span> App</span>
         </a>
         <div class="sidebar-toggler not-active">
@@ -11,109 +11,120 @@
     </div>
     <div class="sidebar-body">
         <ul class="nav">
-            <li class="nav-item nav-category">Main</li>
-            @php
-            $user_type = auth()->user()->type;
-            if($user_type != 'manager'){
-            @endphp
-            <li class="nav-item">
-                <a href="{{route('home')}}" class="nav-link">
-                    <i class="link-icon" data-feather="box"></i>
-                    <span class="link-title">{{trans('site_lang.side_home')}}</span>
-                </a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="{{ url('/users') }}">
-                    <i class="link-icon" data-feather="users"></i>
-                    <span class="link-title">{{trans('site_lang.side_users')}}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ url('/clients') }}" class="nav-link">
-                    <i class="link-icon" data-feather="globe"></i>
-                    <span class="link-title">{{trans('site_lang.side_clients')}}</span>
-                </a>
-            </li>
+            @if(auth()->user()->parent_id == null)
+                @php
+                    $expiry_date = auth()->user()->expiry_date;
+                    $expiry_package = auth()->user()->expiry_package;
+                    $package_name = auth()->user()->Package->name ;
+                @endphp
+            @else
+                @php
+                    $parent_user = \App\User::where('id',auth()->user()->parent_id)->first();
+                    $expiry_date = $parent_user->expiry_date;
+                    $expiry_package = $parent_user->expiry_package;
+                    $package_name = $parent_user->Package->name ;
+                @endphp
+            @endif
+                @php $user_type = auth()->user()->type; @endphp
+            @if($expiry_package == 'y')
 
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false" aria-controls="uiComponents">
-                    <i class="link-icon" data-feather="briefcase"></i>
-                    <span class="link-title">{{trans('site_lang.side_cases')}}</span>
-                    <i class="link-arrow" data-feather="chevron-down"></i>
-                </a>
-                <div class="collapse" id="uiComponents">
-                    <ul class="nav sub-menu">
-                        <li class="nav-item">
-                            <a href="{{url('/addCase')}}" class="nav-link">{{trans('site_lang.side_add_case')}}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('/caseDetails') }}" class="nav-link">{{trans('site_lang.side_search_case')}}</a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{url('/mohdareen')}}">
-                    <i class="link-icon" data-feather="check-square"></i>
-                    <span class="link-title">{{trans('site_lang.side_mohdar')}}</span>
-                </a>
-            </li>
-            @php
-            $user_type = auth()->user()->type;
-            if($user_type == 'admin'){
-            @endphp
-            <li class="nav-item">
-                <a class="nav-link" href="{{url('/categories')}}">
-                    <i class="link-icon" data-feather="inbox"></i>
-                    <span class="link-title">{{trans('site_lang.side_categories')}}</span>
-                </a>
+            @if($user_type != 'manager')
+                <li class="nav-item">
+                    <a href="{{route('home')}}" class="nav-link">
+                        <i class="link-icon" data-feather="box"></i>
+                        <span class="link-title">{{trans('site_lang.side_home')}}</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="{{ url('/users') }}">
+                        <i class="link-icon" data-feather="users"></i>
+                        <span class="link-title">{{trans('site_lang.side_users')}}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('/clients') }}" class="nav-link">
+                        <i class="link-icon" data-feather="globe"></i>
+                        <span class="link-title">{{trans('site_lang.side_clients')}}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false" aria-controls="uiComponents">
+                        <i class="link-icon" data-feather="briefcase"></i>
+                        <span class="link-title">{{trans('site_lang.side_cases')}}</span>
+                        <i class="link-arrow" data-feather="chevron-down"></i>
+                    </a>
+                    <div class="collapse" id="uiComponents">
+                        <ul class="nav sub-menu">
+                            <li class="nav-item">
+                                <a href="{{url('/addCase')}}" class="nav-link">{{trans('site_lang.side_add_case')}}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('/caseDetails') }}" class="nav-link">{{trans('site_lang.side_search_case')}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('/mohdareen')}}">
+                        <i class="link-icon" data-feather="check-square"></i>
+                        <span class="link-title">{{trans('site_lang.side_mohdar')}}</span>
+                    </a>
+                </li>
+                @if($user_type == 'admin')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url('/categories')}}">
+                            <i class="link-icon" data-feather="inbox"></i>
+                            <span class="link-title">{{trans('site_lang.side_categories')}}</span>
+                        </a>
 
-            </li>
-            @php
-            }
-            @endphp
+                    </li>
+                @endif
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#charts" role="button" aria-expanded="false" aria-controls="charts">
+                        <i class="link-icon" data-feather="pie-chart"></i>
+                        <span class="link-title">{{trans('site_lang.side_reports')}}</span>
+                        <i class="link-arrow" data-feather="chevron-down"></i>
+                    </a>
+                    <div class="collapse" id="charts">
+                        <ul class="nav sub-menu">
+                            <li class="nav-item">
+                                <a href="{{url('/dailyReport')}}" class="nav-link">{{trans('site_lang.side_reports_daily')}}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('/MonthlyReport') }}" class="nav-link">{{trans('site_lang.side_reports_monthly')}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
 
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#charts" role="button" aria-expanded="false" aria-controls="charts">
-                    <i class="link-icon" data-feather="pie-chart"></i>
-                    <span class="link-title">{{trans('site_lang.side_reports')}}</span>
-                    <i class="link-arrow" data-feather="chevron-down"></i>
-                </a>
-                <div class="collapse" id="charts">
-                    <ul class="nav sub-menu">
-                        <li class="nav-item">
-                            <a href="{{url('/dailyReport')}}" class="nav-link">{{trans('site_lang.side_reports_daily')}}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url('/MonthlyReport') }}" class="nav-link">{{trans('site_lang.side_reports_monthly')}}</a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            @php
-            }
-            @endphp
-            @php
-            $user_type = auth()->user()->type;
-            if($user_type == 'manager'){
-            @endphp
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#tables" role="button" aria-expanded="false" aria-controls="tables">
-                    <i class="link-icon" data-feather="layout"></i>
-                    <span class="link-title">{{trans('site_lang.side_ControlPanel')}}</span>
-                    <i class="link-arrow" data-feather="chevron-down"></i>
-                </a>
-                <div class="collapse" id="tables">
-                    <ul class="nav sub-menu">
-                        <li class="nav-item">
-                            <a href="{{url('/packages')}}" class="nav-link">{{trans('site_lang.side_Packages')}}</a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            @php
-            }
-            @endphp
+            @endif
+{{--                @else--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{route('home')}}" class="nav-link">--}}
+{{--                            <i class="link-icon" data-feather="box"></i>--}}
+{{--                            <span class="link-title">{{trans('site_lang.side_home')}}</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+            @endif
+            @if( auth()->user()->type == 'manager')
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#tables" role="button" aria-expanded="false" aria-controls="tables">
+                        <i class="link-icon" data-feather="layout"></i>
+                        <span class="link-title">{{trans('site_lang.side_ControlPanel')}}</span>
+                        <i class="link-arrow" data-feather="chevron-down"></i>
+                    </a>
+                    <div class="collapse" id="tables">
+                        <ul class="nav sub-menu">
+                            <li class="nav-item">
+                                <a href="{{url('/subscribers')}}" class="nav-link">{{trans('site_lang.side_clients')}}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{url('/packages')}}" class="nav-link">{{trans('site_lang.side_Packages')}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            @endif
         </ul>
     </div>
 </nav>

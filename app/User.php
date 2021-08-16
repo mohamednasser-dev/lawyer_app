@@ -16,8 +16,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'type', 'password','email','cat_id','parent_id','phone','address','package_id',
-        'status','image'
+        'name', 'type', 'password','email','cat_id','parent_id','phone','address','package_id','expiry_date','warning_date','expiry_package'
+        ,'status','image'
     ];
 
  public function category(){
@@ -30,6 +30,10 @@ class User extends Authenticatable
 
         return $this->hasOne('App\Package','id','package_id');
 
+    }
+
+    public function  Package(){
+        return $this->hasOne('App\Package','id','package_id');
     }
 
     /**
@@ -59,6 +63,28 @@ class User extends Authenticatable
             return trans('site_lang.statusActive');
         }else{
             return trans('site_lang.statusDeactive');
+        }
+    }
+
+    public function getExpiryDateAttribute($expire_date)
+    {
+
+        if($this->parent_id != null){
+           $parent_user =  User::find($this->parent_id);
+           return $parent_user->expiry_date;
+        }else{
+            return $expire_date;
+        }
+    }
+
+    public function getWarningDateAttribute($warning_date)
+    {
+
+        if($this->parent_id != null){
+            $parent_user =  User::find($this->parent_id);
+            return $parent_user->warning_date;
+        }else{
+            return $warning_date;
         }
     }
     public function getImageAttribute($image)

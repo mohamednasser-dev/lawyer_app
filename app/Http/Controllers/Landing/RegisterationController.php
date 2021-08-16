@@ -6,6 +6,7 @@ use App\category;
 use App\Package;
 use App\Permission;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
@@ -65,16 +66,32 @@ class RegisterationController extends Controller
         $data['cat_id'] = $category->id;
         $data['status'] = 'Demo';
         $data['type'] = 'admin';
-        $package = Package::where('name','demo')->first();
-        if($package){
-            $data['package_id'] = $package->id;
-        }else{
-            $package =  Package::create(
-                ["name"=>'Demo','cost'=>0,"duration"=>14]
-            );
+//        $package = Package::where('name','demo')->first();
+//        if($package){
+//            $data['package_id'] = $package->id;
+//        }else{
+//            $package =  Package::create(
+//                ["name"=>'Demo','cost'=>0,"duration"=>14]
+//            );
+//
+//            $data['package_id'] = $package->id;
+//        }
 
-            $data['package_id'] = $package->id;
-        }
+        $package = Package::find(5);
+        $mytime = Carbon::now();
+        $today = Carbon::parse($mytime->toDateTimeString())->format('Y-m-d H:i');
+        $final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
+        $warning_final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
+
+        //to generate expiry date ...
+        $expire_date = $final_today->addMonths($package->duration);
+        $data['expiry_date'] = $expire_date;
+
+        //for generate warning date ...
+        $for_warning_date = $warning_final_today->addMonths($package->duration);
+        $warning_date = $for_warning_date->subDays(10);
+        $data['warning_date'] = $warning_date;
+        $data['package_id'] = 5;
 
         $user_result = User::create($data);
 
@@ -113,8 +130,7 @@ class RegisterationController extends Controller
                 'password' => 'required',
                 'phone' => 'required|unique:users,phone',
                 'address' => 'required',
-                'cat_name' => 'required',
-//            'package_id' => 'required',
+                'cat_name' => 'required'
             ];
 
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
@@ -136,17 +152,33 @@ class RegisterationController extends Controller
         $data['cat_id'] = $category->id;
         $data['status'] = 'Demo';
         $data['type'] = 'admin';
-        $package = Package::where('name','demo')->first();
-        if($package){
-            $data['package_id'] = $package->id;
-        }else{
-            $package =  Package::create(
-                ["name"=>'Demo','cost'=>0,"duration"=>14]
-            );
+//        $package = Package::where('name','demo')->first();
+//        if($package){
+//            $data['package_id'] = $package->id;
+//        }else{
+//            $package =  Package::create(
+//                ["name"=>'Demo','cost'=>0,"duration"=>14]
+//            );
+//
+//            $data['package_id'] = $package->id;
+//        }
 
-            $data['package_id'] = $package->id;
-        }
+        $package = Package::find(5);
 
+        $mytime = Carbon::now();
+        $today = Carbon::parse($mytime->toDateTimeString())->format('Y-m-d H:i');
+        $final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
+        $warning_final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
+
+        //to generate expiry date ...
+        $expire_date = $final_today->addMonths($package->duration);
+        $data['expiry_date'] = $expire_date;
+
+        //for generate warning date ...
+        $for_warning_date = $warning_final_today->addMonths($package->duration);
+        $warning_date = $for_warning_date->subDays(10);
+        $data['warning_date'] = $warning_date;
+        $data['package_id'] = 5;
         $user_result = User::create($data);
 
         $category->parent_id = $user_result->id;

@@ -26,8 +26,7 @@
     <div class="row">
         <div class="col-md-12">
             <div style="text-align:center;font-size: 30px;background-color: #8E9AA2;color: white;">
-                <hl class="center">{{$year}}&nbsp; {{trans('site_lang.reports_print_month_1')}}</hl>
-                <hl class="center">{{$month}}&nbsp;{{trans('site_lang.reports_print_month_2')}}</hl>
+                <hl class="center">{{trans('site_lang.reports_print_daily_1')}}&nbsp; {{$id}}</hl>
             </div>
             <br>
             <table class="table table-striped table-bordered table-hover table-full-width"
@@ -47,8 +46,6 @@
                 </thead>
 
                 <tbody>
-
-                {{--                @foreach($data as $caseSession)--}}
                 @php
                     $i=1;
                 @endphp

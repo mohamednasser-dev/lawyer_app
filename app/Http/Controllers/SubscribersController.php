@@ -20,41 +20,57 @@ class SubscribersController extends Controller
     {
         $user_type = auth()->user()->type;
         if ($user_type == 'manager') {
-            if (request()->ajax()) {
+                $data = User::where('parent_id', null)->where('package_id','!=',null)->where('type', '!=', 'manager')
+                    ->get();
+//                    ->addColumn('status', function ($data) {
+//                                 if ($data->status == trans('site_lang.statusDeactive')) {
+//                            $html = '<p class="btn btn-sm" data-user-id="' . $data->id . '" id="change-user-status">
+//                            <span class="btn btn-danger text-bold"> ' . $data->status . '</span></p>';
+//                        } else if ($data->status == trans('site_lang.statusDemo')) {
+//                            $html = '<p class="btn btn-sm" data-user-Id="' . $data->id . '" id="change-user-status">
+//                            <span class="btn btn-warning text-bold"> ' . $data->status . '</span></p>';
+//                        } else {
+//                            $html = '<p class="btn btn-sm" data-user-Id="' . $data->id . '" id="change-user-status">
+//                            <span class="btn btn-success text-bold"> ' . $data->status . '</span></p>';
+//                        }
+//
+//                        return $html;
+//                    })
+//                    ->addColumn('action', function ($data) {
+//                        $button = '<button data-client-id="' . $data->id . '" id="editClient" class="btn btn-xs btn-outline-success" ><i
+//                                    class="fa fa-edit"></i>&nbsp;&nbsp;' . trans('site_lang.public_edit_btn_text') . '</button>';
+//                        $button .= '&nbsp;&nbsp;';
+//                        $button .= '<button data-client-id="' . $data->id . '" id="deleteClient"  class="btn btn-xs btn-outline-danger"" ><i
+//                                    class="fa fa-times fa fa-white"></i>&nbsp;&nbsp;' . trans('site_lang.public_delete_text') . '</button>';
+//                        return $button;
+//                    })
+//                    ->rawColumns(['status', 'action'])
+//                    ->make(true);
 
-                return datatables()->of(User::where('parent_id', null)->where('type', '!=', 'manager')
-                    ->with('package_id')
-                    ->get())
-                    ->addColumn('status', function ($data) {
-                                 if ($data->status == trans('site_lang.statusDeactive')) {
-                            $html = '<p class="btn btn-sm" data-user-id="' . $data->id . '" id="change-user-status">
-                            <span class="btn btn-danger text-bold"> ' . $data->status . '</span></p>';
-                        } else if ($data->status == trans('site_lang.statusDemo')) {
-                            $html = '<p class="btn btn-sm" data-user-Id="' . $data->id . '" id="change-user-status">
-                            <span class="btn btn-warning text-bold"> ' . $data->status . '</span></p>';
-                        } else {
-                            $html = '<p class="btn btn-sm" data-user-Id="' . $data->id . '" id="change-user-status">
-                            <span class="btn btn-success text-bold"> ' . $data->status . '</span></p>';
-                        }
-
-                        return $html;
-                    })
-                    ->addColumn('action', function ($data) {
-                        $button = '<button data-client-id="' . $data->id . '" id="editClient" class="btn btn-xs btn-outline-success" ><i
-                                    class="fa fa-edit"></i>&nbsp;&nbsp;' . trans('site_lang.public_edit_btn_text') . '</button>';
-                        $button .= '&nbsp;&nbsp;';
-                        $button .= '<button data-client-id="' . $data->id . '" id="deleteClient"  class="btn btn-xs btn-outline-danger"" ><i
-                                    class="fa fa-times fa fa-white"></i>&nbsp;&nbsp;' . trans('site_lang.public_delete_text') . '</button>';
-                        return $button;
-                    })
-                    ->rawColumns(['status', 'action'])
-                    ->make(true);
-            }
             $packages = Package::all();
-            return view('Subscribers.subscribers', compact('packages'));
+            $selected_package = 0;
+            return view('Subscribers.subscribers', compact('packages','data','selected_package'));
         } else {
             return redirect(url('home'));
 
+        }
+    }
+    public function search_new(Request $request)
+    {
+        $selected_package = $request->cmb_package_id;
+        $user_type = auth()->user()->type;
+        if ($user_type == 'manager') {
+            if ($request->cmb_package_id != null){
+                $data = User::where('parent_id', null)->where('package_id', $request->cmb_package_id)->where('type', '!=', 'manager')
+                    ->get();
+            }else{
+                $data = User::where('parent_id', null)->where('package_id','!=',null)->where('type', '!=', 'manager')
+                    ->get();
+            }
+            $packages = Package::all();
+            return view('Subscribers.subscribers', compact('packages','data','selected_package'));
+        } else {
+            return redirect(url('home'));
         }
     }
     public function search()
@@ -111,25 +127,34 @@ class SubscribersController extends Controller
     }
 
     // update session status from waiting to done
-    public function updateStatus($id)
+    public function updateStatus($type,$id)
     {
+
         $status = false;
         $user = User::find($id);
-        if ($user->status == trans('site_lang.statusDemo')) {
+
+        if ($type == 'active') {
             $user->status = "Active";
             $user->created_at = Carbon::now();
-            $status = true;
-        } else if ($user->status == trans('site_lang.statusDeactive')) {
-            $user->status = "Active";
-            $user->created_at = Carbon::now();
-            $status = true;
-        } else {
+        } else if ($type == 'deactive') {
             $user->status = "Deactive";
+            $user->created_at = Carbon::now();
+        } else {
+            $user->status = "Active";
             $status = false;
         }
         $user->update();
-        return response(['msg' => trans('site_lang.public_success_text'), 'status' => $status]);
 
+        return back();
+//        return response(['msg' => trans('site_lang.public_success_text'), 'status' => $status]);
+
+    }
+    public function updateStatusActive($id)
+    {
+        $user = User::find($id);
+        $user->status = "Deactive";
+        $user->update();
+        return back();
     }
 
     public function store(Request $request)
@@ -151,6 +176,21 @@ class SubscribersController extends Controller
         $data['cat_id'] = $category->id;
         $data['status'] = 'Active';
         $data['type'] = 'admin';
+        $package = Package::find($request->package_id);
+
+        $mytime = Carbon::now();
+        $today = Carbon::parse($mytime->toDateTimeString())->format('Y-m-d H:i');
+        $final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
+        $warning_final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
+
+        //to generate expiry date ...
+        $expire_date = $final_today->addMonths($package->duration);
+        $data['expiry_date'] = $expire_date;
+
+        //for generate warning date ...
+        $for_warning_date = $warning_final_today->addMonths($package->duration);
+        $warning_date = $for_warning_date->subDays(10);
+        $data['warning_date'] = $warning_date;
         $user_result = User::create($data);
 
         $category->parent_id = $user_result->id;
@@ -167,9 +207,10 @@ class SubscribersController extends Controller
         $permissions['category'] = 'yes';
 
         $per = Permission::create($permissions);
+        session()->flash('success', trans('site_lang.add_success'));
         $per->save();
-
-        return response()->json(['success' => trans('site_lang.public_success_text')]);
+        return back();
+//        return response()->json(['success' => trans('site_lang.public_success_text')]);
     }
 
     /**
@@ -207,11 +248,22 @@ class SubscribersController extends Controller
     public function update(Request $request)
     {
         $user = User::where('id', $request->id)->first();
+        $package = Package::find($request->package_id);
 
-        $old_date = $user->created_at;
-        $old_duration = Package::select('duration')->where('id', $request->id)->first();
-        $old_date = $old_date->addMonths($old_duration);
-        $user->created_at = $old_date;
+        $mytime = Carbon::now();
+        $today = Carbon::parse($mytime->toDateTimeString())->format('Y-m-d H:i');
+        $final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
+        $warning_final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
+
+        //to generate expiry date ...
+        $expire_date = $final_today->addMonths($package->duration);
+        $user->expiry_date = $expire_date;
+
+        //for generate warning date ...
+        $for_warning_date = $warning_final_today->addMonths($package->duration);
+        $warning_date = $for_warning_date->subDays(10);
+        $user->warning_date = $warning_date;
+
         $user->package_id = $request->package_id;
         $user->status = "Active";
 
@@ -221,8 +273,8 @@ class SubscribersController extends Controller
 
 
          User::where('parent_id',$request->id)->update($data);
-        return response(['success' => trans('site_lang.public_success_text')]);
-
+         return back();
+//        return response(['success' => trans('site_lang.public_success_text')]);
     }
 
     /**
@@ -235,5 +287,6 @@ class SubscribersController extends Controller
     {
         $data = User::findOrFail($id);
         $data->delete();
+        return back();
     }
 }

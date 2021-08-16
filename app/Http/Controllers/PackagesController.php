@@ -23,10 +23,12 @@ class PackagesController extends Controller
                         $button = '<button data-package-id="' . $data->id . '" id="editPackage" class="btn btn-xs btn-outline-success" ><i
                                     class="fa fa-edit"></i>&nbsp;&nbsp;' . trans('site_lang.public_edit_btn_text') . '</button>';
                         $button .= '&nbsp';
-
-                        $button .= '<button data-package-id="' . $data->id . '" id="deletePackage" class="btn btn-xs btn-outline-danger" ><i
+                        if ($data->id != 5) {
+                            $button .= '<button data-package-id="' . $data->id . '" id="deletePackage" class="btn btn-xs btn-outline-danger" ><i
                                     class="fa fa-times fa fa-white"></i>&nbsp;&nbsp;' . trans('site_lang.public_delete_text') . '</button>';
-                        return $button;
+                        }
+                            return $button;
+
                     })
                     ->rawColumns(['action'])
                     ->make(true);
@@ -53,12 +55,14 @@ class PackagesController extends Controller
                 'name' => 'required',
                 'cost' => 'required',
                 'duration' => 'required',
+                'description' => 'required',
             ]);
         } else {
             $data = $this->validate(request(), [
                 'name' => 'required',
                 'cost' => 'required',
                 'duration' => 'required',
+                'description' => 'required',
             ]);
         }
         Package::create($data);
@@ -88,6 +92,7 @@ class PackagesController extends Controller
                 'name' => 'required',
                 'cost' => 'required',
                 'duration' => 'required',
+                'description' => 'required',
             ]);
 
             Package::find($request->id)->update($data);

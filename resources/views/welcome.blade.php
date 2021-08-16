@@ -12,6 +12,7 @@
 <!-- partial -->
 
     <div class="page-content">
+        @include('layouts.errors')
         @yield('content')
     </div>
 

@@ -49,6 +49,7 @@ Route::get('delete_client/{id}', 'API\ClientController@destroy');
 
 //case actions
 Route::get('select/data/to_add_case', 'API\casesApiController@select_data_to_add_case');
+Route::get('select/clients/to_add_new_client/{case_id}', 'API\casesApiController@select_clients_to_add_new_client');
 //client Profile
 Route::get('client_Profile/{id}', 'API\ClientProfileController@client_cases');
 Route::get('client_Profile/notes/pagination/{id}', 'API\ClientProfileController@client_notes_pagination');
@@ -93,6 +94,10 @@ Route::post('caseClients/store', 'API\casesApiController@storeCaseClient');
 Route::post('caseClients/destroy', 'API\casesApiController@destroyCaseClient');
 Route::get('caseClients/data_by_id/{id}/{type}', 'API\casesApiController@caseClientDataByID');
 
+//packages
+Route::get('packages', 'API\packagesApiController@packages');
+Route::get('packages/subscripe/{package_id}', 'API\packagesApiController@store');
+
 //Cases Session Actions
 Route::get('case/sessions/{id}', 'API\sessionApiController@index');
 Route::post('addSession', 'API\sessionApiController@store');
@@ -124,18 +129,15 @@ Route::post('search-client-attachment', 'API\CientAttachmentController@search');
 Route::post('search-case-attachment', 'API\attachmentApiController@search');
 Route::post('search-mohdareen', 'API\mohdareenApiController@search');
 
-
-
-
-
-
-
-
-
 Route::get('printCase/{id}', 'API\AuthController@printCase');
+Route::get('print_session_notes/{id}', 'API\sessionNoteApiController@print_session_notes');
 
-
+Route::get('printSearchMonthly/{month}/{year}/{type}', 'API\ReportsApiController@printSearchMonthly');
+Route::get('printSearchDaily/{date}/{type}', 'API\ReportsApiController@printSearchDaily');
 
 // registration form
 Route::post('register', 'Landing\RegisterationController@store');
 Route::post('registeration', 'Landing\RegisterationController@storeApi');
+//Reports
+Route::post('report_monthly', 'API\ReportsApiController@searchMonthly');
+Route::post('report_daily', 'API\ReportsApiController@searchDaily');

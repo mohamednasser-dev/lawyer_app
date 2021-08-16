@@ -1,17 +1,29 @@
 <?php
 
 return [
+    //new
 
+
+
+
+    // public use
+    'package_ended' => 'تم انتهاء باقة',
+    'package_warning' => 'سيتم انتهاء الباقة قريبا',
+    'renew_package' => 'تجديد الاشتراك',
+
+
+
+    'edit_package' => 'تعديل العرض',
+    'alert' => 'تنبية',
+    'not_authorized_to_enter' => 'غير مصرح لك الدخول',
     'case_deleted' => 'تم حذف الدعوى  بنجاح',
     'should_choose_case' => 'يجب اختيار جلسة .... !',
     'should_choose_case_models' => 'يجب اختيار دعوى بشكل صحيح ... !',
     'should_enter_correct' => 'يجب ادخال البيانات بشكل صحيح',
     'please_empty' => "من فضلك قم بافراغ خانه الموكلين والخصوم واخترهم",
-
-
-
-    // public use
-
+    'search' => "بحث",
+    'chooses' => "الاجرائات",
+    'print' => "طباعه",
     'public_add_btn_text' => 'إضافة',
     'loginWarning' => 'يجب تسجيل الدخول',
     'app_name1' => 'توثيق',
@@ -29,7 +41,7 @@ return [
     'public_continue_delete_modal_text' => 'جارى الحذف',
     'profile' => 'الصفحه الشخصية',
     'confirm_password' => 'تأكيد الرقم السري',
-    'updatSuccess' => 'تم التعديل بنجاح !',
+    'updatSuccess' => 'تم التعديل بنجاح',
     'deleted'=>'تم الحذف ',
     'permission_warrning'=>'لا تتملك الصلاحيه لدخول هذه الصفحه',
     'not_allow_delete_cat'=>'يوجد دعاوى مرتبطة بهذا التصنيف.. لايمكنك الحذف',
@@ -52,6 +64,7 @@ return [
     'side_reports_monthly' => 'التقارير الشهرية',
     'side_ControlPanel' => 'لوحة التحكم',
     'side_Packages' => 'العروض',
+    'description' => 'الوصف',
     'side_packageClient' => 'عملاء الموقع',
     'side_ClientReservation' => 'متابعة العملاء',
     'side_exit' => 'تسجيل الخروج',
