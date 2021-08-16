@@ -1,7 +1,12 @@
 <?php
 
 return [
-
+    'package_ended' => 'Package Expired',
+    'package_warning' => 'The package is about to expire, please renew',
+    'renew_package' => 'renew package',
+    'subscribe' => 'subscribe',
+    'month' => 'month',
+    'expired_date' => 'expired date',
     'alert' => 'alert',
     'edit_package' => 'edit package',
     'not_authorized_to_enter' => 'You are not authorized to enter',

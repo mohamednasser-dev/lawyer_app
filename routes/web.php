@@ -22,6 +22,10 @@ Route::group(['middleware' => ['auth', 'Check_package']], function () {
     Route::resource('users', 'UsersController');
     Route::post('users/update', 'UsersController@update')->name('users.update');
     Route::get('users/destroy/{id}', 'UsersController@destroy');
+
+    //user packages to renew
+    Route::get('packages/renew', 'HomeController@renew_package')->name('renew_package');
+    Route::get('my_package', 'HomeController@my_package')->name('my_package');
 //Clients
     Route::resource('clients', 'ClientsController');
     Route::post('clients/update', 'ClientsController@update')->name('clients.update');
@@ -128,6 +132,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 });
 Route::get('reservtion', 'ReservationController@index');
+Route::get('theme/{theme}', 'HomeController@change_them');
 
 
 //lang
@@ -143,17 +148,3 @@ Route::get('lang/{lang}', function ($lang) {
     }
     return back();
 });
-Route::get('theme/{theme}', function ($theme) {
-    if (session()->has('theme')) {
-        session()->forget('theme');
-    }
-    if ($theme == 'light') {
-        session()->put('theme', 'light');
-    } else {
-        session()->put('theme', 'dark');
-    }
-    return back();
-});
-
-
-

@@ -68,6 +68,14 @@
                                     <span>{{trans('site_lang.profile')}}</span>
                                 </a>
                             </li>
+                            @if(auth()->user()->parent_id == null)
+                                <li class="nav-item">
+                                    <a href="{{url('my_package')}}" class="nav-link">
+                                        <i data-feather="user"></i>
+                                        <span>{{trans('site_lang.my_package')}}</span>
+                                    </a>
+                                </li>
+                            @endif
                             <!-- <li class="nav-item">
                                 <a href="javascript:;" class="nav-link">
                                     <i data-feather="edit"></i>

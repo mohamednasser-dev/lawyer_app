@@ -6,13 +6,16 @@ return [
 
 
 
+
+    'my_package' => 'باقتي',
+
     // public use
     'package_ended' => 'تم انتهاء باقة',
-    'package_warning' => 'سيتم انتهاء الباقة قريبا',
+    'package_warning' => 'الباقة على وشك الانتهاء يرجى التجديد',
     'renew_package' => 'تجديد الاشتراك',
-
-
-
+    'subscribe' => 'الاشتراك',
+    'month' => 'شهر',
+    'expired_date' => 'تاريخ الانتهاء',
     'edit_package' => 'تعديل العرض',
     'alert' => 'تنبية',
     'not_authorized_to_enter' => 'غير مصرح لك الدخول',
@@ -70,7 +73,7 @@ return [
     'side_exit' => 'تسجيل الخروج',
     //users
     'users_all' => 'كل المستخدمين',
-    'users_username' => 'إسم المستخدم',
+    'users_username' => 'اسم المستخدم',
     'users_email' => 'البريد الالكترونى',
     'users_type' => 'النوع',
     'users_add_new' => 'إضافة مستخدم جديد',
@@ -94,10 +97,10 @@ return [
     'mohdar_paper_num' => 'رقم الورقة',
     'mohdar_paper_deliver' => 'تاريخ تسليم الورقة',
     //Auth
-    'auth_password' => 'الرقم السرى',
+    'auth_password' => 'الرقم السري',
     'auth_login_text' => 'تسجيل الدخول',
     'auth_cont_title' => 'يرجى تسجيل الدخول لحسابك',
-    'auth_cont_body' => 'يرجى إدخال البريد والرقم السرى',
+    'auth_cont_body' => 'يرجى إدخال البريد والرقم السري',
     'auth_errors' => 'لديك أخطاء, يرجى التاكد منهم',
     //clients
     'clients_add_new_client_text' => 'أضافة عميل جديد',
@@ -190,7 +193,7 @@ return [
 
     //side_categories
     'side_categories' => 'التصنيفات',
-    'category_name' => 'إسم التصنيف',
+    'category_name' => 'اسم التصنيف',
     'add_new_category_text' => 'إضافة تصنيف جديد',
     'edit_category_text' => 'تعديل التصنيف ',
     'public_view_btn_text' => 'الصفحه الشخصيه',

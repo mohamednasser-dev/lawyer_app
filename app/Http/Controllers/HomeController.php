@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\User;
+use App\User;
 use App\Cases;
 use App\mohdr;
 use App\Sessions;
@@ -31,7 +29,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-
         if (\auth()->user()->type == "manager") {
 
             return redirect('subscribers');
@@ -64,6 +61,17 @@ class HomeController extends Controller
 
         return view('home', compact(['users', 'cases', 'mohdreen', 'session', 'mohder', 'sessionNo', 'sessions']));
     }
+    public function renew_package()
+    {
+        $data = Package::where('type', 'users')->get();
+
+        return view('userprofile.renew_user_package', compact('data'));
+    }
+    public function my_package()
+    {
+
+        return view('userprofile.my_package');
+    }
 
 
     public function showMohData($id)
@@ -72,6 +80,22 @@ class HomeController extends Controller
             $data = mohdr::findOrFail($id);
             return response()->json(['data' => $data]);
         }
+    }
+
+    public function change_them($theme)
+    {
+        if (session()->has('theme')) {
+            session()->forget('theme');
+        }
+        if ($theme == 'light') {
+            session()->put('theme', 'light');
+            $them_data['them'] = 'light' ;
+        } else {
+            session()->put('theme', 'dark');
+            $them_data['them'] = 'dark' ;
+        }
+        User::where('id',auth()->user()->id)->update($them_data);
+        return back();
     }
 
     public function showSessionNotes($id)

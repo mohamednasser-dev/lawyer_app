@@ -34,7 +34,6 @@
             }
         @endphp
     @endif
-
     @if($expiry_package == 'y')
         <div class="row">
             <div class="col-12 col-xl-12 stretch-card">
@@ -43,9 +42,9 @@
                         <div class="card card-inverse-danger">
                             <div class="card-body ">
                                 <div class="d-flex justify-content-between align-items-baseline">
-                                    <h6 class="card-title mb-0">{{trans('site_lang.alert')}}</h6>
+                                    <h2 style="font-size: 25px;"
+                                        class="card-title mb-0">{{trans('site_lang.alert')}}</h2>
                                     <div class="dropdown mb-2">
-
                                     </div>
                                 </div>
                                 <div class="row">
@@ -59,19 +58,21 @@
                                         <div class="d-flex align-items-baseline">
                                             <div class="d-flex align-items-baseline">
                                                 <p class="text-success">
-                                                    {{$expiry_date}}
+                                                    {{trans('site_lang.expired_date')}} {{$expiry_date}}
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-4 col-md-12 col-xl-10">
-                                        <div class="d-flex align-items-baseline">
+                                    @if(auth()->user()->parent_id == null)
+                                        <div class="col-4 col-md-12 col-xl-10">
                                             <div class="d-flex align-items-baseline">
-                                                <a class="btn btn-primary"
-                                                   style="color: white;">{{trans('site_lang.renew_package')}} </a>
+                                                <div class="d-flex align-items-baseline">
+                                                    <a href="{{route('renew_package')}}" class="btn btn-primary"
+                                                       style="color: white;">{{trans('site_lang.renew_package')}} </a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -80,43 +81,45 @@
             </div>
         </div> <!-- row -->
     @else
-@if($warning == 'y')
-    <div class="row">
-        <div class="col-12 col-xl-12 stretch-card">
-            <div class="row flex-grow">
-                <div class="col-md-4 grid-margin stretch-card">
-                    <div class="card card-inverse-warning">
-                        <div class="card-body ">
-                            <div class="d-flex justify-content-between align-items-baseline">
-                                <h6 class="card-title mb-0">{{trans('site_lang.alert')}}</h6>
-                                <div class="dropdown mb-2">
-
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-8 col-md-12 col-xl-10">
-                                    <div class="d-flex align-items-baseline">
-                                        <h3 class="mb-7">{{trans('site_lang.package_warning')}} </h3>
+        @if($warning == 'y')
+            <div class="row">
+                <div class="col-12 col-xl-12 stretch-card">
+                    <div class="row flex-grow">
+                        <div class="col-md-4 grid-margin stretch-card">
+                            <div class="card card-inverse-warning">
+                                <div class="card-body ">
+                                    <div class="d-flex justify-content-between align-items-baseline">
+                                        <h2 style="font-size: 25px;"
+                                            class="card-title mb-0">{{trans('site_lang.alert')}}</h2>
                                     </div>
-                                    <div class="d-flex align-items-baseline">
-                                        <h3 class="mb-7">( {{$package_name}} )</h3>
-                                    </div>
-                                </div>
-                                <div class="col-4 col-md-12 col-xl-10">
-                                    <div class="d-flex align-items-baseline">
-                                        <div class="d-flex align-items-baseline">
-                                            <p class="text-success">
-                                                {{$expiry_date}}
-                                            </p>
+                                    <div class="row">
+                                        <div class="col-12 col-md-12 col-xl-10">
+                                            <div class="d-flex align-items-baseline">
+                                                <h4 class="mb-7">{{trans('site_lang.package_warning')}} </h4>
+                                            </div>
+                                            <div class="d-flex align-items-baseline">
+                                                <h3 class="mb-7">( {{$package_name}} )</h3>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-4 col-md-12 col-xl-10">
-                                    <div class="d-flex align-items-baseline">
-                                        <div class="d-flex align-items-baseline">
-                                            <a class="btn btn-primary"
-                                               style="color: white;">{{trans('site_lang.renew_package')}} </a>
+                                        <div class="col-4 col-md-12 col-xl-10">
+                                            <div class="d-flex align-items-baseline">
+                                                <div class="d-flex align-items-baseline">
+                                                    <p class="text-success">
+                                                        {{trans('site_lang.expired_date')}} {{$expiry_date}}
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
+                                        @if(auth()->user()->parent_id == null)
+                                            <div class="col-4 col-md-12 col-xl-10">
+                                                <div class="d-flex align-items-baseline">
+                                                    <div class="d-flex align-items-baseline">
+                                                        <a href="{{route('renew_package')}}" class="btn btn-primary"
+                                                           style="color: white;">{{trans('site_lang.renew_package')}} </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -124,10 +127,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    @endif
-
+        @endif
         <div class="row">
             <div class="col-12 col-xl-12 stretch-card">
                 <div class="row flex-grow">
