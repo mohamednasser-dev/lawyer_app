@@ -60,7 +60,7 @@
                                 <label for="form-field-select-3">
                                     {{trans('site_lang.add_case_to_whom')}}
                                 </label>
-                                <select id="form-field-select-3" class="w-100" data-width="100%"
+                                <select id="form-field-select-3" class="js-example-basic-single w-100" data-width="100%"
                                         name="to_whome">
                                     <option value="">
                                         &nbsp;{{trans('site_lang.add_case_to_whom')}}</option>
