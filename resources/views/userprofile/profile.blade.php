@@ -4,13 +4,15 @@
 <link rel="stylesheet" href="{{url('/assets/vendors/dropify/dist/dropify.min.css')}}">
 <link rel="stylesheet" href="{{url('/assets/vendors/font-awesome/css/font-awesome.min.css')}}">
 <link rel="stylesheet" href="{{url('/assets/vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css')}}">
-
 @endsection
-
 @section('content')
-
+    <nav class="page-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{route('home')}}">{{trans('site_lang.side_home')}}</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> {{trans('site_lang.profile')}}</li>
+        </ol>
+    </nav>
 <div class="row">
-
     <div class="col-lg-12 grid-margin  stretch-card">
         <div class="card">
             <div class="card-body">
@@ -18,24 +20,16 @@
                 <div class="form-group">
                 </div>
                 {{Form::open(array('url' => 'userprofiles', 'method' => 'post', 'files' => true))}}
-
                 {{ csrf_field() }}
-
                 <fieldset>
                     <div class="form-group" style="text-align: center;">
-
                         <h6 class="card-title"></h6>
                         <a href="#" onclick="$('#userimg').trigger('click');">
                             <img width="150" height="150" id='OpenImgUpload' src="{{ asset('uploads/userprofile/'.Auth::user()->image) }}" alt="profile image" class="rounded-circle  center ">
                             <i class="fa fa-camera"></i>
                         </a>
-
-
                         <input type="file" id='userimg' name="image" class="border" style="display: none;"/>
-
                     </div>
-                    @include('layouts.errors')
-
                     <div class="form-group">
                         <label for="name">{{trans('site_lang.users_username')}}</label>
                         <input id="name" class="form-control" name="name" value="{{Auth::user()->name}}" type="text">

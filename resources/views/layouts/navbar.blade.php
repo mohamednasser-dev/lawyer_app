@@ -26,7 +26,6 @@
                 @endphp
             @endif
                 @php $user_type = auth()->user()->type; @endphp
-            @if($expiry_package == 'y')
             @if($user_type != 'manager')
 
                 <li class="nav-item">
@@ -96,15 +95,6 @@
                         </ul>
                     </div>
                 </li>
-
-            @endif
-{{--                @else--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{route('home')}}" class="nav-link">--}}
-{{--                            <i class="link-icon" data-feather="box"></i>--}}
-{{--                            <span class="link-title">{{trans('site_lang.side_home')}}</span>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
             @endif
             @if( auth()->user()->type == 'manager')
                 <li class="nav-item">
@@ -130,19 +120,19 @@
 </nav>
 <nav class="settings-sidebar">
     <div class="sidebar-body">
-        <a href="#" class="settings-sidebar-toggler">
+        <a href="javascript:void(0);" class="settings-sidebar-toggler">
             <i data-feather="settings"></i>
         </a>
         <h6 class="text-muted">theme</h6>
         <div class="row">
             <div class="form-check form-check-inline">
-                <a class="btn btn-success" href="{{url('theme/light')}}" id="theme" role="button" data-toggle="" aria-haspopup="true" aria-expanded="false">
+                <a class="btn @if(auth()->user()->them == 'light') btn-success @else btn-dark @endif " href="{{url('theme/light')}}" id="theme" role="button" data-toggle="" aria-haspopup="true" aria-expanded="false">
                     <i class="" title="light" id="light"></i>
                     <span class="font-weight-medium ml-1 mr-1">light</span>
                 </a>
             </div>
             <div class="form-check form-check-inline">
-                <a class="btn btn-dark" href="{{url('theme/dark')}}" id="theme" role="button" data-toggle="" aria-haspopup="true" aria-expanded="false">
+                <a class="btn @if(auth()->user()->them == 'dark') btn-success @else btn-dark @endif" href="{{url('theme/dark')}}" id="theme" role="button" data-toggle="" aria-haspopup="true" aria-expanded="false">
                     <i class="" title="dark" id="dark"></i>
                     <span class="font-weight-medium ml-1 mr-1">dark</span>
                 </a>
