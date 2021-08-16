@@ -294,13 +294,17 @@ return
                 'en' => 'deleted successfully',
             ],
         'send_reset' =>
-        [
-            'ar' => 'تم ارسال الكود بنجاح',
-            'en' => 'reset code sent',
-        ],'code_confirmed' =>
+            [
+                'ar' => 'تم ارسال الكود بنجاح',
+                'en' => 'reset code sent',
+            ], 'code_confirmed' =>
         [
             'ar' => 'تم تأكيد الكود بنجاح',
             'en' => 'code confirmed successfully',
+        ], 'not_reseted' =>
+        [
+            'ar' => 'لم يتم التأكيد',
+            'en' => 'code not confirmed ',
         ],
 
 
