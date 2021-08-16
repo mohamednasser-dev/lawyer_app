@@ -305,6 +305,10 @@ return
         [
             'ar' => 'لم يتم التأكيد',
             'en' => 'code not confirmed ',
+        ], 'reseted' =>
+        [
+            'ar' => 'تم تغيير الرقم السري بنجاح',
+            'en' => 'password has been changer  successfully',
         ],
 
 

@@ -117,8 +117,17 @@ class AuthController extends Controller
 
     public function resetPassword(Request $request)
     {
+
+        $rules = [
+            'email' => 'required|email|exists:users',
+
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+        }
         $code = rand(1000, 9999);
-        $user = \App\User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
         if ($user) {
             $user->code = $code;
             $user->save();
@@ -128,10 +137,10 @@ class AuthController extends Controller
                 $message->to($user->email);
             });
 
-            return response()->json(msgdata($request, success(), 'send_reset', (object)[]));
+            return response()->json(msg($request, success(), 'send_reset'));
 
         } else {
-            return response()->json(msgdata($request, failed(), 'not_found', (object)[]));
+            return response()->json(msg($request, failed(), 'not_found'));
 
         }
 
@@ -140,6 +149,14 @@ class AuthController extends Controller
 
     public function codeCheck(Request $request)
     {
+        $rules = [
+            'code' => 'required|exists:users',
+
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+        }
 
         $user = User::where('code', $request->code)->first();
         if ($user) {
@@ -154,15 +171,23 @@ class AuthController extends Controller
 
     public function changePassword(Request $request)
     {
+        $rules = [
+            'code' => 'required|exists:users',
+            'password' => 'required|min:6',
 
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+        }
         $user = User::where('code', $request->code)->first();
         if ($user) {
             $user->code = null;
             $user->password = Hash::make($request->password);
             $user->save();
-            return response()->json(msgdata($request, success(), 'reseted', (object)[]));
+            return response()->json(msg($request, success(), 'reseted'));
         } else {
-            return response()->json(msgdata($request, failed(), 'not_reseted', (object)[]));
+            return response()->json(msg($request, failed(), 'not_reseted'));
 
         }
 

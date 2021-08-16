@@ -22,6 +22,14 @@ Route::post('login', 'API\AuthController@login');
 Route::get('logout', 'API\AuthController@logout');
 Route::get('password/forgot/{email}', 'API\ManulPasswordController@forgot');
 Route::post('password/reset', 'API\ManulPasswordController@reset');
+
+
+//reset password
+Route::post('reset-password', 'API\AuthController@resetPassword');
+Route::post('code-check', 'API\AuthController@codeCheck');
+Route::post('change-password', 'API\AuthController@changePassword');
+
+
 //Home Page ..
 Route::get('home_data', 'API\HomePageController@index');
 Route::get('coming_session_pagination', 'API\HomePageController@coming_session_pagination');
