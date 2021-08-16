@@ -73,14 +73,10 @@
                                     @else
                                         <div class="card card-inverse-success">
                                             <div class="card-body ">
-                                                <div class="d-flex justify-content-between align-items-baseline">
-                                                    <h2 style="font-size: 25px;"
-                                                        class="card-title mb-0">{{trans('site_lang.alert')}}</h2>
-                                                </div>
                                                 <div class="row">
                                                     <div class="col-12 col-md-12 col-xl-10">
                                                         <div class="d-flex align-items-baseline">
-                                                            <h4 class="mb-7">{{trans('site_lang.package_warning')}} </h4>
+                                                            <h4 class="mb-7">{{trans('site_lang.package')}} </h4>
                                                         </div>
                                                         <div class="d-flex align-items-baseline">
                                                             <h3 class="mb-7">( {{$package_name}} )</h3>
@@ -95,16 +91,16 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    @if(auth()->user()->parent_id == null)
+
                                                         <div class="col-4 col-md-12 col-xl-10">
                                                             <div class="d-flex align-items-baseline">
                                                                 <div class="d-flex align-items-baseline">
                                                                     <a href="{{route('renew_package')}}" class="btn btn-primary"
-                                                                       style="color: white;">{{trans('site_lang.renew_package')}} </a>
+                                                                       style="color: white;">{{trans('site_lang.see_packages')}} </a>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    @endif
+
                                                 </div>
                                             </div>
                                         </div>

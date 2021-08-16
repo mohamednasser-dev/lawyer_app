@@ -8,6 +8,8 @@ return [
 
 
     'my_package' => 'باقتي',
+    'package' => 'الباقة',
+    'see_packages' => 'عرض الباقات الاخرى',
 
     // public use
     'package_ended' => 'تم انتهاء باقة',
