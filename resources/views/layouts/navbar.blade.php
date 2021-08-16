@@ -27,6 +27,7 @@
             @endif
                 @php $user_type = auth()->user()->type; @endphp
             @if($user_type != 'manager')
+
                 <li class="nav-item">
                     <a href="{{route('home')}}" class="nav-link">
                         <i class="link-icon" data-feather="box"></i>

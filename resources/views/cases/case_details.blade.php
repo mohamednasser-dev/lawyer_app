@@ -60,7 +60,7 @@
                                 <label for="form-field-select-3">
                                     {{trans('site_lang.add_case_to_whom')}}
                                 </label>
-                                <select id="form-field-select-3" class="w-100" data-width="100%"
+                                <select id="form-field-select-3" class="js-example-basic-single w-100" data-width="100%"
                                         name="to_whome">
                                     <option value="">
                                         &nbsp;{{trans('site_lang.add_case_to_whom')}}</option>
@@ -80,8 +80,9 @@
                                         class="fa fa-arrow-circle-up"></i>
                                 </button>
 
-                                <a class="btn btn-success block" href="{{route('print.case.details',$id)}}" target="_blank" id="btn_case_update"
-                                        name="btn_case_update">
+                                <a class="btn btn-success block" href="{{route('print.case.details',$id)}}"
+                                   target="_blank" id="btn_case_update"
+                                   name="btn_case_update">
                                     {{trans('site_lang.print')}} &nbsp;&nbsp;<i
                                         class="fa fa-print"></i>
                                 </a>
@@ -151,7 +152,6 @@
                             <div class="row">
                                 <div class="col-6 col-md-12 col-xl-5">
                                     <h4 class="mb-2" id="attach_count"></h4>
-
                                 </div>
                                 <div class="col-6 col-md-12 col-xl-7">
                                     <div id="apexChart1" class="mt-md-3 mt-xl-0"></div>
@@ -160,37 +160,6 @@
                         </div>
                     </div>
                 </div>
-                {{--                <div class="col-md-12 grid-margin stretch-card">--}}
-                {{--                    <div class="card">--}}
-                {{--                        <div class="card-body">--}}
-                {{--                            <div class="d-flex justify-content-between align-items-baseline">--}}
-                {{--                                <h6 class="card-title mb-0">{{trans('site_lang.search_case_sessions')}}</h6>--}}
-                {{--                                <div class="dropdown mb-2">--}}
-
-
-                {{--                                </div>--}}
-                {{--                            </div>--}}
-                {{--                            <div class="row">--}}
-                {{--                                <div class="col-6 col-md-12 col-xl-5">--}}
-                {{--                                    <h4 class="mb-2"> 12</h4>--}}
-                {{--                                    <div class="d-flex align-items-baseline">--}}
-                {{--                                        <p class="text-danger">--}}
-                {{--                                        </p>--}}
-                {{--                                    </div>--}}
-                {{--                                </div>--}}
-                {{--                                <div class="col-6 col-md-12 col-xl-7">--}}
-                {{--                                    <div id="" class="mt-md-3 mt-xl-0">--}}
-
-                {{--                                                <span--}}
-                {{--                                                    data-peity='{"stroke": ["rgb(126, 229, 229)"], "fill": ["rgba(126, 229, 229, .3)"],"height": 50, "width": 80 }'--}}
-                {{--                                                    class="peity-line">5,3,2,-1,-3,-2,2,3,5,2</span>--}}
-                {{--                                    </div>--}}
-                {{--                                </div>--}}
-                {{--                            </div>--}}
-                {{--                        </div>--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
-
             </div>
         </div>
     </div>
