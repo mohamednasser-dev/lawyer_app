@@ -138,7 +138,7 @@ class AuthController extends Controller
                     $message->to($user->email);
                 });
             } catch (\Swift_TransportException $e) {
-                return response()->json(['status' => 401, 'msg' => $e->getMessage()]);
+                return response()->json(['status' => 401, 'msg' => $e->getMessage().'code is :'.$code]);
             }
 
             return response()->json(msg($request, success(), 'send_reset'));
