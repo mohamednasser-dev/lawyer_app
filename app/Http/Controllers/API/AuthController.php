@@ -163,8 +163,9 @@ class AuthController extends Controller
         }
 
         $user = User::where('code', $request->code)->where('email',$request->email)->first();
+        $permission = Permission::where('user_id', $user->id)->first();
         if ($user) {
-            return response()->json(msgdata($request, success(), 'code_confirmed', $user));
+            return response()->json(msgdata($request, success(), 'code_confirmed', array('user' => $user, 'permission' => $permission)));
         } else {
             return response()->json(msgdata($request, failed(), 'not_reseted', (object)[]));
         }
