@@ -155,48 +155,50 @@ class AuthController extends Controller
     {
         $rules = [
             'code' => 'required|exists:users',
-
+            'email' => 'required|exists:users',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         }
 
-        $user = User::where('code', $request->code)->first();
+        $user = User::where('code', $request->code)->where('email',$request->email)->first();
         if ($user) {
-            return response()->json(msgdata($request, success(), 'code_confirmed', (object)['code' => $request->code]));
+            return response()->json(msgdata($request, success(), 'code_confirmed', $user));
         } else {
             return response()->json(msgdata($request, failed(), 'not_reseted', (object)[]));
-
         }
-
-
     }
 
     public function changePassword(Request $request)
     {
+        $user = check_api_token($request->header('api_token'));
         $rules = [
-            'code' => 'required|exists:users',
+            'old_password' => '',
             'password' => 'required|min:6',
-
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         }
-        $user = User::where('code', $request->code)->first();
-        if ($user) {
-            $user->code = null;
-            $user->password = Hash::make($request->password);
-            $user->save();
-            return response()->json(msg($request, success(), 'reseted'));
+        if ($user != null) {
+            if($request->old_password == null){
+                $user->code = null;
+                $user->password = Hash::make($request->password);
+                $user->save();
+                return response()->json(msg($request, success(), 'reseted'));
+            }else{
+                if(\Hash::check($request->old_password,$user->password)){
+                    $user->code = null;
+                    $user->password = Hash::make($request->password);
+                    $user->save();
+                    return response()->json(msg($request, success(), 'reseted'));
+                }else{
+                    return sendResponse(401, trans('site_lang.check_pass_again'), null);
+                }
+            }
         } else {
-            return response()->json(msg($request, failed(), 'not_reseted'));
-
+            return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
-
-
     }
-
-
 }

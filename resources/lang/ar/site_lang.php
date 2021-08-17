@@ -7,6 +7,7 @@ return [
 
 
 
+    'check_pass_again' => 'كلمة المرور القديمة غير صحيحة',
     'my_package' => 'باقتي',
     'package' => 'الباقة',
     'see_packages' => 'عرض الباقات الاخرى',
