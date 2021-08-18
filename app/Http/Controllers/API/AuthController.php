@@ -49,7 +49,6 @@ class AuthController extends Controller
                     }
                 } else {
                     $parent_user = User::where('id', Auth::user()->parent_id)->first();
-
                     $user = Auth::user();
                     $user->api_token = str_random(60);
                     $user->save();
@@ -138,7 +137,7 @@ class AuthController extends Controller
                     $message->to($user->email);
                 });
             } catch (\Swift_TransportException $e) {
-                return response()->json(['status' => 401, 'msg' => $e->getMessage().'code is :'.$code]);
+                return response()->json(['status' => 401, 'msg' => $e->getMessage() . 'code is :' . $code]);
             }
 
             return response()->json(msg($request, success(), 'send_reset'));
@@ -162,7 +161,11 @@ class AuthController extends Controller
             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         }
 
-        $user = User::where('code', $request->code)->where('email',$request->email)->first();
+        $user = User::where('code', $request->code)->where('email', $request->email)->first();
+        if ($user->api_token == null) {
+            $user->api_token = str_random(60);
+            $user->save();
+        }
         $permission = Permission::where('user_id', $user->id)->first();
         if ($user) {
             return response()->json(msgdata($request, success(), 'code_confirmed', array('user' => $user, 'permission' => $permission)));
@@ -183,18 +186,18 @@ class AuthController extends Controller
             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         }
         if ($user != null) {
-            if($request->old_password == null){
+            if ($request->old_password == null) {
                 $user->code = null;
                 $user->password = Hash::make($request->password);
                 $user->save();
                 return response()->json(msg($request, success(), 'reseted'));
-            }else{
-                if(\Hash::check($request->old_password,$user->password)){
+            } else {
+                if (\Hash::check($request->old_password, $user->password)) {
                     $user->code = null;
                     $user->password = Hash::make($request->password);
                     $user->save();
                     return response()->json(msg($request, success(), 'reseted'));
-                }else{
+                } else {
                     return sendResponse(401, trans('site_lang.check_pass_again'), null);
                 }
             }
