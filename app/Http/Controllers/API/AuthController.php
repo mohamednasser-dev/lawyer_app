@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Cases;
 use App\Http\Controllers\Controller;
+use App\Notifications\UserResetPasswordNotification;
 use App\Sessions;
 use Illuminate\Http\Request;
 use App\Permission;
@@ -130,12 +131,14 @@ class AuthController extends Controller
         if ($user) {
             $user->code = $code;
             $user->save();
+
             try {
-                Mail::raw('رمز استعاده كلمه المرور الخاصة بك: ' . $code, function ($message) use ($user) {
-                    $message->subject('تطبيق المحاماه');
-                    $message->from('taheelpost@gmail.com', 'taheelpost');
-                    $message->to($user->email);
-                });
+//                Mail::raw('رمز استعاده كلمه المرور الخاصة بك: ' . $code, function ($message) use ($user) {
+//                    $message->subject('تطبيق المحاماه');
+//                    $message->from('taheelpost@gmail.com', 'taheelpost');
+//                    $message->to($user->email);
+//                });
+                $user->notify(new UserResetPasswordNotification($code));
             } catch (\Swift_TransportException $e) {
                 return response()->json(['status' => 401, 'msg' => $e->getMessage() . 'code is :' . $code]);
             }

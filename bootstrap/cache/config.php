@@ -1,7 +1,7 @@
 <?php return array (
   'app' => 
   array (
-    'name' => 'Laravel',
+    'name' => 'LawyerApp',
     'env' => 'local',
     'debug' => true,
     'url' => 'http://localhost',
@@ -218,7 +218,7 @@
         'endpoint' => NULL,
       ),
     ),
-    'prefix' => 'laravel_cache',
+    'prefix' => 'lawyerapp_cache',
   ),
   'database' => 
   array (
@@ -289,7 +289,7 @@
       'options' => 
       array (
         'cluster' => 'predis',
-        'prefix' => 'laravel_database_',
+        'prefix' => 'lawyerapp_database_',
       ),
       'default' => 
       array (
@@ -639,7 +639,7 @@
     'from' => 
     array (
       'address' => 'taheelpost@gmail.com',
-      'name' => 'Laravel',
+      'name' => 'LawyerApp',
     ),
     'encryption' => 'tls',
     'username' => 'taheelpost@gmail.com',
@@ -1083,7 +1083,7 @@
       0 => 2,
       1 => 100,
     ),
-    'cookie' => 'laravel_session',
+    'cookie' => 'lawyerapp_session',
     'path' => '/',
     'domain' => NULL,
     'secure' => false,

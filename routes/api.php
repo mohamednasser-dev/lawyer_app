@@ -146,6 +146,10 @@ Route::get('printSearchDaily/{date}/{type}', 'API\ReportsApiController@printSear
 // registration form
 Route::post('register', 'Landing\RegisterationController@store');
 Route::post('registeration', 'Landing\RegisterationController@storeApi');
+
+//contact us
+Route::post('contact-us', 'Landing\RegisterationController@Contact');
+
 //Reports
 Route::post('report_monthly', 'API\ReportsApiController@searchMonthly');
 Route::post('report_daily', 'API\ReportsApiController@searchDaily');
