@@ -41,7 +41,6 @@
                             <tr >
                                  <td> الاسم : {{$data['name']}} </td>
                                  <td> البريد الاليكترونى : {{$data['email']}} </td>
-                                 <td> الموضوع : {{$data['subject']}} </td>
                                  <td> رقم التلفون : {{$data['phone']}} </td>
 
                              </tr>

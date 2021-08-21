@@ -228,7 +228,6 @@ class RegisterationController extends Controller
         $data = $this->validate(request(), [
             'name' => 'required',
             'email' => 'required|email',
-            'subject' => 'required',
             'phone' => 'required',
             'message' => 'required',
 
