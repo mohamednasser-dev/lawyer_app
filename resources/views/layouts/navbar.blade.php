@@ -111,6 +111,9 @@
                             <li class="nav-item">
                                 <a href="{{url('/packages')}}" class="nav-link">{{trans('site_lang.side_Packages')}}</a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{url('/points')}}" class="nav-link">{{trans('site_lang.points')}}</a>
+                            </li>
                         </ul>
                     </div>
                 </li>

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Point;
 use App\User;
 use App\Cases;
 use App\mohdr;
@@ -69,7 +70,6 @@ class HomeController extends Controller
     }
     public function my_package()
     {
-
         return view('userprofile.my_package');
     }
 

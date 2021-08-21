@@ -78,7 +78,14 @@ class RegisterationController extends Controller
 //
 //            $data['package_id'] = $package->id;
 //        }
-
+        $six_digit_random_number = mt_rand(1000, 9999);
+        $exists_user_code = User::where('user_code',$six_digit_random_number)->first();
+        if($exists_user_code){
+            $new_six_digit_random_number = mt_rand(1000, 9999);
+            $data['user_code'] = $new_six_digit_random_number;
+        }else{
+            $data['user_code'] = $six_digit_random_number;
+        }
         $package = Package::find(5);
         $mytime = Carbon::now();
         $today = Carbon::parse($mytime->toDateTimeString())->format('Y-m-d H:i');
@@ -164,7 +171,14 @@ class RegisterationController extends Controller
 //
 //            $data['package_id'] = $package->id;
 //        }
-
+        $six_digit_random_number = mt_rand(1000, 9999);
+        $exists_user_code = User::where('user_code',$six_digit_random_number)->first();
+        if($exists_user_code){
+            $new_six_digit_random_number = mt_rand(1000, 9999);
+            $data['user_code'] = $new_six_digit_random_number;
+        }else{
+            $data['user_code'] = $six_digit_random_number;
+        }
         $package = Package::find(5);
 
         $mytime = Carbon::now();
