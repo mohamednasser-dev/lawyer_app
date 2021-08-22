@@ -16,23 +16,43 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-6">
-                            <a class="btn btn-primary" id="addClientModal"><i
-                                    class="fa fa-plus"></i>{{trans('site_lang.Add_package')}} </a></div>
+                            <a class="btn btn-primary" id="addClientModal">
+                                <i class="fa fa-plus"></i>{{trans('site_lang.add_option')}} </a>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
+
                     <div class="table-responsive">
-                        <table id="package_tbl" class="table table-bordered">
+                        <table id="subscribers_tbl"  class="table table-bordered">
                             <thead>
                             <tr>
                                 <th class="center">#</th>
-                                <th class="center">{{trans('site_lang.packae_name')}}</th>
-                                <th class="center">{{trans('site_lang.package_cost')}}</th>
-                                <th class="center">{{trans('site_lang.renew_points')}}</th>
-                                <th class="center">{{trans('site_lang.package_duration')}}</th>
-                                <th class="center"></th>
+                                <th class="center">{{trans('site_lang.point_name')}}</th>
+                                <th class="center">{{trans('site_lang.point_points')}}</th>
+                                <th class="center">{{trans('site_lang.point_status')}}</th>
+                                <th class="center">{{trans('site_lang.point_type')}}</th>
+                                <th class="center">{{trans('site_lang.chooses')}}</th>
                             </tr>
                             </thead>
+                            <tbody>
+                            @foreach($data as $key=> $row)
+                                <tr>
+                                    <td>{{$key+1}}</td>
+                                    <td>{{$row->name}}</td>
+                                    <td>{{$row->points_num}}</td>
+                                    <td> {{$row->status}}</td>
+                                    <td>{{$row->type}}</td>
+                                    <td>
+                                        <button data-client-id="{{$row->id}}" id="editClient" class="btn btn-xs btn-outline-success" >
+                                            <i class="fa fa-edits"></i>&nbsp;&nbsp; {{trans('site_lang.edit')}}</button>
+                                        &nbsp;&nbsp;
+                                        <button data-point-id="{{$row->id}}" id="deletePoint"  class="btn btn-xs btn-outline-danger">
+                                            <i class="fa fa-times fa fa-white"></i>&nbsp;&nbsp; {{trans('site_lang.public_delete_text')}} </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -52,66 +72,40 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="packages" enctype="multipart/form-data">
-                        <input type="hidden" id="token" name="_token" value="{{csrf_token()}}">
-                        <input type="hidden" name="id" id="id">
+                    <form method="post" action="{{route('points.store')}}" enctype="multipart/form-data">
+                        @csrf
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group{{$errors->has('name')?' has-error':''}}">
                                     <input type="text" name="name" class="form-control" id="name"
-                                           placeholder="{{trans('site_lang.packae_name')}}"
+                                           placeholder="{{trans('site_lang.point_name')}}"
                                            value="{{ old('name') }}">
                                     <span class="text-danger" id="package_Name_error"></span>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('cost')?' has-error':''}}">
-
-                                    <input name="cost" id="cost" type="number"
-                                           placeholder="{{trans('site_lang.package_cost')}}"
+                                <div class="form-group{{$errors->has('points_num')?' has-error':''}}">
+                                    <input name="points_num" id="points_num" type="number"
+                                           placeholder="{{trans('site_lang.point_points')}}"
                                            class="form-control"
-                                           value="{{ old('cost') }}"/>
+                                           value="{{ old('points_num') }}"/>
                                     <span class="text-danger" id="package_cost_error"></span>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('renew_points')?' has-error':''}}">
-
-                                    <input name="renew_points" id="renew_points" type="number"
-                                           placeholder="{{trans('site_lang.renew_points')}}"
+                                <div class="form-group{{$errors->has('type')?' has-error':''}}">
+                                    <input type="text" name="type" id="type"
                                            class="form-control"
-                                           value="{{ old('renew_points') }}"/>
-                                    <span class="text-danger" id="package_cost_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('duration')?' has-error':''}}">
-
-                                    <input type="number" name="duration" id="duration"
-                                           class="form-control"
-                                           placeholder="{{trans('site_lang.package_duration')}} ({{trans('site_lang.months')}})"
-                                           value="{{ old('duration') }}">
+                                           placeholder="{{trans('site_lang.type')}}"
+                                           value="{{ old('type') }}">
                                     <span class="text-danger" id="package_duration_error"></span>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('description')?' has-error':''}}">
-                                        <textarea type="text" name="description" id="description"
-                                                  class="form-control" rows="3"
-                                                  placeholder="{{trans('site_lang.description')}}"
-                                                  value="{{ old('description') }}"></textarea>
-                                    <span class="text-danger" id="package_description_error"></span>
-                                </div>
-                            </div>
-
                         </div>
                         <div class="form-group right">
-                            <button data-dismiss="modal" class="btn btn-danger" type="button">
-                                {{trans('site_lang.public_close_btn_text')}}
+                            <button type="submit" class="btn btn-primary" >
+                                {{trans('site_lang.public_add_btn_text')}}
                             </button>
-                            <input type="hidden" name="hidden_id" id="hidden_id"/>
-                            <input type="submit" class="btn btn-primary" id="add_client" name="add_client"
-                                   value="{{trans('site_lang.public_add_btn_text')}}"/>
                         </div>
                     </form>
 
@@ -175,10 +169,6 @@
                         name: 'cost',
                         className: 'center'
                     }, {
-                        data: 'renew_points',
-                        name: 'renew_points',
-                        className: 'center'
-                    }, {
                         data: 'duration',
                         name: 'duration',
                         className: 'center'
@@ -204,7 +194,7 @@
                 if ($('#add_client').val() == "{{trans('site_lang.public_add_btn_text')}}") {
 
                     $.ajax({
-                        url: "{{route('packages.store')}}",
+                        url: "{{route('points.store')}}",
                         method: 'post',
                         data: new FormData(this),
                         contentType: false,
@@ -287,7 +277,7 @@
             });
 
 
-            var client_id;
+            var point_id;
 
             $(document).on('click', '.btn-lg', function () {
                 var id = $(this).data('moh-Id');
@@ -311,20 +301,20 @@
             });
 
 
-            $(document).on('click', '#deletePackage', function () {
-                Package_id = $(this).data('package-id');
+            $(document).on('click', '#deletePoint', function () {
+                point_id = $(this).data('point-id');
                 $('#confirmModal').modal('show');
             });
             $('#ok_button').click(function () {
                 $.ajax({
-                    url: "packages/destroy/" + Package_id,
+                    url: "points/destroy/" + point_id,
                     beforeSend: function () {
                         $('#ok_button').text("{{trans('site_lang.public_continue_delete_modal_text')}}");
                     },
                     success: function (data) {
                         setTimeout(function () {
                             $('#confirmModal').modal('hide');
-                            $('#package_tbl').DataTable().ajax.reload();
+                            window.location.reload();
                         }, 100);
                     }
                 })

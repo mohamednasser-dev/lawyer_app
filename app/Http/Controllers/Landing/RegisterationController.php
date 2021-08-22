@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Landing;
 
 use App\category;
+use App\Notifications\ContactUsNotification;
+use App\Notifications\UserResetPasswordNotification;
 use App\Package;
 use App\Permission;
 use App\User;
@@ -37,7 +39,7 @@ class RegisterationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -45,7 +47,7 @@ class RegisterationController extends Controller
         app()->setLocale('ar');
         $data = $this->validate(request(), [
             'name' => 'required',
-            'email' =>'required|unique:users,email|regex:/(.+)@(.+)\.(.+)/i',
+            'email' => 'required|unique:users,email|regex:/(.+)@(.+)\.(.+)/i',
             'password' => 'required',
             'phone' => 'required|unique:users,phone',
             'address' => 'required',
@@ -76,7 +78,14 @@ class RegisterationController extends Controller
 //
 //            $data['package_id'] = $package->id;
 //        }
-
+        $six_digit_random_number = mt_rand(1000, 9999);
+        $exists_user_code = User::where('user_code',$six_digit_random_number)->first();
+        if($exists_user_code){
+            $new_six_digit_random_number = mt_rand(1000, 9999);
+            $data['user_code'] = $new_six_digit_random_number;
+        }else{
+            $data['user_code'] = $six_digit_random_number;
+        }
         $package = Package::find(5);
         $mytime = Carbon::now();
         $today = Carbon::parse($mytime->toDateTimeString())->format('Y-m-d H:i');
@@ -126,7 +135,7 @@ class RegisterationController extends Controller
         $rules =
             [
                 'name' => 'required',
-                'email' =>'required|unique:users,email|regex:/(.+)@(.+)\.(.+)/i',
+                'email' => 'required|unique:users,email|regex:/(.+)@(.+)\.(.+)/i',
                 'password' => 'required',
                 'phone' => 'required|unique:users,phone',
                 'address' => 'required',
@@ -162,7 +171,14 @@ class RegisterationController extends Controller
 //
 //            $data['package_id'] = $package->id;
 //        }
-
+        $six_digit_random_number = mt_rand(1000, 9999);
+        $exists_user_code = User::where('user_code',$six_digit_random_number)->first();
+        if($exists_user_code){
+            $new_six_digit_random_number = mt_rand(1000, 9999);
+            $data['user_code'] = $new_six_digit_random_number;
+        }else{
+            $data['user_code'] = $six_digit_random_number;
+        }
         $package = Package::find(5);
 
         $mytime = Carbon::now();
@@ -201,10 +217,60 @@ class RegisterationController extends Controller
 
     }
 
+
+    public function Contact(Request $request)
+    {
+
+
+        app()->setLocale('ar');
+
+        $rules =
+            [
+                'name' => 'required',
+                'email' => 'required|email',
+                'subject' => 'required',
+                'phone' => 'required',
+                'message' => 'required',
+            ];
+
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->all()]);
+        }
+
+
+        $data = $this->validate(request(), [
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'message' => 'required',
+
+        ]);
+
+        $user = User::where('type', 'manager')->first();
+        if ($user) {
+            try {
+//                Mail::raw('رمز استعاده كلمه المرور الخاصة بك: ' . $code, function ($message) use ($user) {
+//                    $message->subject('تطبيق المحاماه');
+//                    $message->from('taheelpost@gmail.com', 'taheelpost');
+//                    $message->to($user->email);
+//                });
+                $user->notify(new ContactUsNotification($data));
+            } catch (\Swift_TransportException $e) {
+
+            }
+        } else {
+            $user = User::make(['email' => "mostafaelebzary@gmail.com"]);
+            $user->notify(new ContactUsNotification($data));
+        }
+
+        return msg($request, success(), 'success');
+    }
+
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -215,7 +281,7 @@ class RegisterationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -226,8 +292,8 @@ class RegisterationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -238,7 +304,7 @@ class RegisterationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

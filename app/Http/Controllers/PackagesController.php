@@ -54,6 +54,7 @@ class PackagesController extends Controller
             $data = $this->validate(request(), [
                 'name' => 'required',
                 'cost' => 'required',
+                'renew_points' => 'required',
                 'duration' => 'required',
                 'description' => 'required',
             ]);
@@ -61,6 +62,7 @@ class PackagesController extends Controller
             $data = $this->validate(request(), [
                 'name' => 'required',
                 'cost' => 'required',
+                'renew_points' => 'required',
                 'duration' => 'required',
                 'description' => 'required',
             ]);
@@ -91,6 +93,7 @@ class PackagesController extends Controller
             $data = $this->validate(request(), [
                 'name' => 'required',
                 'cost' => 'required',
+                'renew_points' => 'required',
                 'duration' => 'required',
                 'description' => 'required',
             ]);

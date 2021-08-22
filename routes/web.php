@@ -25,6 +25,11 @@ Route::group(['middleware' => ['auth', 'Check_package']], function () {
 
     //user packages to renew
     Route::get('packages/renew', 'HomeController@renew_package')->name('renew_package');
+
+    //manager points
+    Route::resource('points', 'PointsController');
+    Route::get('points/destroy/{id}', 'PointsController@destroy');
+
     Route::get('my_package', 'HomeController@my_package')->name('my_package');
 //Clients
     Route::resource('clients', 'ClientsController');
