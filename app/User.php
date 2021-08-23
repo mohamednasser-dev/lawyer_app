@@ -18,7 +18,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'type', 'password','email','cat_id','parent_id','phone','address','package_id','expiry_date',
         'warning_date','expiry_package','user_code','my_points'
-        ,'status','image','them'
+        ,'status','image','them','verified'
     ];
 
  public function category(){

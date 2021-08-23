@@ -168,10 +168,35 @@ return
                 'ar' => ' تم تسجيل الدخول بنجاح ',
                 'en' => 'Login  Successfully',
             ],
+        'verify_email' =>
+            [
+                'ar' => 'تم التحقق من البريد الإلكتروني بنجاح',
+                'en' => 'email is verified successfully',
+            ],
         'login_warrning' =>
             [
                 'ar' => 'البريد الالكترونى او الرقم السري غير صحيح! ',
                 'en' => 'E-mail or Password invalid!',
+            ],
+        'verify_warrning' =>
+            [
+                'ar' => 'البريد الالكترونى او كود التحقق غير صحيح !',
+                'en' => 'E-mail or code invalid !',
+            ],
+        'verify_email_first' =>
+            [
+                'ar' => 'يجب عليك التحقق من البريد الإلكتروني أولاً',
+                'en' => 'you should verify email first',
+            ],
+        'not_have_points' =>
+            [
+                'ar' => 'لا تمتلك العدد الكافى من النقاط لتجديد الباقة المختارة',
+                'en' => 'You do not have enough points to renew the selected package',
+            ],
+        'package_renewed_s' =>
+            [
+                'ar' => 'تم تجديد الباقة بنجاح وخصم النقاط من المستخدم',
+                'en' => 'The package has been successfully renewed and the points have been deducted from the user',
             ],
         'data_invalid' =>
             [
