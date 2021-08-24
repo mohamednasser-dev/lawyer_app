@@ -43,7 +43,7 @@ class UserVerifyEmailNotification extends Notification
         $code = $this->code;
         return (new MailMessage)
             ->view('Mail.user_verify_email',compact('code'))
-            ->subject( 'Reset your password' )
+            ->subject( 'التحقق من البريد الإلكتروني' )
             ->line( "Hey, We've successfully changed the text " )
             ->line( "Your Verification Code is ". $code )
             ->line( "this code is for One time Use and Expired in 1 hour" )

@@ -183,7 +183,7 @@ class RegisterationController extends Controller
         $six_digit_random_number = mt_rand(100000, 999999);
         $exists_user_code = User::where('user_code',$six_digit_random_number)->first();
         if($exists_user_code){
-            $new_six_digit_random_number = mt_rand(1000, 9999);
+            $new_six_digit_random_number = mt_rand(100000, 999999);
             $data['user_code'] = $new_six_digit_random_number;
         }else{
             $data['user_code'] = $six_digit_random_number;
