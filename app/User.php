@@ -15,6 +15,8 @@ class User extends Authenticatable
      *
      * @var array
      */
+
+    protected $appends = ['package_name'];
     protected $fillable = [
         'name', 'type', 'password','email','cat_id','parent_id','phone','address','package_id','expiry_date',
         'warning_date','expiry_package','user_code','my_points'
@@ -86,6 +88,15 @@ class User extends Authenticatable
             return $parent_user->warning_date;
         }else{
             return $warning_date;
+        }
+    }
+    public function getPackageNameAttribute()
+    {
+        if($this->package_id != null){
+            $package =  Package::find($this->package_id);
+            return $package->name;
+        }else{
+            return null;
         }
     }
     public function getImageAttribute($image)

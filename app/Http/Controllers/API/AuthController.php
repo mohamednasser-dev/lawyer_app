@@ -84,7 +84,12 @@ class AuthController extends Controller
         } else {
             $exists_email = Verification::where('email',$request->email)->where('code',$request->code)->first();
             if($exists_email){
-                User::where('email',$exists_email->email)->update(['verified'=>'1']);
+
+                $user_data['api_token'] = str_random(60);
+                $user_data['verified'] = '1' ;
+
+                User::where('email',$exists_email->email)->update($user_data);
+
                 if($exists_email->invite_code){
                     $winner_user = User::where('user_code',$exists_email->invite_code)->first();
                     $point = Point::where('type','friend')->first();

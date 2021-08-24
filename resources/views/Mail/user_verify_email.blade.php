@@ -11,7 +11,7 @@
     <tbody>
     <tr>
         <td style="padding: 30px 30px 0; text-align: center;">
-            <img width="220px" height="120px" src="{{@asset('public/uploads/logo.png')}}" alt="{{config('app.name')}}">
+            <img width="220px" height="120px" src="{{@asset('uploads/logo.png')}}" alt="{{config('app.name')}}">
         </td>
     </tr>
     </tbody>
