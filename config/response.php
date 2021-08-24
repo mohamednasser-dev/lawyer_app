@@ -188,6 +188,11 @@ return
                 'ar' => 'يجب عليك التحقق من البريد الإلكتروني أولاً',
                 'en' => 'you should verify email first',
             ],
+        'invite_code_didt_exist' =>
+            [
+                'ar' => 'كود المستخدم غير موجود',
+                'en' => 'invitation code not exists',
+            ],
         'not_have_points' =>
             [
                 'ar' => 'لا تمتلك العدد الكافى من النقاط لتجديد الباقة المختارة',

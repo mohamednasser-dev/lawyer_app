@@ -149,6 +149,13 @@ class RegisterationController extends Controller
             return response()->json(['status' => 401, 'msg' => $validator->messages()->all()]);
         }
 
+        if($request->invite_code){
+            $user_parent_code =  User::where('user_code',$request->invite_code)->first();
+            if($user_parent_code == null){
+                return msg($request, failed(), 'invite_code_didt_exist');
+            }
+        }
+
 
         $Cat_data['name'] = $request->cat_name;
         $category = category::create($Cat_data);
@@ -198,6 +205,7 @@ class RegisterationController extends Controller
         $data['warning_date'] = $warning_date;
         $data['package_id'] = 5;
         $data['verified'] = '0';
+
         $user_result = User::create($data);
         if($user_result){
             $exists_email = Verification::where('email',$request->email)->first();
