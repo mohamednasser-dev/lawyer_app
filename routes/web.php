@@ -23,8 +23,7 @@ Route::group(['middleware' => ['auth', 'Check_package']], function () {
     Route::post('users/update', 'UsersController@update')->name('users.update');
     Route::get('users/destroy/{id}', 'UsersController@destroy');
 
-    //user packages to renew
-    Route::get('packages/renew', 'HomeController@renew_package')->name('renew_package');
+
 
     //manager points
     Route::resource('points', 'PointsController');
@@ -134,6 +133,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('subscribers/{id}/delete', 'SubscribersController@destroy');
     Route::get('subscribers/search/new', 'SubscribersController@search_new')->name('subscribers.search');
     Route::get('endReservation', 'EndReservationsController@index');
+
+    //user packages to renew
+    Route::get('packages/renew/page', 'UsersController@renew_package')->name('renew_package');
 
 });
 Route::get('reservtion', 'ReservationController@index');

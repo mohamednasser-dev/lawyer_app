@@ -58,26 +58,26 @@
 
                                             <div class="form-group">
                                                 <!-- <label for="exampleInputEmail1">Email address</label> -->
-                                                <input type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" name="email" placeholder="{{trans('site_lang.users_email')}}">
+                                                <input style="color: white;" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" name="email" placeholder="{{trans('site_lang.users_email')}}">
                                                 <i class="fa fa-envelope"></i>
-                                                </span>
-                                                @if ($errors->has('email'))
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('email') }}</strong>
-                                                </span>
-                                                @endif
+{{--                                                </span>--}}
+{{--                                                @if ($errors->has('email'))--}}
+{{--                                                <span class="invalid-feedback" role="alert">--}}
+{{--                                                    <strong>{{ $errors->first('email') }}</strong>--}}
+{{--                                                </span>--}}
+{{--                                                @endif--}}
                                                     <br>
                                                 <div class="form-group">
                                                     <!-- <label for="exampleInputPassword1">Password</label> -->
                                                     <input type="password" class="form-control text-bold" name="password" placeholder="{{trans('site_lang.auth_password')}}">
                                                     <i class="fa fa-lock"></i>
 
-                                                    </span>
-                                                    @if ($errors->has('password'))
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $errors->first('password') }}</strong>
-                                                    </span>
-                                                    @endif
+{{--                                                    </span>--}}
+{{--                                                    @if ($errors->has('password'))--}}
+{{--                                                    <span class="invalid-feedback" role="alert">--}}
+{{--                                                        <strong>{{ $errors->first('password') }}</strong>--}}
+{{--                                                    </span>--}}
+{{--                                                    @endif--}}
                                                 </div>
                                             </div>
 
