@@ -140,7 +140,7 @@ class RegisterationController extends Controller
                 'password' => 'required',
                 'phone' => 'required|unique:users,phone',
                 'address' => 'required',
-                'invite_code' => 'required',
+                'invite_code' => '',
                 'cat_name' => 'required'
             ];
 
