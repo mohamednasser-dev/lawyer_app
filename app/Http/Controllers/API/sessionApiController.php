@@ -47,14 +47,14 @@ class sessionApiController extends Controller
         }
         $api_token = $request->header('api_token');
         $user = User::where('api_token', $api_token)->first();
-        if ($user && $api_token !=null) {
+        if ($user && $api_token != null) {
             $user_id = $user->id;
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
                 $Sessionsdata = Sessions::select('id', 'session_date', 'status')
                     ->where("case_id", $request->case_id)
-                    ->where('session_date',$request->session_date)
+                    ->where('session_date', $request->session_date)
                     ->orderBy('created_at', 'desc')
                     ->paginate(20);
                 return sendResponse(200, 'تم', $Sessionsdata);
@@ -108,6 +108,7 @@ class sessionApiController extends Controller
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
     }
+
     public function show(Request $request)
     {
         $rules = [
@@ -139,6 +140,7 @@ class sessionApiController extends Controller
             }
         }
     }
+
     public function edit(Request $request)
     {
         $input = $request->all();
@@ -163,6 +165,7 @@ class sessionApiController extends Controller
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
     }
+
     public function changeSessionStatus(Request $request, $id)
     {
 
@@ -185,6 +188,7 @@ class sessionApiController extends Controller
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
     }
+
     public function destroy(Request $request, $id)
     {
 
@@ -194,7 +198,7 @@ class sessionApiController extends Controller
             $permission = Permission::where('user_id', $user->id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
-                Session_Notes::where('session_Id',$id)->delete();
+                Session_Notes::where('session_Id', $id)->delete();
                 Sessions::findOrFail($id)->delete();
                 return sendResponse(200, 'تم حذف الجلسة  بنجاح', null);
 
