@@ -4,10 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Package extends Model
+class Point extends Model
 {
-
     protected $fillable = [
-        'name', 'cost', 'duration', 'description','type','renew_points'
+        'name', 'points_num', 'type', 'status'
     ];
 }

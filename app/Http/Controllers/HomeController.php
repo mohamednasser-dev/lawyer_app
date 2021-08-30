@@ -20,6 +20,15 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+        //to expired user package if its time come ....
+        $expired = User::where('expiry_package', 'n')->whereDate('expiry_date', '<', Carbon::now())->get();
+        foreach ($expired as $row) {
+            $product = User::find($row->id);
+            $product->expiry_package = 'y';
+            $product->save();
+        }
+
     }
 
     /**
@@ -61,15 +70,9 @@ class HomeController extends Controller
 
         return view('home', compact(['users', 'cases', 'mohdreen', 'session', 'mohder', 'sessionNo', 'sessions']));
     }
-    public function renew_package()
-    {
-        $data = Package::where('type', 'users')->get();
 
-        return view('userprofile.renew_user_package', compact('data'));
-    }
     public function my_package()
     {
-
         return view('userprofile.my_package');
     }
 

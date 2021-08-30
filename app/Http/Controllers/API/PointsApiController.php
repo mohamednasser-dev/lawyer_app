@@ -5,19 +5,19 @@ namespace App\Http\Controllers\API;
 use App\mohdr;
 use App\Package;
 use App\Permission;
+use App\Point;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class packagesApiController extends Controller
+class PointsApiController extends Controller
 
 {
-    public function packages(Request $request)
+    public function get_points_roles(Request $request)
     {
-        $data = Package::select('id', 'name', 'cost', 'duration', 'description', 'renew_points')->where('type', 'users')->get();
+        $data = Point::select('id', 'name', 'points_num', 'type')->where('status', 'active')->get();
         return msgdata($request, success(), 'success', $data);
-
     }
 
     public function store(Request $request, $package_id)

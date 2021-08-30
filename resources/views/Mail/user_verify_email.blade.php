@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>اعاده تعيين كلمة المرور</title>
+    <title>التحقق من البريد الإلكتروني</title>
 </head>
 <body style="background-color: #f5f5f5; margin: 0; padding: 30px 0;text-align: center">
 <table align="center" width="600" callspacing="0" cellpadding="0" style="margin-top: 0; max-width: 600px; width: 100%;border-spacing: 0;">
@@ -26,7 +26,7 @@
                     <th align="center" colspan="2" class="top-border" style="margin:0; padding:0; background-color: #00aeef; border-radius: 30px 30px 0 0; text-align: center;" valign="top">
                         <img src="{{@asset('uploads/logo_mail.jpg')}}" alt="" width="100%">
                         <h3 class="text-large" style="color: #fff; font-family: Arial; font-size: 24px; margin-bottom: 20px; margin-top: 0;">
-                            <b>اعاده تعيين كلمة المرور</b>
+                            <b>التحقق من البريد الإلكتروني</b>
                         </h3>
                     </th>
                 </tr>
@@ -35,11 +35,11 @@
                 <tbody>
                 <tr>
                     <td class="bottom-border" style="background-color: #fff;padding: 30px 30px 0;">
-                        <p>انت تستقبل هذا البريد الاليكترونى بناء على طلبك بتغيير كلمه المرور</p>
+                        <p>انت تستقبل هذا البريد الاليكترونى بناء على التحقق من البريد الإلكتروني</p>
                         <table align="center" cellpadding="0" cellspacing="0" style="border-spacing:0; height:37px; margin-bottom:30px">
                             <tbody>
                             <tr style="background-color: #f7941d;">
-                                 <td style="background-color:#f7941d; border-width:0px; padding:0"> رمز التأكيد الخاص بك هو :  {{$code}} </td>
+                                 <td style="background-color:#f7941d; border-width:0px; padding:0"> رمز التحقق الخاص بك هو :  {{$code}} </td>
                              </tr>
                             </tbody>
                         </table>

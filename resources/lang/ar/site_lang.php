@@ -7,6 +7,15 @@ return [
 
 
 
+    'point_name' => 'اسم الخاصية',
+    'point_points' => 'نقاط الخاصية',
+    'point_status' => 'حالة الخاصية',
+    'point_type' => 'نوع الخاصية',
+    'points' => 'النقاط',
+    'add_option' => 'اضافة خاصية',
+    'renew_points' => 'نقاط التجديد',
+    'months' => 'شهور',
+
     'check_pass_again' => 'كلمة المرور القديمة غير صحيحة',
     'my_package' => 'باقتي',
     'package' => 'الباقة',

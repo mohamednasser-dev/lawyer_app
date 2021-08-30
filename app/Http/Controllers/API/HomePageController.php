@@ -3,16 +3,28 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\User;
+//use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Sessions;
 use App\Cases;
 use App\mohdr;
+use App\User;
 use Validator;
 
 class HomePageController extends Controller
 {
+    public function __construct()
+    {
+        //to expired user package if its time come ....
+        $expired = User::where('expiry_package', 'n')->whereDate('expiry_date', '<', Carbon::now())->get();
+        foreach ($expired as $row) {
+            $product = User::find($row->id);
+            $product->expiry_package = 'y';
+            $product->save();
+        }
+
+    }
     public function index(Request $request)
     {
         $api_token = $request->header('api_token');

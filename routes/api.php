@@ -28,6 +28,8 @@ Route::post('password/reset', 'API\ManulPasswordController@reset');
 Route::post('reset-password', 'API\AuthController@resetPassword');
 Route::post('code-check', 'API\AuthController@codeCheck');
 Route::post('change-password', 'API\AuthController@changePassword');
+Route::post('verify_email', 'API\AuthController@verify_email');
+Route::post('renew/package', 'API\UsersController@renew_package');
 
 
 //Home Page ..
@@ -101,6 +103,9 @@ Route::post('caseClientsData', 'API\casesApiController@caseClientsData');
 Route::post('caseClients/store', 'API\casesApiController@storeCaseClient');
 Route::post('caseClients/destroy', 'API\casesApiController@destroyCaseClient');
 Route::get('caseClients/data_by_id/{id}/{type}', 'API\casesApiController@caseClientDataByID');
+
+//points roles
+Route::get('get_points_roles', 'API\PointsApiController@get_points_roles');
 
 //packages
 Route::get('packages', 'API\packagesApiController@packages');

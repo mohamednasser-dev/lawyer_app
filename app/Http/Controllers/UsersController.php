@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\category;
+use App\Package;
 use App\Permission;
 use App\User;
 use Illuminate\Http\Request;
@@ -127,5 +128,11 @@ class UsersController extends Controller
             $data->delete();
             return response(['status' => true, 'data' => $data]);
         }
+    }
+
+    public function renew_package()
+    {
+        $data = Package::where('type', 'users')->get();
+        return view('userprofile.renew_user_package', compact('data'));
     }
 }

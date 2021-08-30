@@ -176,6 +176,14 @@ class SubscribersController extends Controller
         $data['cat_id'] = $category->id;
         $data['status'] = 'Active';
         $data['type'] = 'admin';
+        $six_digit_random_number = mt_rand(1000, 9999);
+        $exists_user_code = User::where('user_code',$six_digit_random_number)->first();
+        if($exists_user_code){
+            $new_six_digit_random_number = mt_rand(1000, 9999);
+            $data['user_code'] = $new_six_digit_random_number;
+        }else{
+            $data['user_code'] = $six_digit_random_number;
+        }
         $package = Package::find($request->package_id);
 
         $mytime = Carbon::now();

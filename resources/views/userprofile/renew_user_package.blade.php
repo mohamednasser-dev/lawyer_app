@@ -12,6 +12,11 @@
 <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
+            <div class="card-title">
+                <h4>
+                    {{trans('site_lang.current_packages')}}
+                </h4>
+            </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table id="subscribers_tbl"  class="table table-bordered">
