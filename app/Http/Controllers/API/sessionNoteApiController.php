@@ -24,7 +24,7 @@ class sessionNoteApiController extends Controller
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
-                $session_Notes = Session_Notes::with('user')->select('id', 'note', 'status','parent_id')
+                $session_Notes = Session_Notes::with('user')->select('id', 'note', 'status','parent_id','updated_by')
                     ->where("session_id", $id)->paginate(20);
                 return msgdata($request, success(), 'success', $session_Notes);
             } else {
