@@ -25,6 +25,15 @@ Route::group(['middleware' => ['auth', 'Check_package']], function () {
 
 
 
+    //manager governments
+    Route::resource('governments', 'GovernmentsController');
+    Route::get('governments/destroy/{id}', 'GovernmentsController@destroy');
+
+    //manager locations
+    Route::resource('locations', 'LocationsController');
+    Route::get('locations/change_status/{id}', 'LocationsController@change_status')->name('locations.change_status');
+    Route::get('locations/destroy/{id}', 'LocationsController@destroy');
+
     //manager points
     Route::resource('points', 'PointsController');
     Route::get('points/destroy/{id}', 'PointsController@destroy');

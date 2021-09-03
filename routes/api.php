@@ -31,6 +31,9 @@ Route::post('change-password', 'API\AuthController@changePassword');
 Route::post('verify_email', 'API\AuthController@verify_email');
 Route::post('renew/package', 'API\UsersController@renew_package');
 
+// governments locations
+Route::get('get_governments', 'API\HomePageController@get_governments');
+Route::get('get_locations_by_gov_id/{id}/{type}', 'API\HomePageController@get_locations_by_gov_id');
 
 //Home Page ..
 Route::get('home_data', 'API\HomePageController@index');
