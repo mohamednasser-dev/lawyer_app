@@ -85,7 +85,6 @@ class sessionNoteApiController extends Controller
 
     public function store(Request $request)
     {
-        return $request->all();
         $input = $request->all();
         $api_token = $request->header('api_token');
         $user = User::where('api_token', $api_token)->first();

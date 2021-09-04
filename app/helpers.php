@@ -48,7 +48,6 @@ if (!function_exists('validationErrorsToString')) {
 if (!function_exists('makeValidate')) {
     function makeValidate($inputs, $rules)
     {
-
         $validator = Validator::make($inputs, $rules);
         if ($validator->fails()) {
             return validationErrorsToString($validator->messages());
