@@ -23,7 +23,7 @@ class User extends Authenticatable
         ,'status','image','them','verified'
     ];
 
- public function category(){
+    public function category(){
         return $this->hasOne('App\category','id','cat_id');
     }
     public function getDuration(){
@@ -59,7 +59,6 @@ class User extends Authenticatable
 
     public function getStatusAttribute($value)
     {
-
         if ($value == 'Demo') {
             return trans('site_lang.statusDemo');
         } else if ($value == 'Active'){
@@ -101,7 +100,7 @@ class User extends Authenticatable
     }
     public function getImageAttribute($image)
     {
-//default.png
+        //default.png
         if (!empty($image)){
             return  $image;
         }

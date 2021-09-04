@@ -7,6 +7,22 @@ return [
 
 
 
+    'addresses' => 'عناوين المحاكم واقسام الشرطة',
+    'address_name' => 'اسم العنوان',
+    'show' => 'مرئي',
+    'hidden' => 'مخفي',
+    'Court' => 'محكمة',
+    'Police_station' => 'قسم شرطة',
+    'real_estate_month' => 'شهر عقاري',
+    'name' => 'الاسم',
+    'choose_address_on_map' => 'حدد العنوان على الخريطة',
+    'status' => 'مرئي / مخفي',
+    'add_location' => 'إضافة عنوان جديد',
+    'addresses_2' => 'العناوين',
+    'gov_name' => 'اسم المحافظة',
+    'Add_new_gov' => 'اضافة محافظة جديدة',
+    'add_govern' => 'اضافة محافظة',
+    'governments' => 'المحافظات',
     'point_name' => 'اسم الخاصية',
     'point_points' => 'نقاط الخاصية',
     'point_status' => 'حالة الخاصية',

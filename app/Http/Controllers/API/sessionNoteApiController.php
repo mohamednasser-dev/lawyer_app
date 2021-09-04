@@ -24,7 +24,7 @@ class sessionNoteApiController extends Controller
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
-                $session_Notes = Session_Notes::with('user')->select('id', 'note', 'status','parent_id')
+                $session_Notes = Session_Notes::with('user')->select('id', 'note', 'status','parent_id','updated_by')
                     ->where("session_id", $id)->paginate(20);
                 return msgdata($request, success(), 'success', $session_Notes);
             } else {
@@ -85,6 +85,7 @@ class sessionNoteApiController extends Controller
 
     public function store(Request $request)
     {
+
         $input = $request->all();
         $api_token = $request->header('api_token');
         $user = User::where('api_token', $api_token)->first();
@@ -99,9 +100,13 @@ class sessionNoteApiController extends Controller
             } else {
                 $input['parent_id'] = $user->id;
             }
+
             if (!is_array($validate)) {
+                $input['updated_by'] = $user->id;
                 $session_Notes = Session_Notes::create($input);
-                $data = Session_Notes::with('user')->select('id','note','parent_id','status')->whereId($session_Notes->id)->first()->makeHidden('parent_id');
+
+                $data = Session_Notes::where('id',$session_Notes->id)->select('id','note','parent_id','status','updated_by')->with('user')->first();
+
                 return msgdata($request, success(), 'success', $data);
             } else {
                 return sendResponse(401, $validate[0], null);

@@ -114,6 +114,9 @@
                             <li class="nav-item">
                                 <a href="{{url('/points')}}" class="nav-link">{{trans('site_lang.points')}}</a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{url('/governments')}}" class="nav-link">{{trans('site_lang.governments')}}</a>
+                            </li>
                         </ul>
                     </div>
                 </li>

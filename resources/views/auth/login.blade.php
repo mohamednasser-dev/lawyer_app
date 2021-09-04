@@ -15,11 +15,11 @@
 	<link rel="stylesheet" href="{{url('/assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
 	<!-- endinject -->
   <!-- Layout styles -->
-    @if(session('theme')=='light')
+{{--    @if(session('theme')=='light')--}}
         <link rel="stylesheet" href="{{url('/assets/css/demo_1/style.css')}}">
-    @else
-        <link rel="stylesheet" href="{{url('/assets/css/demo_2/style.css')}}">
-    @endif
+{{--    @else--}}
+{{--        <link rel="stylesheet" href="{{url('/assets/css/demo_2/style.css')}}">--}}
+{{--    @endif--}}
   <!-- End layout styles -->
   <link rel="shortcut icon" href="{{url('/assets/images/favicon.png')}}" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -58,7 +58,7 @@
 
                                             <div class="form-group">
                                                 <!-- <label for="exampleInputEmail1">Email address</label> -->
-                                                <input style="color: white;" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" name="email" placeholder="{{trans('site_lang.users_email')}}">
+                                                <input  type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" name="email" placeholder="{{trans('site_lang.users_email')}}">
                                                 <i class="fa fa-envelope"></i>
 {{--                                                </span>--}}
 {{--                                                @if ($errors->has('email'))--}}

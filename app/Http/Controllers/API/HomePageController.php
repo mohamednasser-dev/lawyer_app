@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Government;
 use App\Http\Controllers\Controller;
 //use Illuminate\Foundation\Auth\User;
+use App\Location;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Sessions;
@@ -154,6 +156,31 @@ class HomePageController extends Controller
                     ->whereBetween('session_date', array($today, $datee))->where('parent_id', $user->id)->paginate(20);
             }
             return msgdata($request, success(), 'success', $mohder);
+        } else {
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
+        }
+    }
+    //governments locations ...
+    public function get_governments(Request $request)
+    {
+        $api_token = $request->header('api_token');
+        $lang = $request->header('lang');
+        $user = check_api_token($api_token);
+        if ($user != null) {
+                $data['governments'] = Government::select('id','name')->paginate(20);
+                $data['gov_locations'] = Location::where('government_id',1)->where('status','show')->select('id','name','address','type','lat','long')->paginate(20);
+            return msgdata($request, success(), 'success', $data);
+        } else {
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
+        }
+    }
+    public function get_locations_by_gov_id(Request $request,$id,$type)
+    {
+        $api_token = $request->header('api_token');
+        $user = check_api_token($api_token);
+        if ($user != null) {
+                $data = Location::where('government_id',$id)->where('status','show')->where('type',$type)->select('id','name','address','type','lat','long')->paginate(20);
+            return msgdata($request, success(), 'success', $data);
         } else {
             return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
