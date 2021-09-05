@@ -168,7 +168,7 @@ class HomePageController extends Controller
         $user = check_api_token($api_token);
         if ($user != null) {
                 $data['governments'] = Government::select('id','name')->get();
-                $data['gov_locations'] = Location::where('government_id',1)->where('status','show')->select('id','name','address','type','lat','long')->paginate(20);
+                $data['gov_locations'] = Location::where('government_id',1)->where('type','Court')->where('status','show')->select('id','name','address','type','lat','long')->paginate(20);
             return msgdata($request, success(), 'success', $data);
         } else {
             return response()->json(msg($request, not_authoize(), 'not_authoize'));
