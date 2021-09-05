@@ -158,6 +158,11 @@ return
                 'ar' => 'الحصه غير موجوده ',
                 'en' => 'Session  not found',
             ],
+        'service_not_found' =>
+            [
+                'ar' => 'الخدمة غير موجوده ',
+                'en' => 'Service  not found',
+            ],
         'success' =>
             [
                 'ar' => '  تمت العملية بنجاح',

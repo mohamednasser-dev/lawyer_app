@@ -31,6 +31,7 @@ class AuthController extends Controller
         $rules = [
             'email' => 'required|email',
             'password' => 'required',
+            'device_token' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -47,6 +48,7 @@ class AuthController extends Controller
                 if (Auth::user()->parent_id == null) {
                     $user = Auth::user();
                     $user->api_token = str_random(60);
+                    $user->device_token = $request->device_token;
                     $user->save();
                     $permission = Permission::where('user_id', $user->id)->first();
                     if (Auth::user()->expiry_package == 'n') {
@@ -58,6 +60,7 @@ class AuthController extends Controller
                     $parent_user = User::where('id', Auth::user()->parent_id)->first();
                     $user = Auth::user();
                     $user->api_token = str_random(60);
+                    $user->device_token = $request->device_token;
                     $user->save();
                     $permission = Permission::where('user_id', $user->id)->first();
                     if ($parent_user->expiry_package == 'n') {
@@ -200,6 +203,7 @@ class AuthController extends Controller
         $rules = [
             'code' => 'required|exists:users',
             'email' => 'required|exists:users',
+            'device_token' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -209,6 +213,7 @@ class AuthController extends Controller
         $user = User::where('code', $request->code)->where('email', $request->email)->first();
         if ($user->api_token == null) {
             $user->api_token = str_random(60);
+            $user->device_token = $request->device_token;
             $user->save();
         }
         $permission = Permission::where('user_id', $user->id)->first();

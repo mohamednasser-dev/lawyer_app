@@ -140,6 +140,7 @@ class RegisterationController extends Controller
                 'password' => 'required',
                 'phone' => 'required|unique:users,phone',
                 'address' => 'required',
+                'device_token' => 'required',
                 'invite_code' => '',
                 'cat_name' => 'required'
             ];
@@ -165,6 +166,7 @@ class RegisterationController extends Controller
         $data['phone'] = $request->phone;
         $data['address'] = $request->address;
         $data['cat_name'] = $request->cat_name;
+        $data['device_token'] = $request->device_token;
 
         $data['password'] = bcrypt(request('password'));
         $data['cat_id'] = $category->id;

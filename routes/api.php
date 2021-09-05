@@ -161,3 +161,10 @@ Route::post('contact-us', 'Landing\RegisterationController@Contact');
 //Reports
 Route::post('report_monthly', 'API\ReportsApiController@searchMonthly');
 Route::post('report_daily', 'API\ReportsApiController@searchDaily');
+
+//services
+Route::get('services', 'API\ServicesController@index');
+Route::get('my-services', 'API\ServicesController@myServices');
+Route::post('add-service', 'API\ServicesController@store');
+Route::post('edit-service/{id}', 'API\ServicesController@update');
+Route::get('delete-service/{id}', 'API\ServicesController@delete');
