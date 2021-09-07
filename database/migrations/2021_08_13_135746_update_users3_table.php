@@ -15,7 +15,7 @@ class UpdateUsers3Table extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->bigInteger('my_points')->default('0');
-            $table->string('user_code');
+            $table->string('user_code')->nullable();
         });
     }
 
