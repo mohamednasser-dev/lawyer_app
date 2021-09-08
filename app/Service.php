@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
@@ -10,14 +11,12 @@ class Service extends Model
 
 
     protected $with = ['user'];
-    protected $casts = [
-//       'time' => 'date_format:Y-m-d H:i',
-    ];
+
 
     public function getTimeAttribute($time)
     {
 
-        return  date("Y-m-d H:i" ,$time);
+        return  DateTime::createFromFormat('d-m-y H:i', $time);
     }
 
     protected $dispatchesEvents = [
