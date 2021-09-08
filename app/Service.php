@@ -16,7 +16,7 @@ class Service extends Model
     public function getTimeAttribute($time)
     {
 
-        return  date('d-m-Y H:i' , strtotime($time));
+        return  date('Y-m-d H:i' , strtotime($time));
     }
 
     protected $dispatchesEvents = [
