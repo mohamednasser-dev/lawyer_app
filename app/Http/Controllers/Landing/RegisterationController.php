@@ -147,7 +147,7 @@ class RegisterationController extends Controller
 
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json(['status' => 401, 'msg' => $validator->messages()->all()]);
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         }
 
         if($request->invite_code){
