@@ -10,6 +10,13 @@ class Service extends Model
 
 
     protected $with = ['user'];
+    protected $casts = [
+
+
+        'time' => 'datetime:Y-m-d h:i',
+
+    ];
+
     protected $dispatchesEvents = [
         'created' => 'App\Events\ServiceCreated'
     ];

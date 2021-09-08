@@ -20,8 +20,6 @@ class ServicesController extends Controller
         }
 
         $service = Service::orderBy('time', 'desc')->whereDate('time',' >= ', Carbon::now())->paginate(10);
-
-
         return msgdata($request, success(), 'success', $service);
 
     }
