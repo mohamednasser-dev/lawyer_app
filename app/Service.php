@@ -11,10 +11,7 @@ class Service extends Model
 
     protected $with = ['user'];
     protected $casts = [
-
-
-       'time' => 'datetime:Y-m-d h:i',
-
+       'time' => 'date_format:Y-m-d H:i',
     ];
 
     protected $dispatchesEvents = [

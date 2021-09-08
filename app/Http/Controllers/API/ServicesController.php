@@ -19,7 +19,7 @@ class ServicesController extends Controller
             return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
 
-        $service = Service::orderBy('time', 'desc')->paginate(10);
+        $service = Service::orderBy('time', 'desc')->whereDate('time',' >= ', Carbon::now())->paginate(10);
         return msgdata($request, success(), 'success', $service);
 
     }
