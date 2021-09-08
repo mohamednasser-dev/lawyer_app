@@ -16,7 +16,7 @@ class Service extends Model
     public function getTimeAttribute($time)
     {
 
-        return  DateTime::createFromFormat('d-m-y H:i', $time);
+        return  date('d-m-y H:i' , strtotime($time));
     }
 
     protected $dispatchesEvents = [
