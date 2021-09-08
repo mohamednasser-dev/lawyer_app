@@ -14,7 +14,7 @@ class Service extends Model
 //       'time' => 'date_format:Y-m-d H:i',
     ];
 
-    protected $dateFormat = 'Y-m-d H:i';
+
 
 
 
