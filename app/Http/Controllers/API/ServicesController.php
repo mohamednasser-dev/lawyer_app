@@ -19,7 +19,7 @@ class ServicesController extends Controller
             return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
 
-        $service = Service::orderBy('time', 'desc')->whereDate('time',' >= ', Carbon::now())->paginate(10);
+        $service = Service::orderBy('time', 'desc')->paginate(10);
         return msgdata($request, success(), 'success', $service);
 
     }
@@ -38,7 +38,7 @@ class ServicesController extends Controller
                 'whatsapp' => 'required',
                 'desc' => 'nullable',
                 'image' => 'nullable',
-                'time' => 'required',
+                'time' => 'required|date_format:Y-m-d H:i',
 
             ];
 
