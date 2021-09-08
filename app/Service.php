@@ -13,7 +13,7 @@ class Service extends Model
     protected $casts = [
 
 
-        'time' => 'datetime:Y-m-d h:i',
+//        'time' => 'datetime:Y-m-d h:i',
 
     ];
 
