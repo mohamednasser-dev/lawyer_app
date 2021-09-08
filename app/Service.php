@@ -14,6 +14,12 @@ class Service extends Model
        'time' => 'date_format:Y-m-d H:i',
     ];
 
+    public function getTimeAttribute($time)
+    {
+        $desiredFormat = "Y-M-d H:i";
+        return  $time->format($desiredFormat);
+    }
+
     protected $dispatchesEvents = [
         'created' => 'App\Events\ServiceCreated'
     ];
