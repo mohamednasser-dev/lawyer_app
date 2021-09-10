@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Cases;
 use App\Http\Controllers\Controller;
 use App\Notifications\UserResetPasswordNotification;
+use App\Point;
 use App\Sessions;
+use App\Verification;
 use Illuminate\Http\Request;
 use App\Permission;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +31,7 @@ class AuthController extends Controller
         $rules = [
             'email' => 'required|email',
             'password' => 'required',
+            'device_token' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -38,9 +41,14 @@ class AuthController extends Controller
                 'email' => $request->input('email'),
                 'password' => $request->input('password')
             ])) {
+                if(Auth::user()->verified == '0'){
+                    Auth::logout();
+                    return msgdata($request, not_active(), 'verify_email_first', null);
+                }
                 if (Auth::user()->parent_id == null) {
                     $user = Auth::user();
                     $user->api_token = str_random(60);
+                    $user->device_token = $request->device_token;
                     $user->save();
                     $permission = Permission::where('user_id', $user->id)->first();
                     if (Auth::user()->expiry_package == 'n') {
@@ -52,6 +60,7 @@ class AuthController extends Controller
                     $parent_user = User::where('id', Auth::user()->parent_id)->first();
                     $user = Auth::user();
                     $user->api_token = str_random(60);
+                    $user->device_token = $request->device_token;
                     $user->save();
                     $permission = Permission::where('user_id', $user->id)->first();
                     if ($parent_user->expiry_package == 'n') {
@@ -65,6 +74,42 @@ class AuthController extends Controller
             }
         }
     }
+
+    public function verify_email(Request $request)
+    {
+        $rules = [
+            'email' => 'required|email',
+            'code' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+        } else {
+            $exists_email = Verification::where('email',$request->email)->where('code',$request->code)->first();
+            if($exists_email){
+
+                $user_data['api_token'] = str_random(60);
+                $user_data['verified'] = '1' ;
+
+                User::where('email',$exists_email->email)->update($user_data);
+
+                if($exists_email->invite_code){
+                    $winner_user = User::where('user_code',$exists_email->invite_code)->first();
+                    $point = Point::where('type','friend')->first();
+                    $winner_user->my_points = $winner_user->my_points + $point->points_num ;
+                    $winner_user->save();
+                }
+                $exists_email->delete();
+                $user = User::where('email',$exists_email->email)->first();
+                $permission = Permission::where('user_id', $user->id)->first();
+                return msgdata($request, success(), 'verify_email', array('user' => $user, 'permission' => $permission));
+            }else{
+                return response()->json(msg($request, failed(), 'verify_warrning'));
+            }
+        }
+    }
+
+
 
     public function logout(Request $request)
     {
@@ -158,6 +203,7 @@ class AuthController extends Controller
         $rules = [
             'code' => 'required|exists:users',
             'email' => 'required|exists:users',
+            'device_token' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -167,6 +213,7 @@ class AuthController extends Controller
         $user = User::where('code', $request->code)->where('email', $request->email)->first();
         if ($user->api_token == null) {
             $user->api_token = str_random(60);
+            $user->device_token = $request->device_token;
             $user->save();
         }
         $permission = Permission::where('user_id', $user->id)->first();

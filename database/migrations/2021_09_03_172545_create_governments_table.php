@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateUsers3Table extends Migration
+class CreateGovernmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class UpdateUsers3Table extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->bigInteger('my_points')->default('0');
-            $table->string('user_code')->nullable();
+        Schema::create('governments', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -26,6 +28,6 @@ class UpdateUsers3Table extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('governments');
     }
 }

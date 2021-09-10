@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Role;
 
 class Session_Notes extends Model
 {
@@ -26,10 +27,10 @@ class Session_Notes extends Model
         }
     }
 
-    public function  user(){
 
-        return $this->hasOne('App\User','id','parent_id')->select('id','name');
-
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
 }

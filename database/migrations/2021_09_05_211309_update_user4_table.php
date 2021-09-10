@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateUsers3Table extends Migration
+class UpdateUser4Table extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class UpdateUsers3Table extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->bigInteger('my_points')->default('0');
-            $table->string('user_code')->nullable();
+            $table->string('device_token')->nullable();
         });
     }
 

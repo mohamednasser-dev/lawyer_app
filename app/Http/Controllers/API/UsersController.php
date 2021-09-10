@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Package;
+use App\Point;
+use App\Verification;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -24,6 +28,7 @@ class UsersController extends Controller
             $enabled = $permission->users;
             if ($enabled == 'yes') {
                 $users = null;
+
                 if ($user->parent_id != null) {
                     $users = User::select('id', 'phone', 'address', 'name', 'email', 'type', 'parent_id', 'cat_id')
                         ->where('parent_id', $user->parent_id)->where('id', '!=', $user_id)->with('category')->paginate(10);
@@ -42,6 +47,63 @@ class UsersController extends Controller
         }
     }
 
+    public function renew_package(Request $request)
+    {
+        $api_token = $request->header('api_token');
+        $auth_user = check_api_token($api_token);
+
+        if (empty($auth_user)) {
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
+        }
+        $rules = [
+            'package_id' => 'required|exists:packages,id',
+            'type' => 'required|in:1,0',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+        } else {
+            if ($request->type == 1) {
+                // Begain points renew package  ...
+
+                $package = Package::where('id', $request->package_id)->first();
+
+                if ($package->renew_points <= $auth_user->my_points) {
+                    $mytime = Carbon::now();
+                    $today = Carbon::parse($mytime->toDateTimeString())->format('Y-m-d H:i');
+                    $final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
+                    $warning_final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
+
+                    //to generate expiry date ...
+                    $expire_date = $final_today->addMonths($package->duration);
+                    $renew_data['expiry_date'] = $expire_date;
+                    $renew_data['expiry_package'] = 'n';
+                    $renew_data['my_points'] = $auth_user->my_points - $package->renew_points;
+
+                    //for generate warning date ...
+                    $for_warning_date = $warning_final_today->addMonths($package->duration);
+                    $warning_date = $for_warning_date->subDays(10);
+                    $renew_data['warning_date'] = $warning_date;
+
+                    User::where('id', $auth_user->id)->update($renew_data);
+
+                    $user = User::where('id', $auth_user->id)->first();
+                    $permission = Permission::where('user_id', $auth_user->id)->first();
+                    return msgdata($request, success(), 'package_renewed_s', array('user' => $user, 'permission' => $permission));
+
+                } else {
+                    return response()->json(msg($request, failed(), 'not_have_points'));
+                }
+                // End points renew package  ...
+            } elseif ($request->type == 0) {
+                // Begain credit method ...
+
+                // End credit method  ...
+            }
+
+        }
+    }
+
     public function search(Request $request)
     {
         $input = $request->all();
@@ -57,7 +119,7 @@ class UsersController extends Controller
 
         $api_token = $request->header('api_token');
         $user = check_api_token($api_token);
-        if ($user && $api_token !=null) {
+        if ($user && $api_token != null) {
             $user_id = $user->id;
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->users;
@@ -67,14 +129,14 @@ class UsersController extends Controller
                     $users = User::select('id', 'phone', 'address', 'name', 'email', 'type', 'parent_id', 'cat_id')
                         ->where('parent_id', $user->parent_id)
                         ->where('id', '!=', $user_id)
-                        ->where('name','like','%'.$request->name .'%')
+                        ->where('name', 'like', '%' . $request->name . '%')
                         ->with('category')
                         ->paginate(10);
                 } else {
                     $users = User::select('id', 'phone', 'address', 'name', 'email', 'type', 'parent_id', 'cat_id')
                         ->where('parent_id', $user_id)
                         ->where('id', '!=', $user_id)
-                        ->where('name','like','%'.$request->name .'%')
+                        ->where('name', 'like', '%' . $request->name . '%')
                         ->with('category')
                         ->paginate(10);
                 }
@@ -281,11 +343,13 @@ class UsersController extends Controller
 
         }
     }
-    public function update_profile(Request $request){
+
+    public function update_profile(Request $request)
+    {
         $input = $request->all();
         $api_token = $request->header('api_token');
         $auth_user = check_api_token($api_token);
-        $id = $auth_user->id ;
+        $id = $auth_user->id;
         $rules =
             [
                 'name' => 'required',
@@ -302,9 +366,9 @@ class UsersController extends Controller
             if (empty($auth_user)) {
                 return response()->json(msg($request, not_authoize(), 'not_authoize'));
             }
-            if($request->password != null){
+            if ($request->password != null) {
                 $input['password'] = bcrypt(request('password'));
-            }else{
+            } else {
                 unset($input['password']);
             }
             if ($request['image'] != null) {
@@ -319,9 +383,9 @@ class UsersController extends Controller
                 $input['image'] = $fileNewName;
             }
             User::find(intval($id))->update($input);
-            $user = User::where('id',$id)->with('category')->first();
+            $user = User::where('id', $id)->with('category')->first();
             $permission = Permission::where('user_id', $user->id)->first();
-            return msgdata($request, success(), 'success',  array('user' => $user, 'permission' => $permission));
+            return msgdata($request, success(), 'success', array('user' => $user, 'permission' => $permission));
         }
     }
 

@@ -26,7 +26,12 @@ Route::post('password/reset', 'API\ManulPasswordController@reset');
 Route::post('reset-password', 'API\AuthController@resetPassword');
 Route::post('code-check', 'API\AuthController@codeCheck');
 Route::post('change-password', 'API\AuthController@changePassword');
+Route::post('verify_email', 'API\AuthController@verify_email');
+Route::post('renew/package', 'API\UsersController@renew_package');
 
+// governments locations
+Route::get('get_governments', 'API\HomePageController@get_governments');
+Route::get('get_locations_by_gov_id/{id}/{type}', 'API\HomePageController@get_locations_by_gov_id');
 
 //Home Page ..
 Route::get('home_data', 'API\HomePageController@index');
@@ -100,6 +105,9 @@ Route::post('caseClients/store', 'API\casesApiController@storeCaseClient');
 Route::post('caseClients/destroy', 'API\casesApiController@destroyCaseClient');
 Route::get('caseClients/data_by_id/{id}/{type}', 'API\casesApiController@caseClientDataByID');
 
+//points roles
+Route::get('get_points_roles', 'API\PointsApiController@get_points_roles');
+
 //packages
 Route::get('packages', 'API\packagesApiController@packages');
 Route::get('packages/subscripe/{package_id}', 'API\packagesApiController@store');
@@ -151,3 +159,10 @@ Route::post('contact-us', 'Landing\RegisterationController@Contact');
 //Reports
 Route::post('report_monthly', 'API\ReportsApiController@searchMonthly');
 Route::post('report_daily', 'API\ReportsApiController@searchDaily');
+
+//services
+Route::get('services', 'API\ServicesController@index');
+Route::get('my-services', 'API\ServicesController@myServices');
+Route::post('add-service', 'API\ServicesController@store');
+Route::post('edit-service/{id}', 'API\ServicesController@update');
+Route::get('delete-service/{id}', 'API\ServicesController@delete');

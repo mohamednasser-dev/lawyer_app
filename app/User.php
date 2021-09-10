@@ -15,13 +15,15 @@ class User extends Authenticatable
      *
      * @var array
      */
+
+    protected $appends = ['package_name'];
     protected $fillable = [
         'name', 'type', 'password','email','cat_id','parent_id','phone','address','package_id','expiry_date',
         'warning_date','expiry_package','user_code','my_points'
-        ,'status','image','them'
+        ,'status','image','them','verified'
     ];
 
- public function category(){
+    public function category(){
         return $this->hasOne('App\category','id','cat_id');
     }
     public function getDuration(){
@@ -57,7 +59,6 @@ class User extends Authenticatable
 
     public function getStatusAttribute($value)
     {
-
         if ($value == 'Demo') {
             return trans('site_lang.statusDemo');
         } else if ($value == 'Active'){
@@ -88,9 +89,18 @@ class User extends Authenticatable
             return $warning_date;
         }
     }
+    public function getPackageNameAttribute()
+    {
+        if($this->package_id != null){
+            $package =  Package::find($this->package_id);
+            return $package->name;
+        }else{
+            return null;
+        }
+    }
     public function getImageAttribute($image)
     {
-//default.png
+        //default.png
         if (!empty($image)){
             return  $image;
         }

@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Landing;
 
 use App\category;
 use App\Notifications\ContactUsNotification;
-use App\Notifications\UserResetPasswordNotification;
+use App\Notifications\UserVerifyEmailNotification;
 use App\Package;
 use App\Permission;
 use App\User;
+use App\Verification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -81,7 +82,7 @@ class RegisterationController extends Controller
         $six_digit_random_number = mt_rand(1000, 9999);
         $exists_user_code = User::where('user_code',$six_digit_random_number)->first();
         if($exists_user_code){
-            $new_six_digit_random_number = mt_rand(1000, 9999);
+            $new_six_digit_random_number = mt_rand(100000, 999999);
             $data['user_code'] = $new_six_digit_random_number;
         }else{
             $data['user_code'] = $six_digit_random_number;
@@ -139,12 +140,21 @@ class RegisterationController extends Controller
                 'password' => 'required',
                 'phone' => 'required|unique:users,phone',
                 'address' => 'required',
+                'device_token' => 'required',
+                'invite_code' => '',
                 'cat_name' => 'required'
             ];
 
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json(['status' => 401, 'msg' => $validator->messages()->all()]);
+            return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
+        }
+
+        if($request->invite_code){
+            $user_parent_code =  User::where('user_code',$request->invite_code)->first();
+            if($user_parent_code == null){
+                return msg($request, failed(), 'invite_code_didt_exist');
+            }
         }
 
 
@@ -156,6 +166,7 @@ class RegisterationController extends Controller
         $data['phone'] = $request->phone;
         $data['address'] = $request->address;
         $data['cat_name'] = $request->cat_name;
+        $data['device_token'] = $request->device_token;
 
         $data['password'] = bcrypt(request('password'));
         $data['cat_id'] = $category->id;
@@ -171,10 +182,10 @@ class RegisterationController extends Controller
 //
 //            $data['package_id'] = $package->id;
 //        }
-        $six_digit_random_number = mt_rand(1000, 9999);
+        $six_digit_random_number = mt_rand(100000, 999999);
         $exists_user_code = User::where('user_code',$six_digit_random_number)->first();
         if($exists_user_code){
-            $new_six_digit_random_number = mt_rand(1000, 9999);
+            $new_six_digit_random_number = mt_rand(100000, 999999);
             $data['user_code'] = $new_six_digit_random_number;
         }else{
             $data['user_code'] = $six_digit_random_number;
@@ -195,7 +206,25 @@ class RegisterationController extends Controller
         $warning_date = $for_warning_date->subDays(10);
         $data['warning_date'] = $warning_date;
         $data['package_id'] = 5;
+        $data['verified'] = '0';
+
         $user_result = User::create($data);
+        if($user_result){
+            $exists_email = Verification::where('email',$request->email)->first();
+            if($exists_email){
+                $new_code  = mt_rand(1000, 9999);
+                Verification::where('email',$request->email)->update(['code'=>$new_code]);
+                $user_result->notify(new UserVerifyEmailNotification($new_code));
+            }else{
+                $code = mt_rand(1000, 9999);
+                $verify_Data['email'] = $request->email ;
+                $verify_Data['code'] = $code;
+                $verify_Data['invite_code'] = $request->invite_code ;
+                Verification::create($verify_Data);
+
+                $user_result->notify(new UserVerifyEmailNotification($code));
+            }
+        }
 
         $category->parent_id = $user_result->id;
         $category->update();
