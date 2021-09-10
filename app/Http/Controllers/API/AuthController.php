@@ -28,11 +28,10 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        return $request;
         $rules = [
             'email' => 'required|email',
             'password' => 'required',
-            'device_token' => 'required',
+//            'device_token' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
