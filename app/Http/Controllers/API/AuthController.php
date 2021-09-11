@@ -31,7 +31,7 @@ class AuthController extends Controller
         $rules = [
             'email' => 'required|email',
             'password' => 'required',
-            'device_token' => 'required',
+//            'device_token' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -41,7 +41,7 @@ class AuthController extends Controller
                 'email' => $request->input('email'),
                 'password' => $request->input('password')
             ])) {
-                if(Auth::user()->verified == '0'){
+                if (Auth::user()->verified == '0') {
                     Auth::logout();
                     return msgdata($request, not_active(), 'verify_email_first', null);
                 }
@@ -85,31 +85,29 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         } else {
-            $exists_email = Verification::where('email',$request->email)->where('code',$request->code)->first();
-            if($exists_email){
+            $exists_email = Verification::where('email', $request->email)->where('code', $request->code)->first();
+            if ($exists_email) {
 
                 $user_data['api_token'] = str_random(60);
-                $user_data['verified'] = '1' ;
+                $user_data['verified'] = '1';
 
-                User::where('email',$exists_email->email)->update($user_data);
+                User::where('email', $exists_email->email)->update($user_data);
 
-                if($exists_email->invite_code){
-                    $winner_user = User::where('user_code',$exists_email->invite_code)->first();
-                    $point = Point::where('type','friend')->first();
-                    $winner_user->my_points = $winner_user->my_points + $point->points_num ;
+                if ($exists_email->invite_code) {
+                    $winner_user = User::where('user_code', $exists_email->invite_code)->first();
+                    $point = Point::where('type', 'friend')->first();
+                    $winner_user->my_points = $winner_user->my_points + $point->points_num;
                     $winner_user->save();
                 }
                 $exists_email->delete();
-                $user = User::where('email',$exists_email->email)->first();
+                $user = User::where('email', $exists_email->email)->first();
                 $permission = Permission::where('user_id', $user->id)->first();
                 return msgdata($request, success(), 'verify_email', array('user' => $user, 'permission' => $permission));
-            }else{
+            } else {
                 return response()->json(msg($request, failed(), 'verify_warrning'));
             }
         }
     }
-
-
 
     public function logout(Request $request)
     {
