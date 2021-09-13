@@ -251,4 +251,7 @@ return [
     'phone' => 'رقم الهاتف',
     'address' => 'العنوان',
     'selectType' => 'اختر النوع',
+    'edit_client' => 'تعديل البيانات',
+    'EXPIRE_DATE' => 'تاريخ الانتهاء',
+
 ];

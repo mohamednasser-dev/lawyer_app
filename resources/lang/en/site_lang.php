@@ -214,4 +214,6 @@ return [
     'phone' => 'Phone',
     'address' => 'Address',
     'selectType' => 'Choose type',
+    'edit_client' => 'edit client',
+    'EXPIRE_DATE' => 'EXPIRE DATE',
 ];

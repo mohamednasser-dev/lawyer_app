@@ -50,8 +50,9 @@
                                 <th class="center">{{trans('site_lang.subPackage')}}</th>
                                 <th class="center">{{trans('site_lang.subEmail')}}</th>
                                 <th class="center">{{trans('site_lang.subPhone')}}</th>
-                                <th class="center">{{trans('site_lang.clients_client_address')}}</th>
+
                                 <th class="center">{{trans('site_lang.subStatus')}}</th>
+                                <th class="center">{{trans('site_lang.expire_date')}}</th>
                                 <th class="center">{{trans('site_lang.chooses')}}</th>
                             </tr>
                         </thead>
@@ -63,7 +64,7 @@
                                 <td> @if($row->package_id != null){{$row->Package->name}} @endif</td>
                                 <td>{{$row->email}}</td>
                                 <td>{{$row->phone}}</td>
-                                <td>{{$row->address}}</td>
+
                                 <td>
                                     @if ($row->status == trans('site_lang.statusDeactive'))
                                         <a class="btn btn-sm" data-user-id="{{$row->id}}" id="change-user-status" href="{{route('subscribers.updateStatus',['type'=>'active','id'=>$row->id])}}">
@@ -76,9 +77,15 @@
                                             <span class="btn btn-success text-bold">{{$row->status}}</span></a>
                                     @endif
                                 </td>
+                                <td>{{$row->expiry_date}}</td>
                                 <td>
                                     <button data-client-id="{{$row->id}}" id="editClient" class="btn btn-xs btn-outline-success" >
                                         <i class="fa fa-edits"></i>&nbsp;&nbsp; {{trans('site_lang.edit_package')}}</button>
+                                    &nbsp;&nbsp;
+                                    &nbsp;&nbsp;
+                                    <button data-client-id="{{$row->id}}" id="editClientData" class="btn btn-xs btn-outline-primary" >
+                                        <i class="fa fa-edits"></i>&nbsp;&nbsp; {{trans('site_lang.edit_client')}}</button>
+                                    &nbsp;&nbsp;
                                     &nbsp;&nbsp;
                                     <button data-client-id="{{$row->id}}" id="deleteClient"  class="btn btn-xs btn-outline-danger">
                                         <i class="fa fa-times fa fa-white"></i>&nbsp;&nbsp; {{trans('site_lang.public_delete_text')}} </button>
@@ -181,6 +188,78 @@
     <!-- /.modal-dialog -->
 </div>
 
+
+<div id="edits_subscriber_model" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal_title"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{--                id="subscribers"--}}
+                <form method="post" action="{{route('subscribers.edit')}}">
+                    <input type="hidden" id="token" name="_token" value="{{csrf_token()}}">
+                    <input type="hidden" name="id" id="id">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('name')?' has-error':''}}">
+                                <input type="text" name="name" class="form-control" id="edit_name" required placeholder="{{trans('site_lang.users_username')}}">
+                                <span class="text-danger" id="name_error"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('email')?' has-error':''}}">
+                                <input name="email" id="edit_email" placeholder="{{trans('site_lang.users_email')}}" required class="form-control" />
+                                <span class="text-danger" id="email_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('password')?' has-error':''}}">
+                                <input type="password" name="password" id="edit_password" class="form-control"  placeholder="{{trans('site_lang.auth_password')}}">
+                                <span class="text-danger" id="password_error"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('phone')?' has-error':''}}">
+
+                                <input type="number" name="phone" id="edit_phone" class="form-control" placeholder="{{trans('site_lang.subPhone')}}">
+                                <span class="text-danger" id="phone_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('address')?' has-error':''}}">
+                                <input type="text" name="address" id="edit_address" class="form-control" placeholder="{{trans('site_lang.client_Address')}}" rows="10">
+                                <input type="hidden" name="id" id="edit_id" >
+                                <span class="text-danger" id="address_error"></span>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="form-group right">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">
+                            {{trans('site_lang.public_close_btn_text')}}
+                        </button>
+
+                        <input type="submit" class="btn btn-primary" id="add_client" name="add_client" value="{{trans('site_lang.public_edit_btn_text')}}" />
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+
+
+    <!-- /.modal-dialog -->
+</div>
+
 <div id="edit_subscriber_modal" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -258,115 +337,6 @@
         }
     });
     $(document).ready(function() {
-        {{--var pack_id;--}}
-        {{--$('#subscribers_tbl').DataTable({--}}
-        {{--    processing: true,--}}
-        {{--    serverSide: true,--}}
-        {{--    ajax: {--}}
-        {{--        url: "{{ url('subscribers') }}",--}}
-        {{--    },--}}
-        {{--    columns: [{--}}
-        {{--            data: 'id',--}}
-        {{--            name: 'id',--}}
-        {{--            className: 'center'--}}
-        {{--        }, {--}}
-        {{--            data: 'name',--}}
-        {{--            name: 'name',--}}
-        {{--            className: 'center'--}}
-
-        {{--        }, {--}}
-        {{--            data: 'package_id.name',--}}
-        {{--            name: 'package_id.name',--}}
-        {{--            className: 'center'--}}
-
-        {{--        }, {--}}
-        {{--            data: 'email',--}}
-        {{--            name: 'email',--}}
-        {{--            className: 'center'--}}
-
-        {{--        }, {--}}
-        {{--            data: 'phone',--}}
-        {{--            name: 'phone',--}}
-        {{--            className: 'center'--}}
-
-        {{--        }, {--}}
-        {{--            data: 'address',--}}
-        {{--            name: 'address',--}}
-        {{--            className: 'center'--}}
-
-        {{--        }, {--}}
-        {{--            data: 'status',--}}
-        {{--            name: 'status',--}}
-        {{--            className: 'center'--}}
-
-        {{--        },--}}
-
-        {{--        {--}}
-        {{--            data: 'action',--}}
-        {{--            name: 'action',--}}
-        {{--            orderable: false,--}}
-        {{--            className: 'center'--}}
-        {{--        }--}}
-        {{--    ]--}}
-        {{--});--}}
-
-        {{--$("#cmb_package_id").change(function() {--}}
-        {{--    pack_id = $('#cmb_package_id').val();--}}
-        {{--    console.log('this is =' + pack_id);--}}
-
-        {{--    $('#subscribers_tbl').DataTable({--}}
-
-        {{--                processing: true,--}}
-        {{--                serverSide: true,--}}
-        {{--                ajax: {--}}
-        {{--                url: "{{ url('subSearch') }}",--}}
-        {{--            },--}}
-        {{--            columns: [{--}}
-        {{--                data: 'id',--}}
-        {{--                name: 'id',--}}
-        {{--                className: 'center'--}}
-        {{--            }, {--}}
-        {{--                data: 'name',--}}
-        {{--                name: 'name',--}}
-        {{--                className: 'center'--}}
-
-        {{--            }, {--}}
-        {{--                data: 'package_id.name',--}}
-        {{--                name: 'package_id.name',--}}
-        {{--                className: 'center'--}}
-
-        {{--            }, {--}}
-        {{--                data: 'email',--}}
-        {{--                name: 'email',--}}
-        {{--                className: 'center'--}}
-
-        {{--            }, {--}}
-        {{--                data: 'phone',--}}
-        {{--                name: 'phone',--}}
-        {{--                className: 'center'--}}
-
-        {{--            }, {--}}
-        {{--                data: 'address',--}}
-        {{--                name: 'address',--}}
-        {{--                className: 'center'--}}
-
-        {{--            }, {--}}
-        {{--                data: 'status',--}}
-        {{--                name: 'status',--}}
-        {{--                className: 'center'--}}
-
-        {{--            },--}}
-
-        {{--                {--}}
-        {{--                    data: 'action',--}}
-        {{--                    name: 'action',--}}
-        {{--                    orderable: false,--}}
-        {{--                    className: 'center'--}}
-        {{--                }--}}
-        {{--            ]--}}
-        {{--        });--}}
-        {{--});--}}
-
         $('#addSubscribersModal').click(function() {
             $('#modal_title').text("{{trans('site_lang.clients_add_new_client_text')}}");
             $('#add_client').val("{{trans('site_lang.public_add_btn_text')}}");
@@ -454,6 +424,28 @@
                     $('#modal_title').text("{{trans('site_lang.clients_edit_client_text')}}");
                     $('#edit_client').val("{{trans('site_lang.public_edit_btn_text')}}");
                     $('#edit_subscriber_modal').modal('show');
+
+                }
+            })
+        });
+
+        $(document).on('click', '#editClientData', function() {
+            var id = $(this).data('client-id');
+            $.ajax({
+                url: "/subscribers/" + id + "/edit",
+                dataType: "json",
+                success: function(html) {
+                    console.log(html.data.id);
+                    $('#package_id_dialog').val(html.data.package_id);
+                    $('#edit_id').val(html.data.id);
+                    $('#edit_name').val(html.data.name);
+                    $('#edit_email').val(html.data.email);
+                    $('#edit_phone').val(html.data.phone);
+                    $('#edit_address').val(html.data.address);
+
+                    $('#modal_title').text("{{trans('site_lang.clients_edit_client_text')}}");
+                    $('#edit_clients').val("{{trans('site_lang.public_edit_btn_text')}}");
+                    $('#edits_subscriber_model').modal('show');
 
                 }
             })

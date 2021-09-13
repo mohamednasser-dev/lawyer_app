@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\category;
 use App\Package;
+use Illuminate\Support\Facades\Hash;
 
 class SubscribersController extends Controller
 {
@@ -20,8 +21,8 @@ class SubscribersController extends Controller
     {
         $user_type = auth()->user()->type;
         if ($user_type == 'manager') {
-                $data = User::where('parent_id', null)->where('package_id','!=',null)->where('type', '!=', 'manager')
-                    ->get();
+            $data = User::where('parent_id', null)->where('package_id', '!=', null)->where('type', '!=', 'manager')
+                ->get();
 //                    ->addColumn('status', function ($data) {
 //                                 if ($data->status == trans('site_lang.statusDeactive')) {
 //                            $html = '<p class="btn btn-sm" data-user-id="' . $data->id . '" id="change-user-status">
@@ -49,33 +50,35 @@ class SubscribersController extends Controller
 
             $packages = Package::all();
             $selected_package = 0;
-            return view('Subscribers.subscribers', compact('packages','data','selected_package'));
+            return view('Subscribers.subscribers', compact('packages', 'data', 'selected_package'));
         } else {
             return redirect(url('home'));
 
         }
     }
+
     public function search_new(Request $request)
     {
         $selected_package = $request->cmb_package_id;
         $user_type = auth()->user()->type;
         if ($user_type == 'manager') {
-            if ($request->cmb_package_id != null){
+            if ($request->cmb_package_id != null) {
                 $data = User::where('parent_id', null)->where('package_id', $request->cmb_package_id)->where('type', '!=', 'manager')
                     ->get();
-            }else{
-                $data = User::where('parent_id', null)->where('package_id','!=',null)->where('type', '!=', 'manager')
+            } else {
+                $data = User::where('parent_id', null)->where('package_id', '!=', null)->where('type', '!=', 'manager')
                     ->get();
             }
             $packages = Package::all();
-            return view('Subscribers.subscribers', compact('packages','data','selected_package'));
+            return view('Subscribers.subscribers', compact('packages', 'data', 'selected_package'));
         } else {
             return redirect(url('home'));
         }
     }
+
     public function search()
     {
-         $user_type = auth()->user()->type;
+        $user_type = auth()->user()->type;
         if ($user_type == 'manager') {
             if (request()->ajax()) {
 
@@ -84,7 +87,7 @@ class SubscribersController extends Controller
                     ->with('package_id')
                     ->get())
                     ->addColumn('status', function ($data) {
-                                 if ($data->status == trans('site_lang.statusDeactive')) {
+                        if ($data->status == trans('site_lang.statusDeactive')) {
                             $html = '<p class="btn btn-sm" data-user-id="' . $data->id . '" id="change-user-status">
                             <span class="label label-danger text-bold"> ' . $data->status . '</span></p>';
                         } else if ($data->status == trans('site_lang.statusDemo')) {
@@ -127,7 +130,7 @@ class SubscribersController extends Controller
     }
 
     // update session status from waiting to done
-    public function updateStatus($type,$id)
+    public function updateStatus($type, $id)
     {
 
         $status = false;
@@ -149,6 +152,7 @@ class SubscribersController extends Controller
 //        return response(['msg' => trans('site_lang.public_success_text'), 'status' => $status]);
 
     }
+
     public function updateStatusActive($id)
     {
         $user = User::find($id);
@@ -161,7 +165,7 @@ class SubscribersController extends Controller
     {
         $data = $this->validate(request(), [
             'name' => 'required',
-            'email' =>'required|unique:users,email|regex:/(.+)@(.+)\.(.+)/i',
+            'email' => 'required|unique:users,email|regex:/(.+)@(.+)\.(.+)/i',
             'password' => 'required',
             'phone' => 'required|unique:users,phone',
             'address' => 'required',
@@ -177,11 +181,11 @@ class SubscribersController extends Controller
         $data['status'] = 'Active';
         $data['type'] = 'admin';
         $six_digit_random_number = mt_rand(1000, 9999);
-        $exists_user_code = User::where('user_code',$six_digit_random_number)->first();
-        if($exists_user_code){
+        $exists_user_code = User::where('user_code', $six_digit_random_number)->first();
+        if ($exists_user_code) {
             $new_six_digit_random_number = mt_rand(1000, 9999);
             $data['user_code'] = $new_six_digit_random_number;
-        }else{
+        } else {
             $data['user_code'] = $six_digit_random_number;
         }
         $package = Package::find($request->package_id);
@@ -217,6 +221,27 @@ class SubscribersController extends Controller
         $per = Permission::create($permissions);
         session()->flash('success', trans('site_lang.add_success'));
         $per->save();
+        return back();
+//        return response()->json(['success' => trans('site_lang.public_success_text')]);
+    }
+
+    public function updateData(Request $request)
+    {
+
+        $data = $this->validate(request(), [
+            'name' => 'required',
+            'email' => 'required|unique:users,email,'.$request->id,
+            'password' => 'nullable',
+            'phone' => 'required|unique:users,phone,'.$request->id,
+            'address' => 'required',
+
+
+        ]);
+        if ($request->password){
+            $data['password'] = Hash::make($request->password);
+        }
+        $user = User::whereId($request->id)->update($data);
+        session()->flash('success', trans('site_lang.add_success'));
         return back();
 //        return response()->json(['success' => trans('site_lang.public_success_text')]);
     }
@@ -280,8 +305,8 @@ class SubscribersController extends Controller
         $data['package_id'] = $request->package_id;
 
 
-         User::where('parent_id',$request->id)->update($data);
-         return back();
+        User::where('parent_id', $request->id)->update($data);
+        return back();
 //        return response(['success' => trans('site_lang.public_success_text')]);
     }
 

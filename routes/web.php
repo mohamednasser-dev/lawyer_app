@@ -139,6 +139,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('subscribers/updateStatus/{type}/{id}', 'SubscribersController@updateStatus')->name('subscribers.updateStatus');
 //    Route::get('subscribers/updateStatus/{type}/{id}', 'SubscribersController@updateStatusActive')->name('subscribers.updateStatusActive');
     Route::post('subscribers/update', 'SubscribersController@update')->name('subscribers.update');
+    Route::post('subscribers/updatedata', 'SubscribersController@updateData')->name('subscribers.edit');
     Route::get('subscribers/{id}/delete', 'SubscribersController@destroy');
     Route::get('subscribers/search/new', 'SubscribersController@search_new')->name('subscribers.search');
     Route::get('endReservation', 'EndReservationsController@index');
