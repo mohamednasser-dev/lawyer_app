@@ -117,7 +117,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{url('/points')}}">
-                            <i class="link-icon" data-feather="check-circle "></i>
+                            <i class="link-icon" data-feather="check-circle"></i>
                             <span class="link-title">{{trans('site_lang.points')}}</span>
                         </a>
                     </li>
