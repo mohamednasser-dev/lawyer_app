@@ -52,7 +52,7 @@
                                 <th class="center">{{trans('site_lang.subPhone')}}</th>
 
                                 <th class="center">{{trans('site_lang.subStatus')}}</th>
-                                <th class="center">{{trans('site_lang.expire_date')}}</th>
+                                <th class="center">{{trans('site_lang.EXPIRE_DATE')}}</th>
                                 <th class="center">{{trans('site_lang.chooses')}}</th>
                             </tr>
                         </thead>
