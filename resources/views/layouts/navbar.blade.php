@@ -30,7 +30,7 @@
 
                 <li class="nav-item">
                     <a href="{{route('home')}}" class="nav-link">
-                        <i class="link-icon" data-feather="box"></i>
+                        <i class="link-icon" data-feather="home"></i>
                         <span class="link-title">{{trans('site_lang.side_home')}}</span>
                     </a>
                 </li>
@@ -99,31 +99,31 @@
             @if( auth()->user()->type == 'manager')
                     <li class="nav-item">
                         <a class="nav-link" href="{{url('/manager/home')}}">
-                            <i class="link-icon" data-feather="inbox"></i>
+                            <i class="link-icon" data-feather="home"></i>
                             <span class="link-title">{{trans('site_lang.side_ControlPanel')}}</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{url('/subscribers')}}">
-                            <i class="link-icon" data-feather="inbox"></i>
+                            <i class="link-icon" data-feather="users"></i>
                             <span class="link-title">{{trans('site_lang.side_clients')}}</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{url('/packages')}}">
-                            <i class="link-icon" data-feather="inbox"></i>
+                            <i class="link-icon" data-feather="dollar-sign"></i>
                             <span class="link-title">{{trans('site_lang.side_Packages')}}</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{url('/points')}}">
-                            <i class="link-icon" data-feather="inbox"></i>
+                            <i class="link-icon" data-feather="check-circle "></i>
                             <span class="link-title">{{trans('site_lang.points')}}</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{url('/governments')}}">
-                            <i class="link-icon" data-feather="inbox"></i>
+                            <i class="link-icon" data-feather="box"></i>
                             <span class="link-title">{{trans('site_lang.governments')}}</span>
                         </a>
                     </li>
