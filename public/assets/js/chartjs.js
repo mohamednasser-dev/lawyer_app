@@ -26,13 +26,13 @@ $(function() {
       type: 'line',
       data: {
         labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
-        datasets: [{ 
+        datasets: [{
             data: [86,114,106,106,107,111,133,221,783,2478],
             label: "Africa",
             borderColor: "#7ee5e5",
             backgroundColor: "rgba(0,0,0,0)",
             fill: false
-          }, { 
+          }, {
             data: [282,350,411,502,635,809,947,1402,3700,5267],
             label: "Asia",
             borderColor: "#f77eb9",
@@ -64,18 +64,12 @@ $(function() {
     new Chart($('#chartjsArea'), {
       type: 'line',
       data: {
-        labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
-        datasets: [{ 
-            data: [86,114,106,106,107,111,133,221,783,2478],
+        labels: {!! $users_month_count !!} ,
+        datasets: [{
+            data: {!! $month_arr !!},
             label: "Africa",
             borderColor: "#7ee5e5",
             backgroundColor: "#c2fdfd",
-            fill: true
-          }, { 
-            data: [282,350,411,502,635,809,947,1402,3700,5267],
-            label: "Asia",
-            borderColor: "#f77eb9",
-            backgroundColor: "#ffbedd",
             fill: true
           }
         ]
@@ -144,13 +138,13 @@ $(function() {
       },
       options: {
         scales: {
-          yAxes: [{ 
+          yAxes: [{
             scaleLabel: {
               display: true,
               labelString: "Happiness"
             }
           }],
-          xAxes: [{ 
+          xAxes: [{
             scaleLabel: {
               display: true,
               labelString: "GDP (PPP)"

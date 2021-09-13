@@ -97,29 +97,36 @@
                 </li>
             @endif
             @if( auth()->user()->type == 'manager')
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" href="#tables" role="button" aria-expanded="false" aria-controls="tables">
-                        <i class="link-icon" data-feather="layout"></i>
-                        <span class="link-title">{{trans('site_lang.side_ControlPanel')}}</span>
-                        <i class="link-arrow" data-feather="chevron-down"></i>
-                    </a>
-                    <div class="collapse" id="tables">
-                        <ul class="nav sub-menu">
-                            <li class="nav-item">
-                                <a href="{{url('/subscribers')}}" class="nav-link">{{trans('site_lang.side_clients')}}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{url('/packages')}}" class="nav-link">{{trans('site_lang.side_Packages')}}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{url('/points')}}" class="nav-link">{{trans('site_lang.points')}}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{url('/governments')}}" class="nav-link">{{trans('site_lang.governments')}}</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url('/manager/home')}}">
+                            <i class="link-icon" data-feather="inbox"></i>
+                            <span class="link-title">{{trans('site_lang.side_ControlPanel')}}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url('/subscribers')}}">
+                            <i class="link-icon" data-feather="inbox"></i>
+                            <span class="link-title">{{trans('site_lang.side_clients')}}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url('/packages')}}">
+                            <i class="link-icon" data-feather="inbox"></i>
+                            <span class="link-title">{{trans('site_lang.side_Packages')}}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url('/points')}}">
+                            <i class="link-icon" data-feather="inbox"></i>
+                            <span class="link-title">{{trans('site_lang.points')}}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url('/governments')}}">
+                            <i class="link-icon" data-feather="inbox"></i>
+                            <span class="link-title">{{trans('site_lang.governments')}}</span>
+                        </a>
+                    </li>
             @endif
         </ul>
     </div>

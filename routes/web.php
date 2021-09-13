@@ -23,6 +23,8 @@ Route::group(['middleware' => ['auth', 'Check_package']], function () {
     Route::post('users/update', 'UsersController@update')->name('users.update');
     Route::get('users/destroy/{id}', 'UsersController@destroy');
 
+    Route::get('manager/home', 'HomeController@manager_home')->name('manager_home');
+
 
 
     //manager governments
