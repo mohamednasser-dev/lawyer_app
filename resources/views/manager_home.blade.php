@@ -88,8 +88,8 @@
     </div>
 @endsection
 @section('custom-scripts')
-    <script src="{{url('/assets/plugins/chartjs/Chart.min.js')}}"></script>
-    <script src="{{url('/assets/js/chartjs.js')}}"></script>
+{{--    <script src="{{url('/assets/plugins/chartjs/Chart.min.js')}}"></script>--}}
+{{--    <script src="{{url('/assets/js/chartjs.js')}}"></script>--}}
     <script>
         $(function () {
             'use strict';
