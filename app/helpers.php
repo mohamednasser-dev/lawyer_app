@@ -119,6 +119,7 @@ function send($tokens, $title = "رسالة جديدة", $msg = "رسالة جد
         'sound' => 1
     );
 
+
     $headers = array
     (
         'accept: application/json',
@@ -135,6 +136,7 @@ function send($tokens, $title = "رسالة جديدة", $msg = "رسالة جد
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
     $result = curl_exec($ch);
 
+    dd($fields);
     if ($result === FALSE) {
         die('Curl failed: ' . curl_error($ch));
     }
