@@ -35,7 +35,7 @@ class ServiceNotificationJob implements ShouldQueue
         $users = User::all();
         foreach ($users as $user) {
             if ($user->id != $this->service->user_id) {
-                send($user->device_token, $this->service->title, $this->service->desc, 'mail', $this->service->id);
+                send($user->device_token, $this->service->title, $this->service->desc, 'service', $this->service->id);
             }
         }
 

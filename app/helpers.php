@@ -91,7 +91,7 @@ function msg($request, $status, $key)
     return $msg;
 }
 
-function send($tokens, $title = "رسالة جديدة", $msg = "رسالة جديدة فى البريد", $type = 'mail', $chat = null)
+function send($tokens, $title = "رسالة جديدة", $msg = "رسالة جديدة فى البريد", $type = 'service', $chat = null)
 {
     $key = 'AAAA3G2KNCA:APA91bFXw37Kvqy-_NRSEsOrTBviHY4hSSwvuAvGDT7qbY6MNxwvU66hYc6ZWythp1I7KzWlc6ogx4vUMmgx1qwVYiyDAetd4EXIddNFeeqpjlF-owNE_aEkE_6Y9gdlwN5i6_jUlBMg';
 
