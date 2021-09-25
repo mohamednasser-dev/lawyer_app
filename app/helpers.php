@@ -93,6 +93,7 @@ function msg($request, $status, $key)
 
 function send($tokens, $title = "رسالة جديدة", $msg = "رسالة جديدة فى البريد", $type = 'service', $chat = null)
 {
+
     $key = 'AAAA3G2KNCA:APA91bFXw37Kvqy-_NRSEsOrTBviHY4hSSwvuAvGDT7qbY6MNxwvU66hYc6ZWythp1I7KzWlc6ogx4vUMmgx1qwVYiyDAetd4EXIddNFeeqpjlF-owNE_aEkE_6Y9gdlwN5i6_jUlBMg';
 
     $fields = array
@@ -119,7 +120,6 @@ function send($tokens, $title = "رسالة جديدة", $msg = "رسالة جد
         'sound' => 1
     );
 
-
     $headers = array
     (
         'accept: application/json',
@@ -136,7 +136,7 @@ function send($tokens, $title = "رسالة جديدة", $msg = "رسالة جد
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
     $result = curl_exec($ch);
 
-    dd($fields);
+
     if ($result === FALSE) {
         die('Curl failed: ' . curl_error($ch));
     }
