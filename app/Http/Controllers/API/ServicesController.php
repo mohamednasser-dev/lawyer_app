@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Jobs\ServiceNotificationJob;
 use App\Service;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -61,8 +62,9 @@ class ServicesController extends Controller
         }
         $service->time = $request->time;
         $service->save();
-
+//        dispatch job here
         $service = Service::whereId($service->id)->first();
+        ServiceNotificationJob::dispatch($service);
 
 
         return msgdata($request, success(), 'success', $service);

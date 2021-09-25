@@ -18,9 +18,9 @@ class Service extends Model
         return  date('Y-m-d H:i' , strtotime($time));
     }
 
-    protected $dispatchesEvents = [
-        'created' => 'App\Events\ServiceCreated'
-    ];
+//    protected $dispatchesEvents = [
+//        'created' => 'App\Events\ServiceCreated'
+//    ];
 
     public function user()
     {
