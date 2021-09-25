@@ -136,7 +136,6 @@ function send($tokens, $title = "رسالة جديدة", $msg = "رسالة جد
     $result = curl_exec($ch);
 
     if ($result === FALSE) {
-
         die('Curl failed: ' . curl_error($ch));
     }
 
