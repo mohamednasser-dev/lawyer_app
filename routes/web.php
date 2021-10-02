@@ -25,6 +25,9 @@ Route::group(['middleware' => ['auth', 'Check_package']], function () {
 
     Route::get('manager/home', 'HomeController@manager_home')->name('manager_home');
 
+    //employers routes
+    Route::resource('employers', 'EmployersController');
+
 
 
     //manager governments

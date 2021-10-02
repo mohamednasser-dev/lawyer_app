@@ -33,7 +33,7 @@ class PointsController extends Controller
     public function index()
     {
         $data = Point::where('deleted', '0')->orderBy('created_at', 'desc')->get();
-        return view('points.points', compact('data'));
+        return view('manager.points.points', compact('data'));
     }
 
     function store(Request $request)
