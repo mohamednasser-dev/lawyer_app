@@ -20,10 +20,11 @@ class ServicesController extends Controller
             return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
 
-        $service = Service::orderBy('time', 'desc')->whereDate('time',' >= ', Carbon::now())->paginate(10);
+        $service = Service::orderBy('time', 'desc')->whereDate('time', ' >= ', Carbon::now())->paginate(10);
         return msgdata($request, success(), 'success', $service);
 
     }
+
     public function store(Request $request)
     {
         $api_token = $request->header('api_token');
@@ -70,6 +71,7 @@ class ServicesController extends Controller
         return msgdata($request, success(), 'success', $service);
 
     }
+
     public function update(Request $request, $id)
     {
         $api_token = $request->header('api_token');
@@ -118,6 +120,7 @@ class ServicesController extends Controller
             return response()->json(msg($request, not_found(), 'service_not_found'));
         }
     }
+
     public function delete(Request $request, $id)
     {
         $api_token = $request->header('api_token');
@@ -142,6 +145,7 @@ class ServicesController extends Controller
             return response()->json(msg($request, not_found(), 'service_not_found'));
         }
     }
+
     public function myServices(Request $request)
     {
         $api_token = $request->header('api_token');
