@@ -41,7 +41,7 @@ class ServicesController extends Controller
                 'whatsapp' => 'required',
                 'desc' => 'nullable',
                 'image' => 'nullable',
-                'time' => 'required|date_format:Y-m-d H:i|after:5 hours',
+                'time' => 'required|date_format:Y-m-d H:i|after:1 hours',
 
             ];
 
