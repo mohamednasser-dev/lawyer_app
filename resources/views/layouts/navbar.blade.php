@@ -1,7 +1,7 @@
 <nav class="sidebar">
     <div class="sidebar-header">
         <a href="{{url('/')}}" class="sidebar-brand">
-           Lawyer<span> App</span>
+            Lawyer<span> App</span>
         </a>
         <div class="sidebar-toggler not-active">
             <span></span>
@@ -25,7 +25,7 @@
                     $package_name = $parent_user->Package->name ;
                 @endphp
             @endif
-                @php $user_type = auth()->user()->type; @endphp
+            @php $user_type = auth()->user()->type; @endphp
             @if($user_type != 'manager')
 
                 <li class="nav-item">
@@ -47,7 +47,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false" aria-controls="uiComponents">
+                    <a class="nav-link" data-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false"
+                       aria-controls="uiComponents">
                         <i class="link-icon" data-feather="briefcase"></i>
                         <span class="link-title">{{trans('site_lang.side_cases')}}</span>
                         <i class="link-arrow" data-feather="chevron-down"></i>
@@ -58,7 +59,8 @@
                                 <a href="{{url('/addCase')}}" class="nav-link">{{trans('site_lang.side_add_case')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ url('/caseDetails') }}" class="nav-link">{{trans('site_lang.side_search_case')}}</a>
+                                <a href="{{ url('/caseDetails') }}"
+                                   class="nav-link">{{trans('site_lang.side_search_case')}}</a>
                             </li>
                         </ul>
                     </div>
@@ -79,7 +81,8 @@
                     </li>
                 @endif
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" href="#charts" role="button" aria-expanded="false" aria-controls="charts">
+                    <a class="nav-link" data-toggle="collapse" href="#charts" role="button" aria-expanded="false"
+                       aria-controls="charts">
                         <i class="link-icon" data-feather="pie-chart"></i>
                         <span class="link-title">{{trans('site_lang.side_reports')}}</span>
                         <i class="link-arrow" data-feather="chevron-down"></i>
@@ -87,46 +90,54 @@
                     <div class="collapse" id="charts">
                         <ul class="nav sub-menu">
                             <li class="nav-item">
-                                <a href="{{url('/dailyReport')}}" class="nav-link">{{trans('site_lang.side_reports_daily')}}</a>
+                                <a href="{{url('/dailyReport')}}"
+                                   class="nav-link">{{trans('site_lang.side_reports_daily')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ url('/MonthlyReport') }}" class="nav-link">{{trans('site_lang.side_reports_monthly')}}</a>
+                                <a href="{{ url('/MonthlyReport') }}"
+                                   class="nav-link">{{trans('site_lang.side_reports_monthly')}}</a>
                             </li>
                         </ul>
                     </div>
                 </li>
             @endif
             @if( auth()->user()->type == 'manager')
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url('/manager/home')}}">
-                            <i class="link-icon" data-feather="home"></i>
-                            <span class="link-title">{{trans('site_lang.side_ControlPanel')}}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url('/subscribers')}}">
-                            <i class="link-icon" data-feather="users"></i>
-                            <span class="link-title">{{trans('site_lang.side_clients')}}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url('/packages')}}">
-                            <i class="link-icon" data-feather="dollar-sign"></i>
-                            <span class="link-title">{{trans('site_lang.side_Packages')}}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url('/points')}}">
-                            <i class="link-icon" data-feather="check-circle"></i>
-                            <span class="link-title">{{trans('site_lang.points')}}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url('/governments')}}">
-                            <i class="link-icon" data-feather="box"></i>
-                            <span class="link-title">{{trans('site_lang.governments')}}</span>
-                        </a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('/manager/home')}}">
+                        <i class="link-icon" data-feather="home"></i>
+                        <span class="link-title">{{trans('site_lang.side_ControlPanel')}}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('/subscribers')}}">
+                        <i class="link-icon" data-feather="users"></i>
+                        <span class="link-title">{{trans('site_lang.side_clients')}}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('/packages')}}">
+                        <i class="link-icon" data-feather="dollar-sign"></i>
+                        <span class="link-title">{{trans('site_lang.side_Packages')}}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('/points')}}">
+                        <i class="link-icon" data-feather="check-circle"></i>
+                        <span class="link-title">{{trans('site_lang.points')}}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('/governments')}}">
+                        <i class="link-icon" data-feather="box"></i>
+                        <span class="link-title">{{trans('site_lang.governments')}}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('employers.index')}}">
+                        <i class="link-icon" data-feather="box"></i>
+                        <span class="link-title">{{trans('site_lang.employers')}}</span>
+                    </a>
+                </li>
             @endif
         </ul>
     </div>
@@ -139,13 +150,17 @@
         <h6 class="text-muted">theme</h6>
         <div class="row">
             <div class="form-check form-check-inline">
-                <a class="btn @if(auth()->user()->them == 'light') btn-success @else btn-dark @endif " href="{{url('theme/light')}}" id="theme" role="button" data-toggle="" aria-haspopup="true" aria-expanded="false">
+                <a class="btn @if(auth()->user()->them == 'light') btn-success @else btn-dark @endif "
+                   href="{{url('theme/light')}}" id="theme" role="button" data-toggle="" aria-haspopup="true"
+                   aria-expanded="false">
                     <i class="" title="light" id="light"></i>
                     <span class="font-weight-medium ml-1 mr-1">light</span>
                 </a>
             </div>
             <div class="form-check form-check-inline">
-                <a class="btn @if(auth()->user()->them == 'dark') btn-success @else btn-dark @endif" href="{{url('theme/dark')}}" id="theme" role="button" data-toggle="" aria-haspopup="true" aria-expanded="false">
+                <a class="btn @if(auth()->user()->them == 'dark') btn-success @else btn-dark @endif"
+                   href="{{url('theme/dark')}}" id="theme" role="button" data-toggle="" aria-haspopup="true"
+                   aria-expanded="false">
                     <i class="" title="dark" id="dark"></i>
                     <span class="font-weight-medium ml-1 mr-1">dark</span>
                 </a>
