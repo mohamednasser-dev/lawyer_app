@@ -46,7 +46,7 @@ class ServicesController extends Controller
             ];
 
         $validator = Validator::make($request->all(), $rules);
-        dd($validator)
+        dd($validator);
         if ($validator->fails()) {
             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         }
