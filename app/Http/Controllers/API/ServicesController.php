@@ -44,9 +44,12 @@ class ServicesController extends Controller
                 'time' => 'required|date_format:Y-m-d H:i|after:1 hours',
 
             ];
+        $customMessages = [
+            'after' => ' :attribute يجب ان يكون بعد ساعه من الان على الاقل.'
+        ];
 
-        $validator = Validator::make($request->all(), $rules);
-        dd($validator->messages());
+        $validator = Validator::make($request->all(), $rules,$customMessages);
+
         if ($validator->fails()) {
             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         }
