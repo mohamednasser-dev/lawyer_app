@@ -32,6 +32,18 @@ class ServiceNotificationJob implements ShouldQueue
      */
     public function handle()
     {
+        if (!$this->isQueueListenerRunning()) {
+            $users = User::all();
+            foreach ($users as $user) {
+                if ($user->id != $this->service->user_id) {
+                    send($user->device_token, $this->service->title, $this->service->desc, 'service', $this->service->id);
+                }
+            }
+            $pid = $this->startQueueListener();
+            $this->saveQueueListenerPID($pid);
+        }
+
+
         $users = User::all();
         foreach ($users as $user) {
             if ($user->id != $this->service->user_id) {
@@ -39,5 +51,40 @@ class ServiceNotificationJob implements ShouldQueue
             }
         }
 
+    }
+
+    private function isQueueListenerRunning()
+    {
+        if (!$pid = $this->getLastQueueListenerPID()) {
+            return false;
+        }
+
+        $process = exec("ps -p $pid -opid=,cmd=");
+        //$processIsQueueListener = str_contains($process, 'queue:listen'); // 5.1
+        $processIsQueueListener = !empty($process); // 5.6 - see comments
+
+        return $processIsQueueListener;
+    }
+
+    private function getLastQueueListenerPID()
+    {
+        if (!file_exists(__DIR__ . '/queue.pid')) {
+            return false;
+        }
+
+        return file_get_contents(__DIR__ . '/queue.pid');
+    }
+
+    private function saveQueueListenerPID($pid)
+    {
+        file_put_contents(__DIR__ . '/queue.pid', $pid);
+    }
+
+    private function startQueueListener()
+    {
+        $command = 'php-cli ' . base_path() . '/artisan queue:work --timeout=60 --sleep=5 --tries=3 > /dev/null & echo $!'; // 5.6 - see comments
+        $pid = exec($command);
+
+        return $pid;
     }
 }
