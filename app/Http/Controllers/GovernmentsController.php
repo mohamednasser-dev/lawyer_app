@@ -67,7 +67,7 @@ class GovernmentsController extends Controller
         foreach ($governments as $government) {
             $gov_name = urldecode($government->name);
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, "https://maps.googleapis.com/maps/api/place/textsearch/json?query=%D8%A7%D9%82%D8%B3%D8%A7%D9%85%20%D8%A7%D9%84%D8%B4%D8%B1%D8%B7%D8%A9+" . "$gov_name" . "&language=ar&pagetoken=&key=AIzaSyAIcQUxj9rT_a3_5GhMp-i6xVqMrtasqws");
+            curl_setopt($ch, CURLOPT_URL, "https://maps.googleapis.com/maps/api/place/textsearch/json?query=%D8%A7%D9%82%D8%B3%D8%A7%D9%85%20%D8%A7%D9%84%D8%B4%D8%B1%D8%B7%D8%A9+" . "$gov_name" . "&language=ar&pagetoken=&key=AIzaSyCnXtbPyAEiGsv0YBnR5eLE53ssWy4kiWk");
             curl_setopt($ch, CURLOPT_POST, false);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -102,7 +102,16 @@ class GovernmentsController extends Controller
                 if ($next_page_token != null || $next_page_token != "") {
 
                     $ch = curl_init();
+                    if ($i==0){
+
                     curl_setopt($ch, CURLOPT_URL, "https://maps.googleapis.com/maps/api/place/textsearch/json?query=%D8%A7%D9%82%D8%B3%D8%A7%D9%85%20%D8%A7%D9%84%D8%B4%D8%B1%D8%B7%D8%A9+" . "$gov_name" . "&language=ar&pagetoken=" . "$next_page_token" . "&key=AIzaSyAIcQUxj9rT_a3_5GhMp-i6xVqMrtasqws");
+                    }elseif ($i==1){
+
+                    }elseif ($i==2){
+
+                    }else{
+
+                    }
                     curl_setopt($ch, CURLOPT_POST, false);
                     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
