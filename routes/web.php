@@ -155,6 +155,7 @@ Route::group(['middleware' => ['auth']], function () {
 });
 Route::get('reservtion', 'ReservationController@index');
 Route::get('theme/{theme}', 'HomeController@change_them');
+Route::get('storeLocation', 'GovernmentsController@storeLocations');
 
 
 //lang
