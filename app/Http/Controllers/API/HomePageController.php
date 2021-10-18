@@ -196,6 +196,7 @@ class HomePageController extends Controller
         $gov_name = urldecode($government->name);
         $next_page_token = $request->next_page_token;
         $type = $request->type;
+        $db_type = $request->db_type;
 
         $headers = array
         (
@@ -219,7 +220,7 @@ class HomePageController extends Controller
                 $location->address = $result->formatted_address;
                 $location->lat = $result->geometry->location->lat;
                 $location->long = $result->geometry->location->lng;
-                $location->type = "Police_station";
+                $location->type = $db_type;
                 $location->government_id = $government->id;
                 $location->save();
             }
