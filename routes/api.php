@@ -32,6 +32,8 @@ Route::post('renew/package', 'API\UsersController@renew_package');
 // governments locations
 Route::get('get_governments', 'API\HomePageController@get_governments');
 Route::get('get_locations_by_gov_id/{id}/{type}', 'API\HomePageController@get_locations_by_gov_id');
+Route::get('locations/search/{type}/{location_name}', 'API\HomePageController@locations_search');
+Route::post('storeLocations', 'API\HomePageController@storeLocations');
 
 //Home Page ..
 Route::get('home_data', 'API\HomePageController@index');
@@ -170,4 +172,4 @@ Route::get('delete-service/{id}', 'API\ServicesController@delete');
 
 
 
-Route::post('storeLocations', 'API\HomePageController@storeLocations');
+
