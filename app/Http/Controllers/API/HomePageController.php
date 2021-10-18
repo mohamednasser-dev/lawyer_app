@@ -195,6 +195,7 @@ class HomePageController extends Controller
         $government = Government::findorfail($request->government_id);
         $gov_name = urldecode($government->name);
         $next_page_token = $request->next_page_token;
+        $type = $request->type;
 
         $headers = array
         (
@@ -203,7 +204,7 @@ class HomePageController extends Controller
         );
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://maps.googleapis.com/maps/api/place/textsearch/json?query=%D8%A7%D9%82%D8%B3%D8%A7%D9%85%20%D8%A7%D9%84%D8%B4%D8%B1%D8%B7%D8%A9+" . "$gov_name" . "&language=ar&pagetoken=" . "$next_page_token" . "&key=AIzaSyAIcQUxj9rT_a3_5GhMp-i6xVqMrtasqws");
+        curl_setopt($ch, CURLOPT_URL, "https://maps.googleapis.com/maps/api/place/textsearch/json?query=".$type."+" . "$gov_name" . "&language=ar&pagetoken=" . "$next_page_token" . "&key=AIzaSyAIcQUxj9rT_a3_5GhMp-i6xVqMrtasqws");
         curl_setopt($ch, CURLOPT_POST, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
