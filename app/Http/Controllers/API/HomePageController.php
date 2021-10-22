@@ -178,6 +178,20 @@ class HomePageController extends Controller
         }
     }
 
+    public function locations_search(Request $request , $type , $location_name)
+    {
+        $api_token = $request->header('api_token');
+        $lang = $request->header('lang');
+        $user = check_api_token($api_token);
+        if ($user != null) {
+            $data = Location::where('name', 'like', "%{$location_name}%")->where('type', $type )->where('status', 'show')
+                ->select('id', 'name', 'address', 'type', 'lat', 'long')->paginate(20);
+            return msgdata($request, success(), 'success', $data);
+        } else {
+            return response()->json(msg($request, not_authoize(), 'not_authoize'));
+        }
+    }
+
     public function get_locations_by_gov_id(Request $request, $id, $type)
     {
         $api_token = $request->header('api_token');
