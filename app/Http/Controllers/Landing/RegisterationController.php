@@ -53,6 +53,8 @@ class RegisterationController extends Controller
             'phone' => 'required|unique:users,phone',
             'address' => 'required',
             'cat_name' => 'required',
+            'card_image'=>'required|image',
+            'image'=>'required|image'
 //            'package_id' => 'required',
 
         ]);
@@ -80,6 +82,18 @@ class RegisterationController extends Controller
             $file->move(public_path('uploads/register'), $fileNewName);
 
             $data['card_image'] = $fileNewName;
+        }
+        if ($request['image'] != null) {
+
+            // This is Image Information ...
+            $file = $request->file('image');
+            $name = $file->getClientOriginalName();
+            $ext = $file->getClientOriginalExtension();
+            // Move Image To Folder ..
+            $fileNewName = 'img_' . time() . '.' . $ext;
+            $file->move(public_path('uploads/userprofile'), $fileNewName);
+
+            $data['image'] = $fileNewName;
         }
 //        $package = Package::where('name','demo')->first();
 //        if($package){
@@ -155,7 +169,8 @@ class RegisterationController extends Controller
                 'device_token' => 'required',
                 'invite_code' => '',
                 'cat_name' => 'required',
-                'card_image'=>'required|image'
+                'card_image'=>'required|image',
+                'image'=>'required|image',
             ];
 
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
@@ -192,7 +207,18 @@ class RegisterationController extends Controller
 
             $data['card_image'] = $fileNewName;
         }
+        if ($request['image'] != null) {
 
+            // This is Image Information ...
+            $file = $request->file('image');
+            $name = $file->getClientOriginalName();
+            $ext = $file->getClientOriginalExtension();
+            // Move Image To Folder ..
+            $fileNewName = 'img_' . time() . '.' . $ext;
+            $file->move(public_path('uploads/userprofile'), $fileNewName);
+
+            $data['image'] = $fileNewName;
+        }
         $data['password'] = bcrypt(request('password'));
         $data['cat_id'] = $category->id;
         $data['status'] = 'Demo';
