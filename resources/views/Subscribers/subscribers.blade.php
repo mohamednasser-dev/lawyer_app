@@ -528,11 +528,12 @@
 
             $(document).on('click', '#deleteClient', function () {
                 client_id = $(this).data('client-id');
+                console.log(client_id);
                 $('#confirmModal').modal('show');
             });
             $('#ok_button').click(function () {
                 $.ajax({
-                    url: "subscribers/" + client_id + "/delete",
+                    url: "/subscribers/" + client_id + "/delete",
                     beforeSend: function () {
                         $('#ok_button').text("جارى الحذف ...");
                     },
