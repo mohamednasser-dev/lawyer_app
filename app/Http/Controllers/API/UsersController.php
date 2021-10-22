@@ -22,19 +22,19 @@ class UsersController extends Controller
     {
         $api_token = $request->header('api_token');
         $user = check_api_token($api_token);
+
         if ($user) {
+
             $user_id = $user->id;
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->users;
             if ($enabled == 'yes') {
-                $users = null;
 
                 if ($user->parent_id != null) {
-                    $users = User::select('id', 'phone', 'address', 'name', 'email', 'type', 'parent_id', 'cat_id')
-                        ->where('parent_id', $user->parent_id)->where('id', '!=', $user_id)->with('category')->paginate(10);
+                    $users = User::where('parent_id', $user->parent_id)->where('id', '!=', $user_id)
+                        ->with('category')->paginate(10);
                 } else {
-                    $users = User::select('id', 'phone', 'address', 'name', 'email', 'type', 'parent_id', 'cat_id')
-                        ->where('parent_id', $user_id)->where('id', '!=', $user_id)->with('category')->paginate(10);
+                    $users = User::where('parent_id', $user_id)->where('id', '!=', $user_id)->with('category')->paginate(10);
                 }
                 return msgdata($request, success(), 'success', $users);
 
@@ -164,10 +164,10 @@ class UsersController extends Controller
                 $users = null;
                 $categories = null;
                 if ($user->parent_id != null) {
-                    $user_data = User::select('name', 'type', 'email', 'phone', 'address', 'image', 'parent_id', 'cat_id')->where('parent_id', $user->parent_id)->with('category')->first();
+                    $user_data = User::where('parent_id', $user->parent_id)->with('category')->first();
                     $categories = category::where('parent_id', $user->parent_id)->select('id', 'name')->get();
                 } else {
-                    $user_data = User::select('id', 'name', 'type', 'email', 'phone', 'address', 'image', 'parent_id', 'cat_id')->where('parent_id', $user_id)->orWhere('id', $user_id)->with('category')->first();
+                    $user_data = User::where('parent_id', $user_id)->orWhere('id', $user_id)->with('category')->first();
                     $categories = category::where('parent_id', $user_id)->select('id', 'name')->get();
                 }
                 return msgdata($request, success(), 'success', array('user_data' => $user_data, 'categories' => $categories));
@@ -192,11 +192,11 @@ class UsersController extends Controller
                 $users = null;
                 $categories = null;
                 if ($user->parent_id != null) {
-                    $user_data = User::select('id', 'name', 'type', 'email', 'phone', 'address', 'image', 'cat_id')->with('category')->find($id);
-                    $categories = category::where('parent_id', $user->parent_id)->select('id', 'name')->get();
+                    $user_data = User::with('category')->whereId($id)->first();
+                    $categories = category::where('parent_id', $user->parent_id)->get();
                 } else {
-                    $user_data = User::select('id', 'name', 'type', 'email', 'phone', 'address', 'image', 'parent_id', 'cat_id')->where('parent_id', $user_id)->orWhere('id', $user_id)->with('category')->first();
-                    $categories = category::where('parent_id', $user_id)->select('id', 'name')->get();
+                    $user_data = User::where('parent_id', $user_id)->orWhere('id', $user_id)->with('category')->first();
+                    $categories = category::where('parent_id', $user_id)->get();
                 }
                 return msgdata($request, success(), 'success', array('user_data' => $user_data, 'categories' => $categories));
             } else {

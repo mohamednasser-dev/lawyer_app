@@ -201,7 +201,7 @@ class AuthController extends Controller
         $rules = [
             'code' => 'required|exists:users',
             'email' => 'required|exists:users',
-            'device_token' => 'required',
+            'device_token' => '',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {

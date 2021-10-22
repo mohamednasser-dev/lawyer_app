@@ -53,6 +53,8 @@ class RegisterationController extends Controller
             'phone' => 'required|unique:users,phone',
             'address' => 'required',
             'cat_name' => 'required',
+            'card_image'=>'required|image',
+            'image'=>'required|image'
 //            'package_id' => 'required',
 
         ]);
@@ -69,6 +71,30 @@ class RegisterationController extends Controller
         $data['cat_id'] = $category->id;
         $data['status'] = 'Demo';
         $data['type'] = 'admin';
+        if ($request['card_image'] != null) {
+
+            // This is Image Information ...
+            $file = $request->file('card_image');
+            $name = $file->getClientOriginalName();
+            $ext = $file->getClientOriginalExtension();
+            // Move Image To Folder ..
+            $fileNewName = 'img_' . time() . '.' . $ext;
+            $file->move(public_path('uploads/register'), $fileNewName);
+
+            $data['card_image'] = $fileNewName;
+        }
+        if ($request['image'] != null) {
+
+            // This is Image Information ...
+            $file = $request->file('image');
+            $name = $file->getClientOriginalName();
+            $ext = $file->getClientOriginalExtension();
+            // Move Image To Folder ..
+            $fileNewName = 'img_' . time() . '.' . $ext;
+            $file->move(public_path('uploads/userprofile'), $fileNewName);
+
+            $data['image'] = $fileNewName;
+        }
 //        $package = Package::where('name','demo')->first();
 //        if($package){
 //            $data['package_id'] = $package->id;
@@ -142,7 +168,9 @@ class RegisterationController extends Controller
                 'address' => 'required',
                 'device_token' => 'required',
                 'invite_code' => '',
-                'cat_name' => 'required'
+                'cat_name' => 'required',
+                'card_image'=>'required|image',
+                'image'=>'required|image',
             ];
 
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
@@ -167,7 +195,30 @@ class RegisterationController extends Controller
         $data['address'] = $request->address;
         $data['cat_name'] = $request->cat_name;
         $data['device_token'] = $request->device_token;
+        if ($request['card_image'] != null) {
 
+            // This is Image Information ...
+            $file = $request->file('card_image');
+            $name = $file->getClientOriginalName();
+            $ext = $file->getClientOriginalExtension();
+            // Move Image To Folder ..
+            $fileNewName = 'img_' . time() . '.' . $ext;
+            $file->move(public_path('uploads/register'), $fileNewName);
+
+            $data['card_image'] = $fileNewName;
+        }
+        if ($request['image'] != null) {
+
+            // This is Image Information ...
+            $file = $request->file('image');
+            $name = $file->getClientOriginalName();
+            $ext = $file->getClientOriginalExtension();
+            // Move Image To Folder ..
+            $fileNewName = 'img_' . time() . '.' . $ext;
+            $file->move(public_path('uploads/userprofile'), $fileNewName);
+
+            $data['image'] = $fileNewName;
+        }
         $data['password'] = bcrypt(request('password'));
         $data['cat_id'] = $category->id;
         $data['status'] = 'Demo';

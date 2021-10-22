@@ -20,10 +20,12 @@ class ServicesController extends Controller
             return response()->json(msg($request, not_authoize(), 'not_authoize'));
         }
 
-        $service = Service::orderBy('time', 'desc')->whereDate('time',' >= ', Carbon::now())->paginate(10);
+        $service = Service::orderBy('time', 'desc')->whereDate('time', ' >= ', Carbon::now())->paginate(10);
+
         return msgdata($request, success(), 'success', $service);
 
     }
+
     public function store(Request $request)
     {
         $api_token = $request->header('api_token');
@@ -39,11 +41,15 @@ class ServicesController extends Controller
                 'whatsapp' => 'required',
                 'desc' => 'nullable',
                 'image' => 'nullable',
-                'time' => 'required|date_format:Y-m-d H:i',
+                'time' => 'required|date_format:Y-m-d H:i|after:1 hours',
 
             ];
+        $customMessages = [
+            'after' => ' :attribute يجب ان يكون بعد ساعه من الان على الاقل.'
+        ];
 
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules,$customMessages);
+
         if ($validator->fails()) {
             return response()->json(['status' => 401, 'msg' => $validator->messages()->first()]);
         }
@@ -70,6 +76,7 @@ class ServicesController extends Controller
         return msgdata($request, success(), 'success', $service);
 
     }
+
     public function update(Request $request, $id)
     {
         $api_token = $request->header('api_token');
@@ -118,6 +125,7 @@ class ServicesController extends Controller
             return response()->json(msg($request, not_found(), 'service_not_found'));
         }
     }
+
     public function delete(Request $request, $id)
     {
         $api_token = $request->header('api_token');
@@ -142,6 +150,7 @@ class ServicesController extends Controller
             return response()->json(msg($request, not_found(), 'service_not_found'));
         }
     }
+
     public function myServices(Request $request)
     {
         $api_token = $request->header('api_token');

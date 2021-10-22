@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Government;
+use App\Location;
 use App\Point;
 use App\User;
 use App\Cases;
@@ -23,7 +24,7 @@ class GovernmentsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+//        $this->middleware('auth');
     }
 
     /**
@@ -45,9 +46,111 @@ class GovernmentsController extends Controller
         Government::create($data);
         return back();
     }
+
     public function destroy($id)
     {
-        Government::where('id',$id)->delete();
+        Government::where('id', $id)->delete();
         return back();
+    }
+
+
+    public function storeLocationspage(){
+        return view('locations');
+    }
+    public function storeLocations(Request $request)
+    {
+
+        $governments = Government::all();
+        global $next_page_token;
+        global $json;
+        $headers = array
+        (
+            'accept: application/json',
+            'Content-Type: application/json',
+        );
+        foreach ($governments as $government) {
+            $next_page_token = "";
+            $gov_name = urldecode($government->name);
+            for ($i = 0; $i <= 5; $i++) {
+
+                $ch = curl_init();
+                if ($i == 0) {
+                    curl_setopt($ch, CURLOPT_URL, "https://maps.googleapis.com/maps/api/place/textsearch/json?query=%D8%A7%D9%82%D8%B3%D8%A7%D9%85%20%D8%A7%D9%84%D8%B4%D8%B1%D8%B7%D8%A9+" . "$gov_name" . "&language=ar&pagetoken=" . "$next_page_token" . "&key=AIzaSyAIcQUxj9rT_a3_5GhMp-i6xVqMrtasqws");
+                } else {
+                    curl_setopt($ch, CURLOPT_URL, "https://maps.googleapis.com/maps/api/place/textsearch/json?query=%D8%A7%D9%82%D8%B3%D8%A7%D9%85%20%D8%A7%D9%84%D8%B4%D8%B1%D8%B7%D8%A9+" . "$gov_name" . "&language=ar&pagetoken=" . "$next_page_token" . "&key=AIzaSyAttLa0sqreDq9-egm4WY-7GfKGU2gSXqs");
+                }
+                curl_setopt($ch, CURLOPT_POST, false);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                $res = curl_exec($ch);
+                $json = json_decode($res);
+
+
+                if (isset($json->results) && count($json->results) > 0) {
+                    foreach ($json->results as $result) {
+                        $location = new Location();
+                        $location->name = $result->name;
+                        $location->address = $result->formatted_address;
+                        $location->lat = $result->geometry->location->lat;
+                        $location->long = $result->geometry->location->lng;
+                        $location->type = "Police_station";
+                        $location->government_id = $government->id;
+                        $location->save();
+
+
+                    }
+
+                    if (isset($json->next_page_token)) {
+                        $next_page_token = $json->next_page_token;
+                    } else {
+                        $next_page_token = null;
+
+                    }
+                }
+
+
+            }
+//            $ch = curl_init();
+//            curl_setopt($ch, CURLOPT_URL, "https://maps.googleapis.com/maps/api/place/textsearch/json?query=%D8%A7%D9%82%D8%B3%D8%A7%D9%85%20%D8%A7%D9%84%D8%B4%D8%B1%D8%B7%D8%A9+" . "$gov_name" . "&language=ar&pagetoken=&key=AIzaSyDlJvQF04Y_NBcYeHoR5x1hTbCZJEIX3tc");
+//            curl_setopt($ch, CURLOPT_POST, false);
+//            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//            $json = curl_exec($ch);
+//            $json = json_decode($json);
+//
+//            if (isset($json->next_page_token)) {
+//                $next_page_token = $json->next_page_token;
+//            } else {
+//                $next_page_token = null;
+//            }
+//
+//            if (isset($json->results) && count($json->results) > 0) {
+//
+//                foreach ($json->results as $result) {
+//
+//                    $location = new Location();
+//                    $location->name = $result->name;
+//                    $location->address = $result->formatted_address;
+//                    $location->lat = $result->geometry->location->lat;
+//                    $location->long = $result->geometry->location->lng;
+//                    $location->type = "Police_station";
+//                    $location->government_id = $government->id;
+//                    $location->save();
+//                }
+//            }
+//
+//
+//
+
+
+        }
+
+
+        $locations = Location::all();
+        return $locations;
+
+
     }
 }

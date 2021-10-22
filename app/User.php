@@ -11,6 +11,7 @@ class User extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -19,25 +20,31 @@ class User extends Authenticatable
 
     protected $appends = ['package_name'];
     protected $fillable = [
-        'name', 'type', 'password','email','cat_id','parent_id','phone','address','package_id','expiry_date',
-        'warning_date','expiry_package','user_code','my_points'
-        ,'status','image','them','verified'
+        'name', 'type', 'password', 'email', 'cat_id', 'parent_id', 'phone', 'address', 'package_id', 'expiry_date',
+        'warning_date', 'expiry_package', 'user_code', 'my_points'
+        , 'status', 'image', 'them', 'verified', 'card_image'
     ];
 
-    public function category(){
-        return $this->hasOne('App\category','id','cat_id');
-    }
-    public function getDuration(){
-        return $this->hasOne('App\Package','id','package_id');
-    }
-    public function  package_id(){
-
-        return $this->hasOne('App\Package','id','package_id');
-
+    public function category()
+    {
+        return $this->hasOne('App\category', 'id', 'cat_id');
     }
 
-    public function  Package(){
-        return $this->hasOne('App\Package','id','package_id');
+    public function getDuration()
+    {
+        return $this->hasOne('App\Package', 'id', 'package_id');
+    }
+
+    public function package_id()
+    {
+
+        return $this->hasOne('App\Package', 'id', 'package_id');
+
+    }
+
+    public function Package()
+    {
+        return $this->hasOne('App\Package', 'id', 'package_id');
     }
 
     /**
@@ -62,9 +69,9 @@ class User extends Authenticatable
     {
         if ($value == 'Demo') {
             return trans('site_lang.statusDemo');
-        } else if ($value == 'Active'){
+        } else if ($value == 'Active') {
             return trans('site_lang.statusActive');
-        }else{
+        } else {
             return trans('site_lang.statusDeactive');
         }
     }
@@ -72,10 +79,10 @@ class User extends Authenticatable
     public function getExpiryDateAttribute($expire_date)
     {
 
-        if($this->parent_id != null){
-           $parent_user =  User::find($this->parent_id);
-           return $parent_user->expiry_date;
-        }else{
+        if ($this->parent_id != null) {
+            $parent_user = User::find($this->parent_id);
+            return $parent_user->expiry_date;
+        } else {
             return $expire_date;
         }
     }
@@ -83,28 +90,39 @@ class User extends Authenticatable
     public function getWarningDateAttribute($warning_date)
     {
 
-        if($this->parent_id != null){
-            $parent_user =  User::find($this->parent_id);
+        if ($this->parent_id != null) {
+            $parent_user = User::find($this->parent_id);
             return $parent_user->warning_date;
-        }else{
+        } else {
             return $warning_date;
         }
     }
+
     public function getPackageNameAttribute()
     {
-        if($this->package_id != null){
-            $package =  Package::find($this->package_id);
+        if ($this->package_id != null) {
+            $package = Package::find($this->package_id);
             return $package->name;
-        }else{
+        } else {
             return null;
         }
     }
+
     public function getImageAttribute($image)
     {
         //default.png
-        if (!empty($image)){
-            return  $image;
+        if (!empty($image)) {
+            return $image;
         }
         return 'default.png';
+    }
+
+    public function getCardImageAttribute($image)
+    {
+        //default.png
+        if (!empty($image)) {
+            return $image;
+        }
+        return '';
     }
 }
