@@ -138,6 +138,18 @@
                         <span class="link-title">{{trans('site_lang.employers')}}</span>
                     </a>
                 </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('suggestions.index')}}">
+                            <i class="link-icon" data-feather="box"></i>
+                            <span class="link-title">{{trans('site_lang.suggestions')}}</span>
+                        </a>
+                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('settings.index')}}">
+                        <i class="link-icon" data-feather="box"></i>
+                        <span class="link-title">{{trans('site_lang.settings')}}</span>
+                    </a>
+                </li>
             @endif
         </ul>
     </div>

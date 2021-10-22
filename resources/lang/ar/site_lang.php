@@ -2,15 +2,12 @@
 
 return [
     //new
-
-
-
-
-
+    'settings' => 'الاعدادات',
+    'suggestions' => 'الاقتراحات',
+    'messages' => 'الرسائل',
+    'about_us' => 'عن التطبيق',
     'employers' => 'الموظفين',
     'add_new_emp' => 'اضافة موظف جديد',
-
-
     'addresses' => 'عناوين المحاكم واقسام الشرطة',
     'address_name' => 'اسم العنوان',
     'show' => 'مرئي',
@@ -35,11 +32,14 @@ return [
     'add_option' => 'اضافة خاصية',
     'renew_points' => 'نقاط التجديد',
     'months' => 'شهور',
-
     'check_pass_again' => 'كلمة المرور القديمة غير صحيحة',
     'my_package' => 'باقتي',
     'package' => 'الباقة',
     'see_packages' => 'عرض الباقات الاخرى',
+
+
+
+
 
     // public use
     'package_ended' => 'تم انتهاء باقة',

@@ -166,3 +166,7 @@ Route::get('my-services', 'API\ServicesController@myServices');
 Route::post('add-service', 'API\ServicesController@store');
 Route::post('edit-service/{id}', 'API\ServicesController@update');
 Route::get('delete-service/{id}', 'API\ServicesController@delete');
+
+//suggestions
+Route::post('suggestion/store', 'API\SuggestionsController@store');
+Route::get('settings/get_data/{type}', 'API\SettingsController@get_data');
