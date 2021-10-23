@@ -323,8 +323,12 @@ class RegisterationController extends Controller
         $user = User::where('type', 'manager')->first();
 
         if ($user) {
-            unset($data['subject']);
-            Suggestion::create($data);
+            $suggestionData['name'] = $request->name ;
+            $suggestionData['phone'] = $request->phone ;
+            $suggestionData['email'] = $request->email ;
+            $suggestionData['phone'] = $request->phone ;
+            $suggestionData['message'] = $request->message ;
+            Suggestion::create($suggestionData);
             try {
 //                Mail::raw('رمز استعاده كلمه المرور الخاصة بك: ' . $code, function ($message) use ($user) {
 //                    $message->subject('تطبيق المحاماه');
