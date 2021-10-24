@@ -7,6 +7,7 @@ use App\Notifications\ContactUsNotification;
 use App\Notifications\UserVerifyEmailNotification;
 use App\Package;
 use App\Permission;
+use App\Suggestion;
 use App\User;
 use App\Verification;
 use Carbon\Carbon;
@@ -300,10 +301,7 @@ class RegisterationController extends Controller
 
     public function Contact(Request $request)
     {
-
-
         app()->setLocale('ar');
-
         $rules =
             [
                 'name' => 'required',
@@ -312,23 +310,25 @@ class RegisterationController extends Controller
                 'phone' => 'required',
                 'message' => 'required',
             ];
-
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json(['status' => 401, 'msg' => $validator->messages()->all()]);
         }
-
-
         $data = $this->validate(request(), [
             'name' => 'required',
             'email' => 'required|email',
             'phone' => 'required',
             'message' => 'required',
-
         ]);
-
         $user = User::where('type', 'manager')->first();
+
         if ($user) {
+            $suggestionData['name'] = $request->name ;
+            $suggestionData['phone'] = $request->phone ;
+            $suggestionData['email'] = $request->email ;
+            $suggestionData['phone'] = $request->phone ;
+            $suggestionData['message'] = $request->message ;
+            Suggestion::create($suggestionData);
             try {
 //                Mail::raw('رمز استعاده كلمه المرور الخاصة بك: ' . $code, function ($message) use ($user) {
 //                    $message->subject('تطبيق المحاماه');

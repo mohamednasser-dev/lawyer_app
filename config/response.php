@@ -7,6 +7,16 @@ return
                 'ar' => 'البريد الإلكتروني موجود من قبل',
                 'en' => 'Name is Required',
             ],
+        'data_shown' =>
+            [
+                'ar' => 'تم عرض البيانات',
+                'en' => 'data shown successfully',
+            ],
+        'Suggestion_Send' =>
+            [
+                'ar' => 'تم ارسال الاقتراح بنجاح',
+                'en' => 'suggestion sent successfully',
+            ],
         'package_ended' =>
             [
                 'ar' => 'تم انتهاء الباقة',

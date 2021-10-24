@@ -28,8 +28,6 @@ Route::group(['middleware' => ['auth', 'Check_package']], function () {
     //employers routes
     Route::resource('employers', 'EmployersController');
 
-
-
     //manager governments
     Route::resource('governments', 'GovernmentsController');
     Route::get('governments/destroy/{id}', 'GovernmentsController@destroy');
@@ -156,6 +154,13 @@ Route::group(['middleware' => ['auth']], function () {
 
     //user packages to renew
     Route::get('packages/renew/page', 'UsersController@renew_package')->name('renew_package');
+
+    //settings
+    Route::get('settings', 'SettingsController@index')->name('settings.index');
+    Route::post('settings/update/{id}', 'SettingsController@update')->name('settings.update');
+
+    //contact us inbox
+    Route::resource('suggestions', 'SuggestionsController');
 
 });
 Route::get('reservtion', 'ReservationController@index');
