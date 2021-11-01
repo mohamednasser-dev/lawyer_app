@@ -30,33 +30,30 @@ class EmployersController extends Controller
 
     public function store(Request $request)
     {
-
-        if ($request->ajax()) {
-            $data = $this->validate(request(), [
-                'name' => 'required|unique:users,name',
-                'email' => 'required|unique:users,email|regex:/(.+)@(.+)\.(.+)/i',
-                'phone' => 'required|unique:users,phone',
-                'address' => 'required',
-                'password' => 'required',
-                'type' => 'required',
-                'cat_id' => 'required'
-            ]);
-
-            $data['password'] = bcrypt(request('password'));
-            $data['parent_id'] = getParentId();
-            $data['package_id'] = auth()->user()->package_id;
-//
-            $user = User::create($data);
-            $user_id = $user->id;
-            $permissions['user_id'] = $user_id;
-            $per = Permission::create($permissions);
-            $per->save();
-
-
-            $html = view('users.users_item', compact('user'))->render();
-            return response(['status' => true, 'result' => $html, 'msg' => trans('site_lang.public_success_text')]);
+        $data = $this->validate(request(), [
+            'name' => 'required|unique:users,name',
+            'email' => 'required|unique:users,email|regex:/(.+)@(.+)\.(.+)/i',
+            'phone' => 'required|unique:users,phone',
+            'address' => 'required',
+            'password' => 'required',
+            'image' => 'required',
+        ]);
+        $data['password'] = bcrypt(request('password'));
+        $data['package_id'] = auth()->user()->package_id;
+        $data['type'] = 'employer';
+        if ($request['image'] != null) {
+            $file = $request->file('image');
+            $ext = $file->getClientOriginalExtension();
+            $fileNewName = 'img_' . time() . '.' . $ext;
+            $file->move(public_path('uploads/userprofile'), $fileNewName);
+            $data['image'] = $fileNewName;
         }
-        return redirect()->route('users.users')->with('success', trans('site_lang.public_success_text'));
+        $user = User::create($data);
+        $user_id = $user->id;
+        $permissions['user_id'] = $user_id;
+        Permission::create($permissions);
+        session()->flash('success', trans('site_lang.add_success'));
+        return back();
     }
 
     /**

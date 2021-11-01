@@ -234,7 +234,6 @@ class SubscribersController extends Controller
         session()->flash('success', trans('site_lang.add_success'));
         $per->save();
         return back();
-//        return response()->json(['success' => trans('site_lang.public_success_text')]);
     }
 
     public function updateData(Request $request)
@@ -270,10 +269,9 @@ class SubscribersController extends Controller
         }else{
             unset($data['image']);
         }
-        $user = User::whereId($request->id)->update($data);
+        User::whereId($request->id)->update($data);
         session()->flash('success', 'تم التعديل بنجاح');
         return back();
-//        return response()->json(['success' => trans('site_lang.public_success_text')]);
     }
 
     /**

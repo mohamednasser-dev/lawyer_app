@@ -109,8 +109,6 @@
             </div>
         </div>
     </div>
-    <!-- end: PAGE -->
-
     <div id="add_subscriber_model" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"
          class="modal fade">
         <div class="modal-dialog">
@@ -122,102 +120,92 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    {{--                id="subscribers"--}}
-                        {{ Form::open( ['route' =>'subscribers.store','method'=>'post', 'files'=>'true'] ) }}
-                        <input type="hidden" name="id" id="id">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('name')?' has-error':''}}">
-                                    <input type="text" name="name" class="form-control" id="name" required
-                                           placeholder="{{trans('site_lang.users_username')}}">
-                                    <span class="text-danger" id="name_error"></span>
-                                </div>
+                    {{ Form::open( ['route' =>'subscribers.store','method'=>'post', 'files'=>'true'] ) }}
+                    <input type="hidden" name="id" id="id">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('name')?' has-error':''}}">
+                                <input type="text" name="name" class="form-control" id="name" required
+                                       placeholder="{{trans('site_lang.users_username')}}">
+                                <span class="text-danger" id="name_error"></span>
                             </div>
-
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('email')?' has-error':''}}">
-                                    <input name="email" id="email" placeholder="{{trans('site_lang.users_email')}}"
-                                           required class="form-control"/>
-                                    <span class="text-danger" id="email_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('password')?' has-error':''}}">
-                                    <input type="password" name="password" id="password" class="form-control" required
-                                           placeholder="{{trans('site_lang.auth_password')}}">
-                                    <span class="text-danger" id="password_error"></span>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('phone')?' has-error':''}}">
-
-                                    <input type="number" name="phone" id="phone" class="form-control"
-                                           placeholder="{{trans('site_lang.subPhone')}}">
-                                    <span class="text-danger" id="phone_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('address')?' has-error':''}}">
-                                    <input type="text" name="address" id="address" class="form-control"
-                                           placeholder="{{trans('site_lang.client_Address')}}" rows="10">
-                                    <span class="text-danger" id="address_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('cat_id')?' has-error':''}}">
-                                    <select id="form-field-select-3" class="form-control select2-arrow"
-                                            name="package_id">
-                                        <option value="">
-                                            &nbsp;{{trans('site_lang.side_Packages')}}</option>
-                                        @foreach($packages as $package)
-                                            <option value='{{$package->id}}'>{{$package->name}}</option>
-                                        @endforeach
-                                    </select>
-                                    <span class="text-danger" id="package_id_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('password')?' has-error':''}}">
-                                    <input type="text" name="cat_name" id="cat_name" class="form-control" required
-                                           placeholder="{{trans('site_lang.subCatname')}}">
-                                    <span class="text-danger" id="cat_name_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-6">
-                                <label> الصورة الشخصية</label>
-                                <div class="form-group{{$errors->has('password')?' has-error':''}}">
-                                    <input type="file" required name="image" id="myDropify" class="border"/>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-6">
-                                <label>صورة الكارنية</label>
-                                <div class="form-group{{$errors->has('password')?' has-error':''}}">
-                                    <input type="file" required name="card_image" id="myDropify_karnee" class="border"/>
-                                </div>
-                            </div>
-
                         </div>
-                        <div class="form-group right">
-                            <button data-dismiss="modal" class="btn btn-default" type="button">
-                                {{trans('site_lang.public_close_btn_text')}}
-                            </button>
-                            <input type="hidden" name="hidden_id" id="hidden_id"/>
-                            <input type="submit" class="btn btn-primary" id="add_client" name="add_client"
-                                   value="{{trans('site_lang.public_add_btn_text')}}"/>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('email')?' has-error':''}}">
+                                <input name="email" id="email" placeholder="{{trans('site_lang.users_email')}}"
+                                       required class="form-control"/>
+                                <span class="text-danger" id="email_error"></span>
+                            </div>
                         </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('password')?' has-error':''}}">
+                                <input type="password" name="password" id="password" class="form-control" required
+                                       placeholder="{{trans('site_lang.auth_password')}}">
+                                <span class="text-danger" id="password_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('phone')?' has-error':''}}">
+
+                                <input type="number" name="phone" id="phone" class="form-control"
+                                       placeholder="{{trans('site_lang.subPhone')}}">
+                                <span class="text-danger" id="phone_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('address')?' has-error':''}}">
+                                <input type="text" name="address" id="address" class="form-control"
+                                       placeholder="{{trans('site_lang.client_Address')}}" rows="10">
+                                <span class="text-danger" id="address_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('cat_id')?' has-error':''}}">
+                                <select id="form-field-select-3" class="form-control select2-arrow"
+                                        name="package_id">
+                                    <option value="">
+                                        &nbsp;{{trans('site_lang.side_Packages')}}</option>
+                                    @foreach($packages as $package)
+                                        <option value='{{$package->id}}'>{{$package->name}}</option>
+                                    @endforeach
+                                </select>
+                                <span class="text-danger" id="package_id_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('password')?' has-error':''}}">
+                                <input type="text" name="cat_name" id="cat_name" class="form-control" required
+                                       placeholder="{{trans('site_lang.subCatname')}}">
+                                <span class="text-danger" id="cat_name_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                            <label> الصورة الشخصية</label>
+                            <div class="form-group{{$errors->has('password')?' has-error':''}}">
+                                <input type="file" required name="image" id="myDropify" class="border"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                            <label>صورة الكارنية</label>
+                            <div class="form-group{{$errors->has('password')?' has-error':''}}">
+                                <input type="file" required name="card_image" id="myDropify_karnee" class="border"/>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group right">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">
+                            {{trans('site_lang.public_close_btn_text')}}
+                        </button>
+                        <input type="hidden" name="hidden_id" id="hidden_id"/>
+                        <input type="submit" class="btn btn-primary" id="add_client" name="add_client"
+                               value="{{trans('site_lang.public_add_btn_text')}}"/>
+                    </div>
                     {{ Form::close() }}
                 </div>
-
             </div>
-            <!-- /.modal-content -->
         </div>
-
-
-        <!-- /.modal-dialog -->
     </div>
-
-
     <div id="edits_subscriber_model" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"
          class="modal fade">
         <div class="modal-dialog">

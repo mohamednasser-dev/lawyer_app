@@ -39,7 +39,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if (\auth()->user()->type == "manager") {
+        if (\auth()->user()->type == "manager" || \auth()->user()->type == "employer" ) {
 
             return redirect('manager/home');
         }

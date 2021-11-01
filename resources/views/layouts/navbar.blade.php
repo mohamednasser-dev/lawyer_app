@@ -26,8 +26,7 @@
                 @endphp
             @endif
             @php $user_type = auth()->user()->type; @endphp
-            @if($user_type != 'manager')
-
+            @if($user_type != 'manager' && $user_type != 'employer')
                 <li class="nav-item">
                     <a href="{{route('home')}}" class="nav-link">
                         <i class="link-icon" data-feather="home"></i>
@@ -101,7 +100,7 @@
                     </div>
                 </li>
             @endif
-            @if( auth()->user()->type == 'manager')
+            @if( auth()->user()->type == 'manager' || auth()->user()->type == 'employer')
                 <li class="nav-item">
                     <a class="nav-link" href="{{url('/manager/home')}}">
                         <i class="link-icon" data-feather="home"></i>
