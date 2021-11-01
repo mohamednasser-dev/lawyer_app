@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Point;
+use App\Suggestion;
 use App\User;
 use App\Cases;
 use App\mohdr;
@@ -32,8 +33,9 @@ class SuggestionsController extends Controller
      */
     public function index()
     {
-        $data = Point::where('deleted', '0')->orderBy('created_at', 'desc')->get();
-        return view('manager.inbox', compact('data'));
+        $data = Suggestion::orderBy('created_at', 'desc')->get();
+        Suggestion::where('seen','0')->update(['seen'=>'1']);
+        return view('manager.suggestions.index', compact('data'));
     }
 
     function store(Request $request)

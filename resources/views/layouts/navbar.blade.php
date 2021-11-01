@@ -128,25 +128,29 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{url('/governments')}}">
-                        <i class="link-icon" data-feather="box"></i>
+                        <i class="link-icon" data-feather="map"></i>
                         <span class="link-title">{{trans('site_lang.governments')}}</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('employers.index')}}">
-                        <i class="link-icon" data-feather="box"></i>
+                        <i class="link-icon" data-feather="user-check"></i>
                         <span class="link-title">{{trans('site_lang.employers')}}</span>
                     </a>
                 </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('suggestions.index')}}">
-                            <i class="link-icon" data-feather="box"></i>
-                            <span class="link-title">{{trans('site_lang.suggestions')}}</span>
-                        </a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('suggestions.index')}}">
+                        <i class="link-icon" data-feather="pen-tool"></i>
+                        <span class="link-title">{{trans('site_lang.suggestions')}}</span>
+                        &nbsp; &nbsp;
+                        @if(un_seen_suggestion() > 0)
+                            <span style="color: red;"> {{un_seen_suggestion()}}</span>
+                        @endif
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('settings.index')}}">
-                        <i class="link-icon" data-feather="box"></i>
+                        <i class="link-icon" data-feather="settings"></i>
                         <span class="link-title">{{trans('site_lang.settings')}}</span>
                     </a>
                 </li>

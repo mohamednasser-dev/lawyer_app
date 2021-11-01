@@ -21,7 +21,8 @@ class SubscribersController extends Controller
     {
         $user_type = auth()->user()->type;
         if ($user_type == 'manager') {
-            $data = User::where('parent_id', null)->where('package_id', '!=', null)->where('type', '!=', 'manager')
+            $data = User::where('parent_id', null)->where('package_id', '!=', null)
+                ->where('type', '!=', 'manager')->orderBy('created_at','desc')
                 ->get();
 //                    ->addColumn('status', function ($data) {
 //                                 if ($data->status == trans('site_lang.statusDeactive')) {
@@ -50,7 +51,7 @@ class SubscribersController extends Controller
 
             $packages = Package::all();
             $selected_package = 0;
-            return view('Subscribers.subscribers', compact('packages', 'data', 'selected_package'));
+            return view('manager.Subscribers.subscribers', compact('packages', 'data', 'selected_package'));
         } else {
             return redirect(url('home'));
 
@@ -70,7 +71,7 @@ class SubscribersController extends Controller
                     ->get();
             }
             $packages = Package::all();
-            return view('Subscribers.subscribers', compact('packages', 'data', 'selected_package'));
+            return view('manager.Subscribers.subscribers', compact('packages', 'data', 'selected_package'));
         } else {
             return redirect(url('home'));
         }
@@ -112,7 +113,7 @@ class SubscribersController extends Controller
                     ->make(true);
             }
             $packages = Package::all();
-            return view('Subscribers.subscribers', compact('packages'));
+            return view('manager.Subscribers.subscribers', compact('packages'));
         } else {
             return redirect(url('home'));
 
@@ -171,9 +172,9 @@ class SubscribersController extends Controller
             'address' => 'required',
             'cat_name' => 'required',
             'package_id' => 'required',
-
+            'image' => 'required',
+            'card_image' => 'required',
         ]);
-
         $Cat_data['name'] = $request->cat_name;
         $category = category::create($Cat_data);
         $data['password'] = bcrypt(request('password'));
@@ -189,20 +190,31 @@ class SubscribersController extends Controller
             $data['user_code'] = $six_digit_random_number;
         }
         $package = Package::find($request->package_id);
-
         $mytime = Carbon::now();
         $today = Carbon::parse($mytime->toDateTimeString())->format('Y-m-d H:i');
         $final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
         $warning_final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
-
         //to generate expiry date ...
         $expire_date = $final_today->addMonths($package->duration);
         $data['expiry_date'] = $expire_date;
-
         //for generate warning date ...
         $for_warning_date = $warning_final_today->addMonths($package->duration);
         $warning_date = $for_warning_date->subDays(10);
         $data['warning_date'] = $warning_date;
+        if ($request['card_image'] != null) {
+            $file = $request->file('card_image');
+            $ext = $file->getClientOriginalExtension();
+            $fileNewName = 'img_' . time() . '.' . $ext;
+            $file->move(public_path('uploads/register'), $fileNewName);
+            $data['card_image'] = $fileNewName;
+        }
+        if ($request['image'] != null) {
+            $file = $request->file('image');
+            $ext = $file->getClientOriginalExtension();
+            $fileNewName = 'img_' . time() . '.' . $ext;
+            $file->move(public_path('uploads/userprofile'), $fileNewName);
+            $data['image'] = $fileNewName;
+        }
         $user_result = User::create($data);
 
         $category->parent_id = $user_result->id;
@@ -240,8 +252,26 @@ class SubscribersController extends Controller
         if ($request->password){
             $data['password'] = Hash::make($request->password);
         }
+        if ($request['card_image'] != null) {
+            $file = $request->file('card_image');
+            $ext = $file->getClientOriginalExtension();
+            $fileNewName = 'img_' . time() . '.' . $ext;
+            $file->move(public_path('uploads/register'), $fileNewName);
+            $data['card_image'] = $fileNewName;
+        }else{
+            unset($data['card_image']);
+        }
+        if ($request['image'] != null) {
+            $file = $request->file('image');
+            $ext = $file->getClientOriginalExtension();
+            $fileNewName = 'img_' . time() . '.' . $ext;
+            $file->move(public_path('uploads/userprofile'), $fileNewName);
+            $data['image'] = $fileNewName;
+        }else{
+            unset($data['image']);
+        }
         $user = User::whereId($request->id)->update($data);
-        session()->flash('success', trans('site_lang.add_success'));
+        session()->flash('success', 'تم التعديل بنجاح');
         return back();
 //        return response()->json(['success' => trans('site_lang.public_success_text')]);
     }
@@ -271,51 +301,29 @@ class SubscribersController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request)
     {
         $user = User::where('id', $request->id)->first();
         $package = Package::find($request->package_id);
-
         $mytime = Carbon::now();
         $today = Carbon::parse($mytime->toDateTimeString())->format('Y-m-d H:i');
         $final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
         $warning_final_today = Carbon::createFromFormat('Y-m-d H:i', $today);
-
         //to generate expiry date ...
         $expire_date = $final_today->addMonths($package->duration);
         $user->expiry_date = $expire_date;
-
         //for generate warning date ...
         $for_warning_date = $warning_final_today->addMonths($package->duration);
         $warning_date = $for_warning_date->subDays(10);
         $user->warning_date = $warning_date;
-
         $user->package_id = $request->package_id;
         $user->status = "Active";
-
         $user->save();
-
         $data['package_id'] = $request->package_id;
-
-
         User::where('parent_id', $request->id)->update($data);
         return back();
-//        return response(['success' => trans('site_lang.public_success_text')]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $data = User::findOrFail($id);

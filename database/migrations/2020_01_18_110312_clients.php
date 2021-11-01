@@ -24,7 +24,6 @@ class Clients extends Migration
             $table->foreign('cat_id')->references('id')->on('categories')->onDelete('cascade');
             $table->bigInteger('parent_id')->unsigned();
             $table->foreign('parent_id')->references('id')->on('users')->onDelete('cascade');
-
             $table->timestamps();
         });
     }
