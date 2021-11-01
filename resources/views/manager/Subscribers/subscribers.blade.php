@@ -498,9 +498,6 @@
                         $('#edit_email').val(html.data.email);
                         $('#edit_phone').val(html.data.phone);
                         $('#edit_address').val(html.data.address);
-                        $('.txt_image').dropify({
-                            defaultFile: "{{url('uploads/userprofile/')}}" + "/" + html.data.image ,
-                        });
                         $('#txt_image_old').attr("src", "{{url('uploads/userprofile/')}}" + "/" + html.data.image);
                         $('#txt_card_image_old').attr("src", "{{url('uploads/register/')}}" + "/" + html.data.card_image);
                         $('#card_link').attr("href", "{{url('uploads/register/')}}" + "/" + html.data.card_image);
