@@ -216,4 +216,5 @@ return [
     'selectType' => 'Choose type',
     'edit_client' => 'edit client',
     'EXPIRE_DATE' => 'EXPIRE DATE',
+    'files' => 'files',
 ];

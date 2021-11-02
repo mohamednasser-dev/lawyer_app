@@ -1,23 +1,27 @@
 <?php
+
 namespace App\Http\Controllers\API;
+
+use App\File;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Permission;
 use App\attachment;
 use Validator;
 use App\User;
+
 class attachmentApiController extends Controller
 {
-    public function index(Request $request,$id)
+    public function index(Request $request, $id)
     {
         $api_token = $request->header('api_token');
         $user = User::where('api_token', $api_token)->first();
         if ($user != null) {
-            $user_id= $user->id;
+            $user_id = $user->id;
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
-                $attachments = attachment::select('id','img_Description','img_Url')->where('case_id', $id)->paginate(20);
+                $attachments = attachment::select('id', 'img_Description', 'img_Url')->where('case_id', $id)->paginate(20);
 //                foreach ($attachments as $key=>$row){
 //                    $image = $row->img_Url;
 ////                    dd($image);
@@ -35,12 +39,12 @@ class attachmentApiController extends Controller
 //                    }
 //
 //                }
-                return sendResponse(200, trans('site_lang.data_dispaly_success'),$attachments);
+                return sendResponse(200, trans('site_lang.data_dispaly_success'), $attachments);
             } else {
-                return sendResponse(401, trans('site_lang.permission_warrning'),null);
+                return sendResponse(401, trans('site_lang.permission_warrning'), null);
             }
         } else {
-            return sendResponse(403,  trans('site_lang.loginWarning'), null);
+            return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
     }
 
@@ -61,21 +65,21 @@ class attachmentApiController extends Controller
 
         $api_token = $request->header('api_token');
         $user = User::where('api_token', $api_token)->first();
-        if ($user && $api_token!= null) {
-            $user_id= $user->id;
+        if ($user && $api_token != null) {
+            $user_id = $user->id;
             $permission = Permission::where('user_id', $user_id)->first();
             $enabled = $permission->search_case;
             if ($enabled == 'yes') {
-                $attachments = attachment::select('id','img_Description','img_Url')
-                    ->where('img_Description','like','%'.$request->img_Description.'%')
+                $attachments = attachment::select('id', 'img_Description', 'img_Url')
+                    ->where('img_Description', 'like', '%' . $request->img_Description . '%')
                     ->where('case_id', $request->case_Id)
                     ->paginate(20);
-                return sendResponse(200, trans('site_lang.data_dispaly_success'),$attachments);
+                return sendResponse(200, trans('site_lang.data_dispaly_success'), $attachments);
             } else {
-                return sendResponse(401, trans('site_lang.permission_warrning'),null);
+                return sendResponse(401, trans('site_lang.permission_warrning'), null);
             }
         } else {
-            return sendResponse(403,  trans('site_lang.loginWarning'), null);
+            return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
     }
 
@@ -98,13 +102,12 @@ class attachmentApiController extends Controller
             }
             if (!is_array($validate)) {
 
-                if($input['img_Url'] != null)
-                {
+                if ($input['img_Url'] != null) {
                     // This is Image Information ...
-                    $file	 = $request->file('img_Url');
-                    $ext 	 = $file->getClientOriginalExtension();
+                    $file = $request->file('img_Url');
+                    $ext = $file->getClientOriginalExtension();
                     // Move Image To Folder ..
-                    $fileNewName = 'img_'.time().'.'.$ext;
+                    $fileNewName = 'img_' . time() . '.' . $ext;
                     $file->move(public_path('uploads/attachments'), $fileNewName);
 
                     $data = $request->all();
@@ -119,7 +122,8 @@ class attachmentApiController extends Controller
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
     }
-    public function update(Request $request,$id)
+
+    public function update(Request $request, $id)
     {
         $input = $request->all();
         $api_token = $request->header('api_token');
@@ -132,20 +136,19 @@ class attachmentApiController extends Controller
                 ]);
 //            dd($request->img_Url);
             if (!is_array($validate)) {
-                if($request->img_Url != null)
-                {
+                if ($request->img_Url != null) {
 
                     // This is Image Information ...
-                    $file	 = $request->file('img_Url');
-                    $ext 	 = $file->getClientOriginalExtension();
+                    $file = $request->file('img_Url');
+                    $ext = $file->getClientOriginalExtension();
                     // Move Image To Folder ..
-                    $fileNewName = 'img_'.time().'.'.$ext;
+                    $fileNewName = 'img_' . time() . '.' . $ext;
                     $file->move(public_path('uploads/attachments'), $fileNewName);
 
                     $data = $request->all();
                     $input['img_Url'] = $fileNewName;
                 }
-                attachment::where('id',$id)->update($input);
+                attachment::where('id', $id)->update($input);
                 $data = attachment::whereId($id)->first();
                 return sendResponse(200, trans('site_lang.updatSuccess'), $data);
             } else {
@@ -156,13 +159,29 @@ class attachmentApiController extends Controller
         }
     }
 
-    public function destroy(Request $request,$id)
+    public function destroy(Request $request, $id)
     {
         $api_token = $request->header('api_token');
         $user = User::where('api_token', $api_token)->first();
         if ($user != null) {
-                $attachment = attachment::where('id',$id)->delete();
-                return sendResponse(200, trans('site_lang.deleted') , $attachment);
+            $attachment = attachment::where('id', $id)->delete();
+            return sendResponse(200, trans('site_lang.deleted'), $attachment);
+        } else {
+            return sendResponse(403, trans('site_lang.loginWarning'), null);
+        }
+    }
+
+    public function Files(Request $request)
+    {
+        $api_token = $request->header('api_token');
+        $user = User::where('api_token', $api_token)->first();
+        if ($user != null) {
+            $attachment = File::query();
+            if ($request->search != null || $request->search != '') {
+                $attachment = $attachment->where('type', 'like', '%' . $request->search . '%');
+            }
+            $attachment = $attachment->get();
+            return sendResponse(200, trans('site_lang.data_dispaly_success'), $attachment);
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }

@@ -173,3 +173,7 @@ Route::get('delete-service/{id}', 'API\ServicesController@delete');
 Route::post('suggestion/store', 'API\SuggestionsController@store');
 Route::get('settings/get_data/{type}', 'API\SettingsController@get_data');
 
+
+
+Route::get('get-files', 'API\attachmentApiController@Files');
+

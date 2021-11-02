@@ -132,6 +132,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{url('files')}}">
+                        <i class="link-icon" data-feather="file"></i>
+                        <span class="link-title">{{trans('site_lang.files')}}</span>
+                    </a>
+                </li>
+
+                    <li class="nav-item">
                     <a class="nav-link" href="{{route('employers.index')}}">
                         <i class="link-icon" data-feather="user-check"></i>
                         <span class="link-title">{{trans('site_lang.employers')}}</span>
