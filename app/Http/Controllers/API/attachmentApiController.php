@@ -180,7 +180,7 @@ class attachmentApiController extends Controller
             if ($request->search != null || $request->search != '') {
                 $attachment = $attachment->where('type', 'like', '%' . $request->search . '%');
             }
-            $attachment = $attachment->get();
+            $attachment = $attachment->paginate(10);
             return sendResponse(200, trans('site_lang.data_dispaly_success'), $attachment);
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
