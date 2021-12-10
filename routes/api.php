@@ -160,7 +160,7 @@ Route::post('contact-us', 'Landing\RegisterationController@Contact');
 
 //Reports
 Route::post('report_monthly', 'API\ReportsApiController@searchMonthly');
-Route::post('report_daily', 'API\ReportsApiController@searcuser_by_idhDaily');
+Route::post('report_daily', 'API\ReportsApiController@searchDaily');
 
 //services
 Route::get('services', 'API\ServicesController@index');
