@@ -161,8 +161,10 @@ class ReportsApiController extends Controller
                     ->where('session_date', $request->session_date)
                     ->where('parent_id', $user->parent_id != null ? $user->parent_id : $user->id)
                     ->whereHas('cases', function ($q) use ($request, $user) {
-                        if ($request->category_id != 0) // for get reports with some category if not equal 0 will get all categories reports
+                        if ($request->category_id != 0) {
+                            // for get reports with some category if not equal 0 will get all categories reports
                             $q->where('to_whome', '=', $request->category_id);
+                        }
                     })->paginate(20);
                 $cases->setCollection(
                     $cases->getCollection()
