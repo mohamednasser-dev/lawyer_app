@@ -16,45 +16,13 @@ class ReportsApiController extends Controller
 
     public function printSearchMonthly(Request $request, $month, $year, $type)
     {
-        $api_token = $request->api_token;
-        $user = User::where('api_token', $api_token)->first();
+        $user = check_api_token($request->header('api_token'));
         if ($user != null) {
+            if ($user->type == "User")
+                $type = $user->cat_id; // just put user cat_id to request
             $data = Sessions::with('cases', 'Printnotes', 'clients')
                 ->where('month', '=', $month)
                 ->where('year', '=', $year)
-                ->where('parent_id', $user->parent_id != null ? $user->parent_id : $user->id)
-                ->whereHas('cases', function ($q) use ($user, $type) {
-                    if ($type != 0) // for get reports with some category if equal 0 will get all categories reports
-                        $q->where('to_whome', '=', $type);
-                })->get()
-                ->map(function ($data) {
-                    $new_string = "";
-                    $new_khesm = "";
-                    foreach ($data->clients as $row) {
-                        if ($row->client_type == trans("site_lang.clients_client_type_khesm")) {
-                            $new_khesm = $new_khesm . $row->client_Name . ' , ';
-                        } else
-                            $new_string = $new_string . $row->client_Name . ' , ';
-                    }
-                    $data->client = rtrim($new_string, ", ");
-                    $data->khesm = rtrim($new_khesm, ", ");
-                    unset($data->clients);
-                    return $data;
-                });
-            $pdf = PDF::loadView('Reports.MonthlyPDF', ['data' => $data, 'month' => $month, 'year' => $year]);//    }else{
-            return $pdf->stream('Monthly report' . $month . '/' . $year . '.pdf');
-        } else {
-            return sendResponse(403, trans('site_lang.loginWarning'), null);
-        }
-    }
-
-    public function printSearchDaily(Request $request, $date, $type)
-    {
-        $api_token = $request->api_token;
-        $user = User::where('api_token', $api_token)->first();
-        if ($user != null) {
-            $data = Sessions::with('cases', 'Printnotes', 'clients')
-                ->where('session_date', $date)
                 ->where('parent_id', $user->parent_id != null ? $user->parent_id : $user->id)
                 ->whereHas('cases', function ($q) use ($type, $user) {
                     if ($type != 0) // for get reports with some category if equal 0 will get all categories reports
@@ -74,8 +42,8 @@ class ReportsApiController extends Controller
                     unset($data->clients);
                     return $data;
                 });
-            $pdf = PDF::loadView('Reports.Daily_api_pdf', ['data' => $data, 'id' => $date]);
-            return $pdf->stream('Daily report' . $date . '.pdf');
+            $pdf = PDF::loadView('Reports.MonthlyPDF', ['data' => $data, 'month' => $month, 'year' => $year]);//    }else{
+            return $pdf->stream('Monthly report' . $month . '/' . $year . '.pdf');
         } else {
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
@@ -137,6 +105,40 @@ class ReportsApiController extends Controller
             return sendResponse(403, trans('site_lang.loginWarning'), null);
         }
     }
+
+    public function printSearchDaily(Request $request, $date, $type)
+    {
+        $user = check_api_token($request->header('api_token'));
+        if ($user != null) {
+            $data = Sessions::with('cases', 'Printnotes', 'clients')
+                ->where('session_date', $date)
+                ->where('parent_id', $user->parent_id != null ? $user->parent_id : $user->id)
+                ->whereHas('cases', function ($q) use ($type, $user) {
+                    if ($type != 0) // for get reports with some category if equal 0 will get all categories reports
+                        $q->where('to_whome', '=', $type);
+                })->get()
+                ->map(function ($data) {
+                    $new_string = "";
+                    $new_khesm = "";
+                    foreach ($data->clients as $row) {
+                        if ($row->client_type == trans("site_lang.clients_client_type_khesm")) {
+                            $new_khesm = $new_khesm . $row->client_Name . ' , ';
+                        } else
+                            $new_string = $new_string . $row->client_Name . ' , ';
+                    }
+                    $data->client = rtrim($new_string, ", ");
+                    $data->khesm = rtrim($new_khesm, ", ");
+                    unset($data->clients);
+                    return $data;
+                });
+            $pdf = PDF::loadView('Reports.Daily_api_pdf', ['data' => $data, 'id' => $date]);
+            return $pdf->stream('Daily report' . $date . '.pdf');
+        } else {
+            return sendResponse(403, trans('site_lang.loginWarning'), null);
+        }
+    }
+
+
 
     public function searchDaily(Request $request)
     {
