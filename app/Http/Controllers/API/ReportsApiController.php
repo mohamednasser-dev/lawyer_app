@@ -109,9 +109,10 @@ class ReportsApiController extends Controller
                     ->whereHas('cases', function ($q) use ($request, $user) {
                         if ($request->category_id != 0) // for get reports with some category if equal 0 will get all categories reports
                             $q->where('to_whome', '=', $request->category_id);
-                    })->paginate(20);
-                $cases->setCollection(
-                    $cases->getCollection()
+                    })->get()
+//                ;
+//                $cases->setCollection(
+//                    $cases->getCollection()
                         ->map(function ($data) {
                             $new_string = "";
                             $new_khesm = "";
@@ -125,9 +126,9 @@ class ReportsApiController extends Controller
                             $data->khesm = rtrim($new_khesm, ", ");
                             unset($data->clients);
                             return $data;
-                        })
+                        });
 
-                );
+//                );
 
                 return sendResponse(200, trans('site_lang.data_dispaly_success'), $cases);
             } else {
@@ -165,9 +166,10 @@ class ReportsApiController extends Controller
                             // for get reports with some category if not equal 0 will get all categories reports
                             $q->where('to_whome', '=', $request->category_id);
                         }
-                    })->paginate(20);
-                $cases->setCollection(
-                    $cases->getCollection()
+                    })->get()
+//                ;
+//                $cases->setCollection(
+//                    $cases->getCollection()
                         ->map(function ($data) {
                             $new_string = "";
                             $new_khesm = "";
@@ -181,9 +183,9 @@ class ReportsApiController extends Controller
                             $data->khesm = rtrim($new_khesm, ", ");
                             unset($data->clients);
                             return $data;
-                        })
+                        });
 
-                );
+//                );
 
                 return sendResponse(200, trans('site_lang.data_dispaly_success'), $cases);
             } else {
