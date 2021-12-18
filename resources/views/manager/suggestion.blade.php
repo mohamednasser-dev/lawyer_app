@@ -14,10 +14,6 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-6">
-                            <a class="btn btn-primary" id="addClientModal">
-                                <i class="fa fa-plus"></i>{{trans('site_lang.add_option')}} </a>
-                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -26,7 +22,6 @@
                         <table id="subscribers_tbl"  class="table table-bordered">
                             <thead>
                             <tr>
-
                                 <th class="center">اسم المستخدم</th>
                                 <th class="center">الاسم</th>
                                 <th class="center">البريد الإلكتروني</th>
@@ -37,18 +32,11 @@
                             <tbody>
                             @foreach($data as $key=> $row)
                                 <tr>
-                                    <td>{{$key+1}}</td>
+                                    <td>{{$row->User->name}}</td>
                                     <td>{{$row->name}}</td>
-                                    <td>{{$row->points_num}}</td>
-                                    <td> {{$row->status}}</td>
-                                    <td>{{$row->type}}</td>
-                                    <td>
-                                        <button data-client-id="{{$row->id}}" id="editClient" class="btn btn-xs btn-outline-success" >
-                                            <i class="fa fa-edits"></i>&nbsp;&nbsp; {{trans('site_lang.edit')}}</button>
-                                        &nbsp;&nbsp;
-                                        <button data-point-id="{{$row->id}}" id="deletePoint"  class="btn btn-xs btn-outline-danger">
-                                            <i class="fa fa-times fa fa-white"></i>&nbsp;&nbsp; {{trans('site_lang.public_delete_text')}} </button>
-                                    </td>
+                                    <td>{{$row->email}}</td>
+                                    <td> {{$row->phone}}</td>
+                                    <td>{{$row->message}}</td>
                                 </tr>
                             @endforeach
                             </tbody>

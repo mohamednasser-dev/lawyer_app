@@ -142,7 +142,10 @@
                         <a class="nav-link" href="{{route('suggestions.index')}}">
                             <i class="link-icon" data-feather="box"></i>
                             <span class="link-title">{{trans('site_lang.suggestions')}}</span>
+                            &nbsp; &nbsp; &nbsp;
+                            <span style="color: red" >5</span>
                         </a>
+
                     </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('settings.index')}}">

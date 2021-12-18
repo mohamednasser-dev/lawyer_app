@@ -27,7 +27,6 @@
     <link rel="shortcut icon" href="{{url('/assets/images/favicon.png')}}"/>
     <link rel="stylesheet" href="{{url('/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css')}}">
     <link rel="stylesheet" href="{{url('/plugins/toastr/toastr.min.css') }}">
-
 </head>
 
 @if(session('lang')=='en')

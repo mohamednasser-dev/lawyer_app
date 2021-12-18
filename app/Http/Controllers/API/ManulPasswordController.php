@@ -27,7 +27,7 @@ class ManulPasswordController extends Controller
                 $data['email'] =$email;
                 $manual_pass = Manual_pass_reset::create($data);
                 //send email to user contain token of 4 degits ...
-                Mail::to('test@test.com')->send(new \App\Mail\resetPassMail($manual_pass->token));
+                Mail::to($email)->send(new \App\Mail\resetPassMail($manual_pass->token));
                 return sendResponse(200,'Reset password link sent on your email.',null);
             }else{
                 $data['token'] = $six_digit_random_number;

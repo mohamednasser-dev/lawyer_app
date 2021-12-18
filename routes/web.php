@@ -155,7 +155,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('settings/update/{id}', 'SettingsController@update')->name('settings.update');
 
     //contact us inbox
-    Route::resource('suggestions', 'SuggestionsController');
+    Route::get('suggestions', 'SuggestionsController@index')->name('suggestions.index');
 
 });
 Route::get('reservtion', 'ReservationController@index');
