@@ -18,8 +18,7 @@
                     </div>
 
                 </div>
-                {{ Form::open(array('url' =>url('attachment/'.$case_id.'/store') ,'files'=>true )   ) }}
-                {!! csrf_field() !!}
+                {{ Form::open(array('url' =>url('attachment/'.$case_id.'/store') ,'files'=>true ))}}
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
                         {{ Form::label('img_Url',trans('site_lang.attachments_file_attach')) }}
@@ -32,10 +31,7 @@
                         {{ Form::textarea('img_Description',old('img_Description'),["class"=>"form-control"]) }}
                     </div>
                 </div>
-
-
-                {{ Form::submit( trans('site_lang.attachments_new_attach') ,['class'=>'btn btn-primary center-block']) }}
-
+                {{ Form::submit( trans('site_lang.attachments_new_attach') ,['class'=>'btn btn-primary center-block'])}}
                 {{ Form::close() }}
             </div>
         </div>

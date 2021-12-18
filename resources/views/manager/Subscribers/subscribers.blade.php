@@ -1,6 +1,7 @@
 @extends('welcome')
 @section('styles')
     <link rel="stylesheet" href="{{url('/assets/vendors/prismjs/themes/prism.css')}}">
+    <link rel="stylesheet" href="{{url('/assets/plugins/dropify/css/dropify.min.css')}}">
 @endsection
 
 @section('content')
@@ -48,7 +49,6 @@
                         <table id="subscribers_tbl" class="table table-bordered">
                             <thead>
                             <tr>
-                                <th class="center">#</th>
                                 <th class="center">{{trans('site_lang.subName')}}</th>
                                 <th class="center">{{trans('site_lang.subPackage')}}</th>
                                 {{--                                <th class="center">{{trans('site_lang.subEmail')}}</th>--}}
@@ -62,7 +62,6 @@
                             <tbody>
                             @foreach($data as $key=> $row)
                                 <tr>
-                                    <td>{{$key+1}}</td>
                                     <td>{{$row->name}}</td>
                                     <td> @if($row->package_id != null){{$row->Package->name}} @endif</td>
                                     {{--                                    <td>{{$row->email}}</td>--}}
@@ -83,7 +82,7 @@
                                     </td>
                                     <td>{{$row->expiry_date}}</td>
                                     <td>
-                                        <button data-client-id="{{$row->id}}" id="editClient"
+                                        <button data-client-id="{{$row->id}}" data-package-id="{{$row->package_id}}" id="edit_package"
                                                 class="btn btn-xs btn-outline-success">
                                             <i class="fa fa-edits"></i>&nbsp;&nbsp; {{trans('site_lang.edit_package')}}
                                         </button>
@@ -110,8 +109,6 @@
             </div>
         </div>
     </div>
-    <!-- end: PAGE -->
-
     <div id="add_subscriber_model" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"
          class="modal fade">
         <div class="modal-dialog">
@@ -123,108 +120,108 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    {{--                id="subscribers"--}}
-                    <form method="post" action="{{route('subscribers.store')}}">
-                        <input type="hidden" id="token" name="_token" value="{{csrf_token()}}">
-                        <input type="hidden" name="id" id="id">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('name')?' has-error':''}}">
-                                    <input type="text" name="name" class="form-control" id="name" required
-                                           placeholder="{{trans('site_lang.users_username')}}">
-                                    <span class="text-danger" id="name_error"></span>
-                                </div>
+                    {{ Form::open( ['route' =>'subscribers.store','method'=>'post', 'files'=>'true'] ) }}
+                    <input type="hidden" name="id" id="id">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('name')?' has-error':''}}">
+                                <input type="text" name="name" class="form-control" id="name" required
+                                       placeholder="{{trans('site_lang.users_username')}}">
+                                <span class="text-danger" id="name_error"></span>
                             </div>
-
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('email')?' has-error':''}}">
-                                    <input name="email" id="email" placeholder="{{trans('site_lang.users_email')}}"
-                                           required class="form-control"/>
-                                    <span class="text-danger" id="email_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('password')?' has-error':''}}">
-                                    <input type="password" name="password" id="password" class="form-control" required
-                                           placeholder="{{trans('site_lang.auth_password')}}">
-                                    <span class="text-danger" id="password_error"></span>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('phone')?' has-error':''}}">
-
-                                    <input type="number" name="phone" id="phone" class="form-control"
-                                           placeholder="{{trans('site_lang.subPhone')}}">
-                                    <span class="text-danger" id="phone_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('address')?' has-error':''}}">
-                                    <input type="text" name="address" id="address" class="form-control"
-                                           placeholder="{{trans('site_lang.client_Address')}}" rows="10">
-                                    <span class="text-danger" id="address_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('cat_id')?' has-error':''}}">
-                                    <select id="form-field-select-3" class="form-control select2-arrow"
-                                            name="package_id">
-                                        <option value="">
-                                            &nbsp;{{trans('site_lang.side_Packages')}}</option>
-                                        @foreach($packages as $package)
-                                            <option value='{{$package->id}}'>{{$package->name}}</option>
-                                        @endforeach
-                                    </select>
-                                    <span class="text-danger" id="package_id_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group{{$errors->has('password')?' has-error':''}}">
-                                    <input type="text" name="cat_name" id="cat_name" class="form-control" required
-                                           placeholder="{{trans('site_lang.subCatname')}}">
-                                    <span class="text-danger" id="cat_name_error"></span>
-                                </div>
-                            </div>
-
                         </div>
-                        <div class="form-group right">
-                            <button data-dismiss="modal" class="btn btn-default" type="button">
-                                {{trans('site_lang.public_close_btn_text')}}
-                            </button>
-                            <input type="hidden" name="hidden_id" id="hidden_id"/>
-                            <input type="submit" class="btn btn-primary" id="add_client" name="add_client"
-                                   value="{{trans('site_lang.public_add_btn_text')}}"/>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('email')?' has-error':''}}">
+                                <input name="email" id="email" placeholder="{{trans('site_lang.users_email')}}"
+                                       required class="form-control"/>
+                                <span class="text-danger" id="email_error"></span>
+                            </div>
                         </div>
-                    </form>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('password')?' has-error':''}}">
+                                <input type="password" name="password" id="password" class="form-control" required
+                                       placeholder="{{trans('site_lang.auth_password')}}">
+                                <span class="text-danger" id="password_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('phone')?' has-error':''}}">
+
+                                <input type="number" name="phone" id="phone" class="form-control"
+                                       placeholder="{{trans('site_lang.subPhone')}}">
+                                <span class="text-danger" id="phone_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('address')?' has-error':''}}">
+                                <input type="text" name="address" id="address" class="form-control"
+                                       placeholder="{{trans('site_lang.client_Address')}}" rows="10">
+                                <span class="text-danger" id="address_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('cat_id')?' has-error':''}}">
+                                <select id="form-field-select-3" class="form-control select2-arrow"
+                                        name="package_id">
+                                    <option value="">
+                                        &nbsp;{{trans('site_lang.side_Packages')}}</option>
+                                    @foreach($packages as $package)
+                                        <option value='{{$package->id}}'>{{$package->name}}</option>
+                                    @endforeach
+                                </select>
+                                <span class="text-danger" id="package_id_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group{{$errors->has('password')?' has-error':''}}">
+                                <input type="text" name="cat_name" id="cat_name" class="form-control" required
+                                       placeholder="{{trans('site_lang.subCatname')}}">
+                                <span class="text-danger" id="cat_name_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                            <label> الصورة الشخصية</label>
+                            <div class="form-group{{$errors->has('password')?' has-error':''}}">
+                                <input type="file" required name="image" id="myDropify" class="border"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                            <label>صورة الكارنية</label>
+                            <div class="form-group{{$errors->has('password')?' has-error':''}}">
+                                <input type="file" required name="card_image" id="myDropify_karnee" class="border"/>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group right">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">
+                            {{trans('site_lang.public_close_btn_text')}}
+                        </button>
+                        <input type="hidden" name="hidden_id" id="hidden_id"/>
+                        <input type="submit" class="btn btn-primary" id="add_client" name="add_client"
+                               value="{{trans('site_lang.public_add_btn_text')}}"/>
+                    </div>
+                    {{ Form::close() }}
                 </div>
-
             </div>
-            <!-- /.modal-content -->
         </div>
-
-
-        <!-- /.modal-dialog -->
     </div>
-
-
     <div id="edits_subscriber_model" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"
          class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="modal_title"></h4>
+                    <h4 class="modal-title" id="modal_title">تعديل البيانات</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    {{--                id="subscribers"--}}
-                    <form method="post" action="{{route('subscribers.edit')}}">
-                        <input type="hidden" id="token" name="_token" value="{{csrf_token()}}">
+                        {{ Form::open( ['route' =>'subscribers.edit','method'=>'post', 'files'=>'true'] ) }}
                         <input type="hidden" name="id" id="id">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
+                                <label> الاسم</label>
                                 <div class="form-group{{$errors->has('name')?' has-error':''}}">
                                     <input type="text" name="name" class="form-control" id="edit_name" required
                                            placeholder="{{trans('site_lang.users_username')}}">
@@ -233,6 +230,7 @@
                             </div>
 
                             <div class="col-xs-12 col-sm-12 col-md-12">
+                                <label>البريد الإلكتروني</label>
                                 <div class="form-group{{$errors->has('email')?' has-error':''}}">
                                     <input name="email" id="edit_email" placeholder="{{trans('site_lang.users_email')}}"
                                            required class="form-control"/>
@@ -240,6 +238,7 @@
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">
+                                <label> الرقم السري</label>
                                 <div class="form-group{{$errors->has('password')?' has-error':''}}">
                                     <input type="password" name="password" id="edit_password" class="form-control"
                                            placeholder="{{trans('site_lang.auth_password')}}">
@@ -248,6 +247,7 @@
                             </div>
 
                             <div class="col-xs-12 col-sm-12 col-md-12">
+                                <label>الهاتف</label>
                                 <div class="form-group{{$errors->has('phone')?' has-error':''}}">
                                     <input type="number" name="phone" id="edit_phone" class="form-control"
                                            placeholder="{{trans('site_lang.subPhone')}}">
@@ -255,6 +255,7 @@
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">
+                                <label>العنوان</label>
                                 <div class="form-group{{$errors->has('address')?' has-error':''}}">
                                     <input type="text" name="address" id="edit_address" class="form-control"
                                            placeholder="{{trans('site_lang.client_Address')}}" rows="10">
@@ -262,15 +263,25 @@
                                     <span class="text-danger" id="address_error"></span>
                                 </div>
                             </div>
-
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <a href="" id="card_link" target="_blank">
-                                <img src="" id="card_image" alt="Card Image" width="100%" height="100%">
-                                </a>
-
+                            <div class="col-xs-12 col-sm-12 col-md-6">
+                                <label> الصورة الشخصية</label>
+                                <img src="" style="width: 180px;height: 180px;" id="txt_image_old" alt="Image" width="100%" height="100%">
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6">
+                                <label>صورة الكارنية</label>
+                                <img src="" style="width: 180px;height: 180px;" id="txt_card_image_old"  alt="Card Image" width="100%" height="100%">
                             </div>
                             <br>
-
+                            <div class="col-xs-12 col-sm-12 col-md-6">
+                                <div class="form-group{{$errors->has('password')?' has-error':''}}">
+                                    <input type="file" data-default-file="" name="image" id="txt_image" class="border"/>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6">
+                                <div class="form-group{{$errors->has('password')?' has-error':''}}">
+                                    <input type="file" name="card_image" id="txt_card_image" class="border"/>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group right">
                             <button data-dismiss="modal" class="btn btn-default" type="button">
@@ -280,7 +291,7 @@
                             <input type="submit" class="btn btn-primary" id="add_client" name="add_client"
                                    value="{{trans('site_lang.public_edit_btn_text')}}"/>
                         </div>
-                    </form>
+                    {{ Form::close() }}
                 </div>
 
             </div>
@@ -291,12 +302,12 @@
         <!-- /.modal-dialog -->
     </div>
 
-    <div id="edit_subscriber_modal" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"
+    <div id="edit_subscriber_package_modal" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"
          class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="modal_title"></h4>
+                    <h4 class="modal-title" id="modal_title">تعديل العرض</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -305,7 +316,7 @@
                     {{--                id="edit_subscribe"--}}
                     <form method="post" action="{{route('subscribers.update')}}">
                         <input type="hidden" id="token" name="_token" value="{{csrf_token()}}">
-                        <input type="hidden" name="id" id="edit_id">
+                        <input type="hidden" name="id" id="txt_subscriber_id">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
@@ -363,6 +374,8 @@
 @section('custom-plugin')
     <script src="{{url('/assets/vendors/prismjs/prism.js')}}"></script>
     <script src="{{url('/assets/vendors/clipboard/clipboard.min.js')}}"></script>
+    <script src="{{url('/assets/plugins/dropify/js/dropify.min.js')}}"></script>
+    <script src="{{url('/assets/js/dropify.js')}}"></script>
     <script>
         var client_id;
 
@@ -431,7 +444,7 @@
                     processData: false,
                     dataType: "json",
                     success: function (data) {
-                        $('#edit_subscriber_modal').modal('hide');
+                        $('#edit_subscriber_package_modal').modal('hide');
                         toastr.success(data.success);
                         $("#edit_subscribe").trigger('reset');
 
@@ -447,21 +460,17 @@
                 0
             });
 
-            $(document).on('click', '#editClient', function () {
+            $(document).on('click', '#edit_package', function () {
                 var id = $(this).data('client-id');
-                $.ajax({
-                    url: "/subscribers/" + id + "/edit",
-                    dataType: "json",
-                    success: function (html) {
-                        console.log(html.data.id);
-                        $('#package_id_dialog').val(html.data.package_id);
-                        $('#edit_id').val(html.data.id);
-                        $('#modal_title').text("{{trans('site_lang.clients_edit_client_text')}}");
-                        $('#edit_client').val("{{trans('site_lang.public_edit_btn_text')}}");
-                        $('#edit_subscriber_modal').modal('show');
+                var package_id = $(this).data('package-id');
+                console.log(id);
+                console.log(package_id);
+                $('#package_id_dialog').val(package_id);
 
-                    }
-                })
+                $('#modal_title').text("{{trans('site_lang.clients_edit_client_text')}}");
+                $('#edit_client').val("{{trans('site_lang.public_edit_btn_text')}}");
+                $('#txt_subscriber_id').val(id);
+                $('#edit_subscriber_package_modal').modal('show');
             });
 
             $(document).on('click', '#editClientData', function () {
@@ -477,7 +486,8 @@
                         $('#edit_email').val(html.data.email);
                         $('#edit_phone').val(html.data.phone);
                         $('#edit_address').val(html.data.address);
-                        $('#card_image').attr("src", "{{url('uploads/register/')}}" + "/" + html.data.card_image);
+                        $('#txt_image_old').attr("src", "{{url('uploads/userprofile/')}}" + "/" + html.data.image);
+                        $('#txt_card_image_old').attr("src", "{{url('uploads/register/')}}" + "/" + html.data.card_image);
                         $('#card_link').attr("href", "{{url('uploads/register/')}}" + "/" + html.data.card_image);
                         $('#modal_title').text("{{trans('site_lang.clients_edit_client_text')}}");
                         $('#edit_clients').val("{{trans('site_lang.public_edit_btn_text')}}");

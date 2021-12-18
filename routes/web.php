@@ -147,6 +147,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('subscribers/search/new', 'SubscribersController@search_new')->name('subscribers.search');
     Route::get('endReservation', 'EndReservationsController@index');
 
+
+//    files
+    Route::resource('files', 'FilesController');
+    Route::get('files/{id}/delete', 'FilesController@destroy');
+
     //user packages to renew
     Route::get('packages/renew/page', 'UsersController@renew_package')->name('renew_package');
 

@@ -26,8 +26,7 @@
                 @endphp
             @endif
             @php $user_type = auth()->user()->type; @endphp
-            @if($user_type != 'manager')
-
+            @if($user_type != 'manager' && $user_type != 'employer')
                 <li class="nav-item">
                     <a href="{{route('home')}}" class="nav-link">
                         <i class="link-icon" data-feather="home"></i>
@@ -101,7 +100,7 @@
                     </div>
                 </li>
             @endif
-            @if( auth()->user()->type == 'manager')
+            @if( auth()->user()->type == 'manager' || auth()->user()->type == 'employer')
                 <li class="nav-item">
                     <a class="nav-link" href="{{url('/manager/home')}}">
                         <i class="link-icon" data-feather="home"></i>
@@ -128,28 +127,36 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{url('/governments')}}">
-                        <i class="link-icon" data-feather="box"></i>
+                        <i class="link-icon" data-feather="map"></i>
                         <span class="link-title">{{trans('site_lang.governments')}}</span>
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{url('files')}}">
+                        <i class="link-icon" data-feather="file"></i>
+                        <span class="link-title">{{trans('site_lang.files')}}</span>
+                    </a>
+                </li>
+
+                    <li class="nav-item">
                     <a class="nav-link" href="{{route('employers.index')}}">
-                        <i class="link-icon" data-feather="box"></i>
+                        <i class="link-icon" data-feather="user-check"></i>
                         <span class="link-title">{{trans('site_lang.employers')}}</span>
                     </a>
                 </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('suggestions.index')}}">
-                            <i class="link-icon" data-feather="box"></i>
-                            <span class="link-title">{{trans('site_lang.suggestions')}}</span>
-                            &nbsp; &nbsp; &nbsp;
-                            <span style="color: red" >5</span>
-                        </a>
-
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('suggestions.index')}}">
+                        <i class="link-icon" data-feather="pen-tool"></i>
+                        <span class="link-title">{{trans('site_lang.suggestions')}}</span>
+                        &nbsp; &nbsp;
+                        @if(un_seen_suggestion() > 0)
+                            <span style="color: red;"> {{un_seen_suggestion()}}</span>
+                        @endif
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('settings.index')}}">
-                        <i class="link-icon" data-feather="box"></i>
+                        <i class="link-icon" data-feather="settings"></i>
                         <span class="link-title">{{trans('site_lang.settings')}}</span>
                     </a>
                 </li>

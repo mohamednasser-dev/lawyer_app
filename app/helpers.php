@@ -12,6 +12,12 @@ function getParentId()
     }
 }
 
+if (!function_exists('un_seen_suggestion')) {
+    function un_seen_suggestion()
+    {
+        return \App\Suggestion::where('seen', '0')->get()->count();
+    }
+}
 if (!function_exists('getQuery')) {
     function getQuery()
     {

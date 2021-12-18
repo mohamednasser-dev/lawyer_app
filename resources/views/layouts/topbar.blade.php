@@ -21,7 +21,7 @@
 
 {{--                </div>--}}
 {{--            </li>--}}
-            <li class="nav-item dropdown nav-apps">
+{{--            <li class="nav-item dropdown nav-apps">
                 <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i data-feather="grid"></i>
                 </a>
@@ -45,7 +45,7 @@
                     </div>
 
                 </div>
-            </li>
+            </li>--}}
             <li class="nav-item dropdown nav-profile">
                 <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <img src="{{ asset('uploads/userprofile/'.Auth::user()->image) }}" alt="profile">
